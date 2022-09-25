@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Navbar from '../components/Navbar'
 import supabase from '../lib/client';
+import Footer from '../components/Footer';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient({}));
@@ -17,13 +18,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Fragment>
-        <QueryClientProvider client={queryClient}>
       <UserProvider supabaseClient={supabaseClient}>
+        <QueryClientProvider client={queryClient}>
           <Navbar />
           <Component {...pageProps} />
+          <Footer />
           <ReactQueryDevtools />
-      </UserProvider>
         </QueryClientProvider>
+      </UserProvider>
     </Fragment>
   );
 }

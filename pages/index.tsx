@@ -1,17 +1,14 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
-import { useUser } from "@supabase/auth-helpers-react";
 import { Fragment } from 'react';
-import HeroSection from '../components/HomePage/HeroSection';
+import Collections from '../components/HomePage/Collections';
+import Handcrafted from '../components/HomePage/Handcrafted';
+import Hero from '../components/HomePage/Hero';
+import NewArrivals from '../components/HomePage/NewArrivals';
+
 
 
 const Home: NextPage = () => {
-
-     const { isLoading, user, error } = useUser();
-     console.log({ user, error });
-
-
 
   return (
     <Fragment>
@@ -20,10 +17,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <HeroSection />
-
-
-
+      <Hero />
+      <NewArrivals />
+      <Collections />
+      <Handcrafted />
     </Fragment>
   )
 }

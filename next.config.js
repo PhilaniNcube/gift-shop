@@ -4,5 +4,5 @@ module.exports = {
   images: {
     domains: ["tailwindui.com"],
   },
-  experimental: { images: { allowFutureImage: true } },
+
 };

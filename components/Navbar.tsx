@@ -2,450 +2,103 @@ import Link from 'next/link'
 import { Fragment, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
+  CreditCardIcon,
   MenuIcon,
   SearchIcon,
   ShoppingBagIcon,
+  ShoppingCartIcon,
+  UserIcon,
   XIcon,
 } from "@heroicons/react/outline";
 import { useUser } from '@supabase/auth-helpers-react';
 import supabase from '../lib/client';
 import { useRouter } from 'next/router';
-
-const navigation = {
-  categories: [
-    {
-      id: "categories",
-      name: "Categories",
-      featured: [
-        {
-          name: "New Arrivals",
-          href: "/new",
-          imageSrc:
-            "/images/gift-basket.jpg",
-          imageAlt:
-            "New Bundles and Hampers",
-        },
-
-      ],
-      sections: [
-        {
-          id: "bundles",
-          name: "Bundles",
-          items: [
-            { name: "Skin Care", href: "/skincare" },
-            { name: "Baby Shower", href: "/babyshower" },
-            { name: "Vegan", href: "/vegan" },
-            { name: "Halaal", href: "/halaal" },
-            { name: "Hair Care", href: "/haircare" },
-            { name: "Fragrance", href: "/fragrance" },
-            { name: "Health", href: "/health" },
-            { name: "Electronics", href: "/electronics" },
-
-          ],
-        },
+import Image from 'next/future/image';
+import { AnimatePresence } from 'framer-motion';
 
 
-      ],
-    },
-  ],
-  pages: [
-    { name: "Contact", href: "/contact" },
-    { name: "About Us", href: "/about" },
-  ],
-};
-
-function classNames(...classes:string[]) : string {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const router = useRouter()
 
+  const navLinks = [
+    { text: "Home", href: "/", active: router.asPath === '/' },
+    { text: "Products", href: "/products" ,active: router.asPath === '/products'},
+    { text: "Categories", href: "/categories", active: router.asPath === '/categories' },
+    { text: "Bundles", href: "/bundles", active: router.asPath === '/bundles' },
+  ];
+
   const { isLoading, user, error } = useUser();
+
+  console.log({isLoading, error, user})
 
 
 
 
   return (
-    <div className="bg-white">
-      {/* Mobile menu */}
-      <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
-          <Transition.Child
-            as={Fragment}
-            enter="transition-opacity ease-linear duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="transition-opacity ease-linear duration-300"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 flex z-40">
-            <Transition.Child
-              as={Fragment}
-              enter="transition ease-in-out duration-300 transform"
-              enterFrom="-translate-x-full"
-              enterTo="translate-x-0"
-              leave="transition ease-in-out duration-300 transform"
-              leaveFrom="translate-x-0"
-              leaveTo="-translate-x-full"
-            >
-              <Dialog.Panel className="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto">
-                <div className="px-4 pt-5 pb-2 flex">
-                  <button
-                    type="button"
-                    className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-gray-400"
-                    onClick={() => setOpen(false)}
+    <header className="">
+      {/* Desktop navigation begins */}
+      <div className="hidden md:block max-w-7xl py-4 px-4 mx-auto">
+        <div className="flex items-center justify-between">
+          <nav className="flex items-center space-x-4">
+            <h2 className="text-primary-main text-3xl xl:text-4xl font-extrabold">
+              all things gifts
+            </h2>
+            <ul className="flex pl-4 items-center space-x-3">
+              {navLinks.map((link, i) => (
+                <Link key={i} href={link.href}>
+                  <a
+                    className={`text-lg font-bold ${
+                      link.active ? "text-primary-main" : "text-slate-800"
+                    }`}
                   >
-                    <span className="sr-only">Close menu</span>
-                    <XIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-                </div>
-
-                {/* Links */}
-                <Tab.Group as="div" className="mt-2">
-                  <div className="border-b border-gray-200">
-                    <Tab.List className="-mb-px flex px-4 space-x-8">
-                      {navigation.categories.map((category, i) => (
-                        <Tab
-                          key={i}
-                          className={({ selected }) =>
-                            classNames(
-                              selected
-                                ? "text-indigo-600"
-                                : "text-gray-900",
-                              "flex-1 whitespace-nowrap py-4 px-1 text-base font-medium"
-                            )
-                          }
-                        >
-                          {category.name}
-                        </Tab>
-                      ))}
-                    </Tab.List>
-                  </div>
-                  <Tab.Panels as={Fragment}>
-                    {navigation.categories.map((category, i) => (
-                      <Tab.Panel
-                        key={i}
-                        className="pt-10 pb-8 px-4 space-y-10"
-                      >
-                        <div className="grid grid-cols-2 gap-x-4">
-                          {category.featured.map((item, i) => (
-                            <div
-                              key={i}
-                              className="group relative text-sm"
-                            >
-                              <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75">
-                                <img
-                                  src={item.imageSrc}
-                                  alt={item.imageAlt}
-                                  className="object-center object-cover"
-                                />
-                              </div>
-                              <Link href={item.href}>
-                                <a className="mt-6 block font-medium text-gray-900">
-                                  <span
-                                    className="absolute z-10 inset-0"
-                                    aria-hidden="true"
-                                  />
-                                  {item.name}
-                                </a>
-                              </Link>
-                              <p aria-hidden="true" className="mt-1">
-                                Shop now
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                        {category.sections.map((section, i) => (
-                          <div key={i}>
-                            <p
-                              id={`${category.id}-${section.id}-heading-mobile`}
-                              className="font-medium text-gray-900"
-                            >
-                              {section.name}
-                            </p>
-                            <ul
-                              role="list"
-                              aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
-                              className="mt-6 flex flex-col space-y-6"
-                            >
-                              {section.items.map((item, i) => (
-                                <li key={i} className="flow-root">
-                                  <a
-                                    href={item.href}
-                                    className="-m-2 p-2 block text-gray-500"
-                                  >
-                                    {item.name}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </Tab.Panel>
-                    ))}
-                  </Tab.Panels>
-                </Tab.Group>
-
-                <div className="border-t border-gray-200 py-6 px-4 space-y-6">
-                  {navigation.pages.map((page, i) => (
-                    <div key={i} className="flow-root">
-                      <Link href={page.href}>
-                        <a className="-m-2 p-2 block font-medium text-gray-900">
-                          {page.name}
-                        </a>
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="border-t border-gray-200 py-6 px-4 space-y-6">
-                  <div className="flow-root">
-                    {user ? (
-                      <Link href="/api/auth/logout">
-                        <a className="-m-2 p-2 block font-medium text-red-700">
-                          Logout
-                        </a>
-                      </Link>
-                    ) : (
-                      <Fragment>
-                        <Link href="/sign-in">
-                          <a className="-m-2 p-2 block font-medium text-gray-900">
-                            Sign in
-                          </a>
-                        </Link>
-
-                        <div className="flow-root">
-                          <Link href="/register">
-                            <a className="-m-2 p-2 block font-medium text-gray-900">
-                              Create account
-                            </a>
-                          </Link>
-                        </div>
-                      </Fragment>
-                    )}
-                  </div>
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition.Root>
-
-      {/**Desktop Starts */}
-
-      <header className="relative bg-white">
-        <p className="bg-indigo-600 h-10 flex items-center justify-center text-sm font-medium text-white px-4 sm:px-6 lg:px-8">
-          Get free delivery on orders over $100
-        </p>
-
-        <nav
-          aria-label="Top"
-          className="container mx-auto px-4 sm:px-6 lg:px-0"
-        >
-          <div className="border-b border-gray-200">
-            <div className="h-16 flex items-center">
-              <button
-                type="button"
-                className="bg-white p-2 rounded-md text-gray-400 lg:hidden"
-                onClick={() => setOpen(true)}
-              >
-                <span className="sr-only">Open menu</span>
-                <MenuIcon className="h-6 w-6" aria-hidden="true" />
-              </button>
-
-              {/* Logo */}
-              <div className="ml-4 flex lg:ml-0">
-                <Link href="/">
-                  <a>
-                    <span className="sr-only">Workflow</span>
-                    <img
-                      className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
-                      alt=""
-                    />
+                    {link.text}
                   </a>
                 </Link>
-              </div>
+              ))}
+            </ul>
+          </nav>
 
-              {/* Flyout menus */}
-              <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
-                <div className="h-full flex space-x-8">
-                  {navigation.categories.map((category, i) => (
-                    <Popover key={i} className="flex">
-                      {({ open }) => (
-                        <>
-                          <div className="relative flex">
-                            <Popover.Button
-                              className={classNames(
-                                open
-                                  ? "text-indigo-600"
-                                  : "border-transparent text-gray-700 hover:text-gray-800",
-                                "relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium  -mb-px pt-px"
-                              )}
-                            >
-                              {category.name}
-                            </Popover.Button>
-                          </div>
-
-                          <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-200"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="transition ease-in duration-150"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                          >
-                            <Popover.Panel className="absolute top-full inset-x-0 text-sm text-gray-500">
-                              {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                              <div
-                                className="absolute inset-0 top-1/2 bg-white shadow"
-                                aria-hidden="true"
-                              />
-
-                              <div className="relative bg-white">
-                                <div className="max-w-7xl mx-auto px-8">
-                                  <div className="grid grid-cols-2 gap-y-10 gap-x-8 py-16">
-                                    <div className="col-start-2 grid grid-cols-2 gap-x-8">
-                                      {category.featured.map((item, i) => (
-                                        <div
-                                          key={i}
-                                          className="group relative text-base sm:text-sm"
-                                        >
-                                          <div className="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75">
-                                            <img
-                                              src={item.imageSrc}
-                                              alt={item.imageAlt}
-                                              className="object-center object-cover"
-                                            />
-                                          </div>
-                                          <Link href={item.href}>
-                                            <a className="mt-6 block font-medium text-gray-900">
-                                              <span
-                                                className="absolute z-10 inset-0"
-                                                aria-hidden="true"
-                                              />
-                                              {item.name}
-                                            </a>
-                                          </Link>
-                                          <p
-                                            aria-hidden="true"
-                                            className="mt-1"
-                                          >
-                                            Shop now
-                                          </p>
-                                        </div>
-                                      ))}
-                                    </div>
-                                    <div className="row-start-1 grid grid-cols-3 gap-y-10 gap-x-8 text-sm">
-                                      {category.sections.map((section, i) => (
-                                        <div key={i}>
-                                          <p
-                                            id={`${section.name}-heading`}
-                                            className="font-medium text-gray-900"
-                                          >
-                                            {section.name}
-                                          </p>
-                                          <ul
-                                            role="list"
-                                            aria-labelledby={`${section.name}-heading`}
-                                            className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-                                          >
-                                            {section.items.map((item, i) => (
-                                              <li
-                                                key={i}
-                                                className="flex"
-                                              >
-                                                <Link href={item.href}>
-                                                  <a className="hover:text-gray-800">
-                                                    {item.name}
-                                                  </a>
-                                                </Link>
-                                              </li>
-                                            ))}
-                                          </ul>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </Popover.Panel>
-                          </Transition>
-                        </>
-                      )}
-                    </Popover>
-                  ))}
-
-                  {navigation.pages.map((page, i) => (
-                    <Link href={page.href} key={i}>
-                      <a
-                        key={page.name}
-                        className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                      >
-                        {page.name}
-                      </a>
-                    </Link>
-                  ))}
-                </div>
-              </Popover.Group>
-
-              <div className="ml-auto flex items-center">
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {user ? (
-                    <Link href="/api/auth/logout">
-                      <a className="-m-2 p-2 block font-medium text-red-700">
-                        Logout
-                      </a>
-                    </Link>
-                  ) : (
-                    <Fragment>
-                      <Link href="/sign-in">
-                        <a className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                          Sign in
-                        </a>
-                      </Link>
-                      <span
-                        className="h-6 w-px bg-gray-200"
-                        aria-hidden="true"
-                      />
-                      <Link href="/register">
-                        <a className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                          Create account
-                        </a>
-                      </Link>
-                    </Fragment>
-                  )}
-                </div>
-
-                {/* Search */}
-
-                {/* Cart */}
-                <div className="ml-4 flow-root lg:ml-6">
-                  <Link href="/cart">
-                    <a className="group -m-2 p-2 flex items-center">
-                      <ShoppingBagIcon
-                        className="flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                        aria-hidden="true"
-                      />
-                      <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                        0
-                      </span>
-                      <span className="sr-only">items in cart, view bag</span>
-                    </a>
-                  </Link>
-                </div>
-              </div>
+          <nav className="flex items-center space-x-8">
+            <div className="hidden md:flex items-center bg-slate-300 rounded-md py-2 pl-2 pr-4">
+              <SearchIcon className="h-6 w-6 text-slate-700 fill-transparent" />
+              <input
+                type="text"
+                className="w-64 bg-transparent border-none outline-none ml-2 focus:outline-none focus:border-none ring-0 focus:ring-transparent focus:ring-0 focus:bg-slate-200 rounde-md"
+              />
             </div>
-          </div>
-        </nav>
-      </header>
-    </div>
+            <div className="flex items-center space-x-4 justify-between">
+              {user ? (
+                <Fragment>
+                  <Link href="/account">
+                    <UserIcon className="text-primary-main h-6 w-6 cursor-pointer" />
+                  </Link>
+                  <>
+                    <ShoppingCartIcon className="text-primary-main cursor-pointer h-6 w-6" />
+                  </>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <Link href="/sign-in">
+                    <UserIcon className="text-primary-main h-6 w-6 cursor-pointer" />
+                  </Link>
+                  <>
+                    <ShoppingCartIcon className="text-primary-main h-6 w-6 cursor-pointer" />
+                  </>
+                </Fragment>
+              )}
+            </div>
+          </nav>
+        </div>
+      </div>{" "}
+      <div className="hidden md:block bg-slate-300 py-4">
+        <div className="max-w-7xl mx-auto px-4 flex justify-center items-center">
+          <p className="slate-800 text-sm font-medium">
+            Order your gifts in time for the christmas rush.</p>
+        </div>
+      </div>
+      {/* Desktop navigation ends */}
+    </header>
   );
 }
