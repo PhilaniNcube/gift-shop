@@ -40,7 +40,7 @@ const Collections = () => {
   return <section className="mt-4 bg-primary-main">
     <div className="max-w-7xl mx-auto px-4">
       <h3 className="text-white text-3xl tracking-wider py-4 font-bold">Handpicked Collections</h3>
-      <div className="grid grid-cols-4 gap-x-8 mt-4 gap-y-4 pb-16">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 mt-4 gap-y-4 pb-16">
         {collections.map((collection) => (
           <div key={collection.id} className="w-full relative isolate">
             <Image alt={collection.name} src={collection.image} width={collection.width} height={collection.height} className="w-full object-cover aspect-w-5 aspect-h-3 h-full rounded-lg"  />
