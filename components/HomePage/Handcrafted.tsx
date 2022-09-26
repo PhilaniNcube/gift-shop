@@ -47,7 +47,7 @@ const Handcrafted = () => {
             />
             <div className="absolute inset-0 flex justify-end items-center p-8">
               <h4 className="text-xl text-primary-main font-bold">
-                Surprise her just because
+                Surprise her just because!
               </h4>
             </div>
           </div>
