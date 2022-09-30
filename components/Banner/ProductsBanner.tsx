@@ -9,7 +9,7 @@ const ProductsBanner               = () => {
           width={1500}
           height={750}
           alt="Products"
-          className="rounded-lg w-full object-cover object-bottom"
+          className="rounded-lg w-full object-cover max-h-[35vh] object-bottom"
         />
         <div className="absolute inset-0 flex justify-end items-center p-12">
           <h1 className="text-3xl md:text-5xl font-bold text-center text-white uppercase tracking-wider">
