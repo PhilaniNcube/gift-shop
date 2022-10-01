@@ -8,20 +8,7 @@ import Filter from "../../components/Filter";
 import products from '../../data/products'
 import formatCurrency from "../../lib/formatCurrency";
 
-interface Product {
-  id: number,
-  name: string,
-  slug: string,
-  price: number,
-  description: string,
-  category: string,
-  tags: string[],
-  image: {
-    src:string,
-    height:number,
-    width:number
-  }
-}
+
 
 const Products = ({ products }: { products: Product[] }) => {
 
@@ -64,15 +51,29 @@ const Products = ({ products }: { products: Product[] }) => {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
               {products.map((product) => (
-                <div key={product.id} className="w-full">
-                  <Image src={product.image.src} height={product.image.height} width={product.image.width} alt={product.name} className="w-full object-cover aspect-square rounded-lg shadow-lg" />
-                  <span className="w-full mt-2 flex justify-between items-center">
-                    <h3 className="text-md font-bold text-primary-main">{product.name}</h3>
-                    <HeartIcon className="h-6 w-6 text-primary-main"  />
-                  </span>
-                  <p className="mt-1 text-xs text-slate-600 font-medium flex space-x-1">{product.description}</p>
-                  <h2 className="text-2xl text-primary-main font-bold">{formatCurrency(product.price)}</h2>
-                </div>
+                <Link key={product.id} href={`/products/${product.slug}`}>
+                  <div className="w-full group cursor-pointer">
+                    <Image
+                      src={product.image.src}
+                      height={product.image.height}
+                      width={product.image.width}
+                      alt={product.name}
+                      className="w-full object-cover group-hover:opacity-90 aspect-square rounded-lg shadow-lg"
+                    />
+                    <span className="w-full mt-2 flex justify-between items-center">
+                      <h3 className="text-md font-bold text-primary-main">
+                        {product.name}
+                      </h3>
+                      <HeartIcon className="h-6 w-6 text-primary-main" />
+                    </span>
+                    <p className="mt-1 text-xs text-slate-600 font-medium flex space-x-1">
+                      {product.description}
+                    </p>
+                    <h2 className="text-2xl text-primary-main font-bold">
+                      {formatCurrency(product.price)}
+                    </h2>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
