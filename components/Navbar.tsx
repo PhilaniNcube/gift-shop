@@ -3,13 +3,12 @@ import { Fragment, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   CreditCardIcon,
-  MenuIcon,
-  SearchIcon,
+  MagnifyingGlassIcon,
   ShoppingBagIcon,
   ShoppingCartIcon,
   UserIcon,
-  XIcon,
-} from "@heroicons/react/outline";
+
+} from "@heroicons/react/24/outline";
 import { useUser } from '@supabase/auth-helpers-react';
 import supabase from '../lib/client';
 import { useRouter } from 'next/router';
@@ -57,7 +56,7 @@ export default function Navbar() {
 
           <nav className="flex items-center space-x-8">
             <div className="hidden md:flex items-center bg-slate-300 rounded-md py-2 pl-2 pr-4">
-              <SearchIcon className="h-6 w-6 text-slate-700 fill-transparent" />
+              <MagnifyingGlassIcon className="h-6 w-6 text-slate-700 fill-transparent" />
               <input
                 type="text"
                 className="w-64 bg-transparent border-none outline-none ml-2 focus:outline-none focus:border-none ring-0 focus:ring-transparent focus:ring-0 focus:bg-slate-200 rounde-md"
@@ -90,7 +89,8 @@ export default function Navbar() {
       <div className="hidden md:block bg-slate-300 py-4">
         <div className="max-w-7xl mx-auto px-4 flex justify-center items-center">
           <p className="slate-800 text-sm font-medium">
-            Order your gifts in time for the christmas rush.</p>
+            Order your gifts in time for the christmas rush.
+          </p>
         </div>
       </div>
       {/* Desktop navigation ends */}

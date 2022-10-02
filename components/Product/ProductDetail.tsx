@@ -1,4 +1,4 @@
-import { ChevronRightIcon, HeartIcon, MinusIcon, PlusIcon, ShoppingBagIcon } from "@heroicons/react/outline";
+import { ChevronRightIcon, HeartIcon, MinusIcon, PlusIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import Image from "next/future/image";
 import Link from "next/link";
 import formatCurrency from "../../lib/formatCurrency";

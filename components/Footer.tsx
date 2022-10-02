@@ -36,7 +36,7 @@ const Footer = () => {
     ];
 
   return (
-    <footer className="bg-primary-main mt-8 py-12">
+    <footer className="bg-primary-main py-12">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-2">
           <div className="w-full col-span-2 md:col-span-1 pr-8">

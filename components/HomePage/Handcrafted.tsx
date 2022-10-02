@@ -2,7 +2,7 @@ import Image from "next/future/image";
 
 const Handcrafted = () => {
   return (
-    <section className="mt-12">
+    <section className="my-12">
       <div className="max-w-7xl mx-auto px-4 relative isoltae">
         <Image
           src="/images/handcrafted.jpg"
