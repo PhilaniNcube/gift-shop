@@ -19,15 +19,14 @@ import formatCurrency from "../../../lib/formatCurrency";
         <div className="w-full">
           {products?.map((product) => (
             <Link href={`/admin/products/${product.id}`}>
-              <div className="flex gap-3 hover:bg-gray-200 py-4 border-b border-slate-200 px-3 cursor-pointer">
-                <Image src={product.main_image} width={100} height={100} alt={product.name} className="w-20 h-20 object-cover rounded" />
-                <div className="">
-                  <h3>{product.name}</h3>
-                  <p className="text-xs text-slate-600 font-medium">{product.details}</p>
-                  <p className="mt-1 font-bold text-slate-700">Price: {formatCurrency(product.price)}</p>
-                </div>
-                <div></div>
-              </div>
+                  <div className="flex gap-3 hover:bg-gray-200 py-4 border-b border-slate-200 px-3 cursor-pointer">
+                    <Image src={product.main_image} width={100} height={100} alt={product.name} className="w-20 h-20 object-cover rounded" />
+                      <div className="">
+                        <h3>{product.name}</h3>
+                        <p className="text-xs text-slate-600 font-medium">{product.details}</p>
+                        <p className="mt-1 font-bold text-slate-700">Price: {formatCurrency(product.price)}</p>
+                      </div>
+                  </div>
             </Link>
           ))}
         </div>

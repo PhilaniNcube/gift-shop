@@ -22,6 +22,7 @@ interface IProduct {
   details:string,
   weight:number,
   price:number,
+  cost: number,
   brand:string,
   category: ICategory,
   main_image:string,
