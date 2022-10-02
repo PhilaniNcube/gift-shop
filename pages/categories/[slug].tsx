@@ -1,23 +1,22 @@
-import { ChevronRightIcon } from '@heroicons/react/outline';
+import { ChevronRightIcon, HeartIcon } from '@heroicons/react/outline';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/future/image';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Fragment } from 'react';
+import { useQuery } from 'react-query';
 import Filter from '../../components/Filter';
-import categories from '../../data/categories'
+import { getCategories, getCategoryProducts } from '../../fetchers/products';
+import supabase from '../../lib/client';
+import formatCurrency from '../../lib/formatCurrency';
 
-interface ICategory {
-  id:number,
-  slug:string,
-  name:string,
-  image:string,
-  width:number,
-  height:number
-}
 
-export default function Category({ category }: { category:ICategory }) {
-  console.log(category);
+
+
+export default function Category({ category, products }: { category:ICategory, products: IProduct[] }) {
+
+
+
   return (
     <Fragment>
       <Head>
@@ -25,9 +24,9 @@ export default function Category({ category }: { category:ICategory }) {
       </Head>{" "}
       <header className="max-w-7xl mx-auto relative my-12 isolate">
         <Image
-          src={category.image}
-          width={category.width}
-          height={category.height}
+          src={category.image.src}
+          width={category.image.width}
+          height={category.image.height}
           alt={category.name}
           className="w-full object-cover h-64 md:h-96 rounded-lg"
         />
@@ -66,11 +65,39 @@ export default function Category({ category }: { category:ICategory }) {
           </aside>
           <div className="flex-1 col-span-4 md:col-span-3 ">
             <div className="flex justify-between items-center mb-2">
-              <p className="text-primary-main text-md font-bold">Showing 1 - 12 of 50 items</p>
+              <p className="text-primary-main text-md font-bold">
+                Showing 1 - 12 of 50 items
+              </p>
               <p className="text-primary-main text-md font-bold">To Show 8</p>
-              <p className="text-primary-main text-md font-bold">Sort By Position</p>
+              <p className="text-primary-main text-md font-bold">
+                Sort By Position
+              </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16">
+              {products?.map((product) => (
+                <Link key={product.id} href={`/products/${product.slug}`}>
+                  <div className="w-full group cursor-pointer">
+                    <Image
+                      src={product.main_image}
+                      height={1000}
+                      width={1000}
+                      alt={product.name}
+                      className="w-full object-cover group-hover:opacity-90 aspect-square rounded-lg shadow-lg"
+                    />
+                    <span className="w-full mt-2 flex justify-between items-center">
+                      <h3 className="text-md font-bold text-primary-main">
+                        {product.name}
+                      </h3>
+                      <HeartIcon className="h-6 w-6 text-primary-main" />
+                    </span>
+
+                    <h2 className="text-2xl text-primary-main font-bold">
+                      {formatCurrency(product.price)}
+                    </h2>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </main>
@@ -82,9 +109,15 @@ export default function Category({ category }: { category:ICategory }) {
 
 
 
-export const getStaticPaths = () =>{
+export const getStaticPaths = async () =>{
 
-  const paths = categories.map((category) => ({
+    let { data: categories, error } = await supabase
+      .from("categories")
+      .select("*");
+
+
+
+  const paths = categories?.map((category) => ({
     params: { slug: category.slug },
   }));
 
@@ -98,13 +131,20 @@ return {
 }
 
 
-export const getStaticProps = ({params: {slug}}: {params: {slug: string}}) => {
+export const getStaticProps = async ({params: {slug}}: {params: {slug: string}}) => {
 
-  const category = categories.filter(c => c.slug === slug)
+  let { data: categories, error } = await supabase
+    .from("categories")
+    .select("*");
+
+  const category = categories?.filter(c => c.slug === slug) as ICategory[]
+
+    const products = await getCategoryProducts(category[0].id) as IProduct[];
 
   return {
     props: {
-      category: category[0]
+      category: category[0],
+      products: products
     },
     revalidate: 10
   }

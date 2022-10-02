@@ -31,11 +31,6 @@ export default function Navbar() {
 
   const { isLoading, user, error } = useUser();
 
-  console.log({isLoading, error, user})
-
-
-
-
   return (
     <header className="">
       {/* Desktop navigation begins */}

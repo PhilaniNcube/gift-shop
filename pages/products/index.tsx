@@ -5,12 +5,12 @@ import Link from "next/link";
 import { Fragment } from "react";
 import ProductsBanner from "../../components/Banner/ProductsBanner";
 import Filter from "../../components/Filter";
-import products from '../../data/products'
+import { getProducts } from "../../fetchers/products";
 import formatCurrency from "../../lib/formatCurrency";
 
 
 
-const Products = ({ products }: { products: Product[] }) => {
+const Products = ({ products }: { products: IProduct[] }) => {
 
 
   return (
@@ -54,9 +54,9 @@ const Products = ({ products }: { products: Product[] }) => {
                 <Link key={product.id} href={`/products/${product.slug}`}>
                   <div className="w-full group cursor-pointer">
                     <Image
-                      src={product.image.src}
-                      height={product.image.height}
-                      width={product.image.width}
+                      src={product.main_image}
+                      height={1000}
+                      width={1000}
                       alt={product.name}
                       className="w-full object-cover group-hover:opacity-90 aspect-square rounded-lg shadow-lg"
                     />
@@ -67,7 +67,7 @@ const Products = ({ products }: { products: Product[] }) => {
                       <HeartIcon className="h-6 w-6 text-primary-main" />
                     </span>
                     <p className="mt-1 text-xs text-slate-600 font-medium flex space-x-1">
-                      {product.description}
+                      {product.details}
                     </p>
                     <h2 className="text-2xl text-primary-main font-bold">
                       {formatCurrency(product.price)}
@@ -87,8 +87,9 @@ export default Products;
 
 
 
-export const getStaticProps = () => {
+export const getStaticProps = async () => {
 
+  const products = await getProducts() as IProduct[];
 
   return {
     props: {

@@ -3,7 +3,7 @@ import Image from "next/future/image";
 import Link from "next/link";
 import formatCurrency from "../../lib/formatCurrency";
 
-const ProductDetail = ({product}:{product:Product}) => {
+const ProductDetail = ({product}:{product:IProduct}) => {
 
   return (
     <header className="py-6">
@@ -29,9 +29,9 @@ const ProductDetail = ({product}:{product:Product}) => {
         <div className="w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           <div className="w-full">
             <Image
-              src={product.image.src}
-              height={product.image.height}
-              width={product.image.width}
+              src={product.main_image}
+              height={1000}
+              width={1000}
               alt={product.name}
               className="w-full object-cover aspect-square rounded-lg"
             />
@@ -41,7 +41,7 @@ const ProductDetail = ({product}:{product:Product}) => {
               {product.name}
             </h1>
             <p className="text-slate-600 font-bold mt-2">
-              {product.description}
+              {product.details}
             </p>
 
             {/**Todo - add star ratings widget */}

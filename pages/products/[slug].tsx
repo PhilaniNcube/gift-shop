@@ -2,9 +2,9 @@ import Head from "next/head";
 import { Fragment } from "react";
 import ProductDetail from "../../components/Product/ProductDetail";
 import ProductTabs from "../../components/Product/ProductTabs";
-import products from "../../data/products";
+import { getProducts } from "../../fetchers/products";
 
-const Product = ({product}:{product:Product}) => {
+const Product = ({product}:{product:IProduct}) => {
 
 console.log(product.id)
 
@@ -19,7 +19,10 @@ console.log(product.id)
 export default Product;
 
 
-export const getStaticPaths = () => {
+export const getStaticPaths = async () => {
+
+  const products = (await getProducts()) as IProduct[];
+
   const paths = products.map((product) => ({
     params: { slug: product.slug },
   }));
@@ -32,11 +35,14 @@ export const getStaticPaths = () => {
   };
 };
 
-export const getStaticProps = ({
+export const getStaticProps = async ({
   params: { slug },
 }: {
   params: { slug: string };
 }) => {
+
+const products = (await getProducts()) as IProduct[];
+
   const product = products.filter((c) => c.slug === slug);
 
   return {
