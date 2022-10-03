@@ -11,6 +11,9 @@ const Layout = ({children}:{children: ReactNode}) => {
         <Link href="/admin/products">
           <a className="text-white text-xl font-bold">Products</a>
         </Link>
+        <Link href="/admin/products/add">
+          <a className="text-white text-xl font-bold">Add/Create Product</a>
+        </Link>
         <Link href="/admin/orders">
           <a className="text-white text-xl font-bold">Orders</a>
         </Link>
