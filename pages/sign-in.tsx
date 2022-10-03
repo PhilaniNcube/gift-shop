@@ -1,4 +1,4 @@
-import { LockClosedIcon } from "@heroicons/react/solid";
+import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { NextPage } from "next";
 import Link from "next/link";
