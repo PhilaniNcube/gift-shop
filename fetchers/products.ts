@@ -14,11 +14,11 @@ const getProducts = async () => {
   return products as IProduct[]
 
 }
-const getSingleProducts = async (id:string) => {
+const getSingleProducts = async (slug:string) => {
 
   let { data: products, error } = await supabase
   .from('products')
-  .select('id, created_at, name, ingredients, details, details, weight, price,cost, brand, main_image, slug, category(*)').eq('id', id).single()
+  .select('id, created_at, name, ingredients, details, details, weight, price,cost, brand, main_image, slug, category(*)').eq('slug', slug).single()
 
   if(error) {
     throw new Error(error.message)

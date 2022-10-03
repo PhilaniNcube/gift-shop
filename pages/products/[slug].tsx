@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Fragment } from "react";
 import ProductDetail from "../../components/Product/ProductDetail";
 import ProductTabs from "../../components/Product/ProductTabs";
-import { getProducts } from "../../fetchers/products";
+import { getProducts, getSingleProducts } from "../../fetchers/products";
 
 const Product = ({product}:{product:IProduct}) => {
 
@@ -31,7 +31,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: "blocking",
+    fallback: 'blocking',
   };
 };
 
@@ -41,13 +41,17 @@ export const getStaticProps = async ({
   params: { slug: string };
 }) => {
 
-const products = (await getProducts()) as IProduct[];
+const product = (await getSingleProducts(slug)) as IProduct;
 
-  const product = products.filter((c) => c.slug === slug);
+if(!product) {
+  return {
+    notFound: true,
+  }
+}
 
   return {
     props: {
-      product: product[0],
+      product,
     },
     revalidate: 10,
   };
