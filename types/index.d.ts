@@ -29,6 +29,10 @@ interface IProduct {
   slug:string
 }
 
+interface ICartProduct extends IProduct {
+  quantity:number
+}
+
 
 interface ICategory {
   id:string,

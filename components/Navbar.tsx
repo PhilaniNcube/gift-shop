@@ -7,6 +7,7 @@ import {
   ShoppingBagIcon,
   ShoppingCartIcon,
   UserIcon,
+  UserMinusIcon,
 
 } from "@heroicons/react/24/outline";
 import { useUser } from '@supabase/auth-helpers-react';
@@ -67,6 +68,9 @@ export default function Navbar() {
                 <Fragment>
                   <Link href="/account">
                     <UserIcon className="text-primary-main h-6 w-6 cursor-pointer" />
+                  </Link>
+                  <Link href="/api/auth/logout">
+                    <UserMinusIcon className="text-red-400 h-6 w-6 cursor-pointer" />
                   </Link>
                   <>
                     <ShoppingCartIcon className="text-primary-main cursor-pointer h-6 w-6" />

@@ -1,9 +1,14 @@
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import slugify from "slugify";
 import Layout from "../../../components/Admin/Layout";
 import { getCategories } from "../../../fetchers/products";
+import supabase from "../../../lib/client";
 
 const Add = ({categories}:{categories:ICategory[]}) => {
+
+  const router = useRouter()
 
   const [imageSrc, setImageSrc] = useState<string>('')
   const [uploadData, setUploadData] = useState({})
@@ -44,6 +49,7 @@ setLoading(false)
 
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
+  setLoading(true)
 
   const { name, cost, details, price, weight, brand, category, ingredients } = Object.fromEntries(
     new FormData(e.currentTarget)
@@ -74,9 +80,32 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     throw new Error("Please enter a valid data");
   }
 
+  const slug = slugify(name)
 
+  const { data, error } = await supabase
+    .from("products")
+    .insert([
+      {
+        name: name,
+        slug: slug,
+        price: parseFloat(price),
+        cost: parseFloat(cost),
+        weight: parseInt(weight),
+        brand: brand,
+        category: category,
+        ingredients: ingredients,
+        details: details,
+        main_image: imageSrc,
+      },
+    ]);
+
+    console.log({data, error})
+
+    setLoading(false)
+    router.push('/admin/products')
 
 };
+
 
 
 
