@@ -7,7 +7,7 @@ import formatCurrency from "../../lib/formatCurrency";
 const ProductDetail = ({product}:{product:IProduct}) => {
 
 
-  const {getItemQuantity, increaseCartQuantity, decreaseCartQuantity, removeFromCart} = useShoppingCart()
+  const {getItemQuantity, increaseCartQuantity, decreaseCartQuantity} = useShoppingCart()
 
   const quantity = getItemQuantity(product.id)
 

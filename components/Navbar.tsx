@@ -1,27 +1,26 @@
 import Link from 'next/link'
-import { Fragment, useState } from "react";
-import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+
 import {
-  CreditCardIcon,
+
   MagnifyingGlassIcon,
-  ShoppingBagIcon,
+
   ShoppingCartIcon,
   UserIcon,
   UserMinusIcon,
 
 } from "@heroicons/react/24/outline";
 import { useUser } from '@supabase/auth-helpers-react';
-import supabase from '../lib/client';
+
 import { useRouter } from 'next/router';
-import Image from 'next/future/image';
-import { AnimatePresence } from 'framer-motion';
+
 import { useShoppingCart } from '../context/ShoppingCartContext';
 
 
 
 
 export default function Navbar() {
-  const {openCart, closeCart, cartQuantity} = useShoppingCart();
+
   const router = useRouter()
 
   const navLinks = [
@@ -31,7 +30,9 @@ export default function Navbar() {
     { text: "Bundles", href: "/bundles", active: router.asPath === '/bundles' },
   ];
 
-  const { isLoading, user, error } = useUser();
+  const {  user } = useUser();
+
+  const { cartQuantity } = useShoppingCart();
 
 
 
@@ -99,7 +100,7 @@ export default function Navbar() {
             </div>
           </nav>
         </div>
-      </div>{" "}
+      </div>
       <div className="hidden md:block bg-slate-300 py-4">
         <div className="max-w-7xl mx-auto px-4 flex justify-center items-center">
           <p className="slate-800 text-sm font-medium">
