@@ -1,4 +1,4 @@
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+
 import { useRouter } from "next/router";
 import { useState } from "react";
 import slugify from "slugify";
@@ -12,6 +12,8 @@ const Add = ({categories}:{categories:ICategory[]}) => {
 
   const [imageSrc, setImageSrc] = useState<string>('')
   const [uploadData, setUploadData] = useState({})
+
+  console.log(uploadData)
 
   const [loading, setLoading] = useState(false)
 

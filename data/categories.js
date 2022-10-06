@@ -1,4 +1,4 @@
-let categories = [
+const categories = [
   {
     id: 1,
     slug: "birthdays",

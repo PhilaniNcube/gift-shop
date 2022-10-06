@@ -18,7 +18,7 @@ import formatCurrency from "../../../lib/formatCurrency";
         </Link>
         <div className="w-full">
           {products?.map((product) => (
-            <Link href={`/admin/products/${product.id}`}>
+            <Link key={product.id} href={`/admin/products/${product.id}`}>
                   <div className="flex gap-3 hover:bg-gray-200 py-4 border-b border-slate-200 px-3 cursor-pointer">
                     <Image src={product.main_image} width={100} height={100} alt={product.name} className="w-20 h-20 object-cover rounded" />
                       <div className="">
