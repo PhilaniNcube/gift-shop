@@ -1,12 +1,12 @@
 import { ChevronRightIcon, HeartIcon } from '@heroicons/react/24/outline';
-import { GetStaticPaths, GetStaticProps } from 'next';
+
 import Image from 'next/future/image';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { useQuery } from 'react-query';
+
 import Filter from '../../components/Filter';
-import { getCategories, getCategoryProducts } from '../../fetchers/products';
+import {  getCategoryProducts } from '../../fetchers/products';
 import supabase from '../../lib/client';
 import formatCurrency from '../../lib/formatCurrency';
 
@@ -102,8 +102,8 @@ export default function Category({ category, products }: { category:ICategory, p
         </div>
       </main>
     </Fragment>
-  );
-};
+  )
+}
 
 
 
@@ -111,7 +111,7 @@ export default function Category({ category, products }: { category:ICategory, p
 
 export const getStaticPaths = async () =>{
 
-    let { data: categories, error } = await supabase
+    const { data: categories } = await supabase
       .from("categories")
       .select("*");
 
@@ -133,7 +133,7 @@ return {
 
 export const getStaticProps = async ({params: {slug}}: {params: {slug: string}}) => {
 
-  let { data: categories, error } = await supabase
+  const { data: categories } = await supabase
     .from("categories")
     .select("*");
 

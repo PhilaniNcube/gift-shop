@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FormEventHandler } from "react";
+
 import supabase from "../lib/client";
 
 const Reset: NextPage = () => {
@@ -19,7 +20,7 @@ const Reset: NextPage = () => {
       throw new Error("Please enter a valid data to register");
     }
 
-   let { data, error } = await supabase.auth.api.resetPasswordForEmail(email);
+   const { data, error } = await supabase.auth.api.resetPasswordForEmail(email);
 
    console.log({data, error})
 
@@ -44,7 +45,7 @@ const Reset: NextPage = () => {
               Or{" "}
               <Link href="/register">
                 <a className="font-medium text-indigo-600 hover:text-indigo-500">
-                  Register if you don't already have an account
+                  Register if you dont already have an account
                 </a>
               </Link>
             </p>
