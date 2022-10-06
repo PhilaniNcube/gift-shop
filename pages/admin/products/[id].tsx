@@ -1,9 +1,14 @@
 import Link from "next/link";
 import Layout from "../../../components/Admin/Layout";
 import { getCategories, getSingleProducts } from "../../../fetchers/products";
+
 import formatCurrency from "../../../lib/formatCurrency";
 
 const Product = ({product, categories}: {product: IProduct, categories: ICategory[]}) => {
+
+
+
+
 
   console.log({product})
 

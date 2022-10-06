@@ -1,9 +1,15 @@
 import { ChevronRightIcon, HeartIcon, MinusIcon, PlusIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import Image from "next/future/image";
 import Link from "next/link";
+import { useShoppingCart } from "../../context/ShoppingCartContext";
 import formatCurrency from "../../lib/formatCurrency";
 
 const ProductDetail = ({product}:{product:IProduct}) => {
+
+
+  const {getItemQuantity, increaseCartQuantity, decreaseCartQuantity, removeFromCart} = useShoppingCart()
+
+  const quantity = getItemQuantity(product.id)
 
   return (
     <header className="py-6">
@@ -40,9 +46,7 @@ const ProductDetail = ({product}:{product:IProduct}) => {
             <h1 className="text-primary-main text-3xl font-bold md:text-4xl">
               {product.name}
             </h1>
-            <p className="text-slate-600 font-bold mt-2">
-              {product.details}
-            </p>
+            <p className="text-slate-600 font-bold mt-2">{product.details}</p>
 
             {/**Todo - add star ratings widget */}
 
@@ -77,9 +81,15 @@ const ProductDetail = ({product}:{product:IProduct}) => {
               <p className="text-lg font-bold text-primary-main">Quantity:</p>
 
               <span className="flex space-x-3 items-center px-2 py-1 ml-3 bg-slate-100 ring-1 ring-slate-100 rounded-lg">
-                <MinusIcon className="h-7 w-7 cursor-pointer text-primary-main" />
-                <small className="text-xl font-bold">2</small>
-                <PlusIcon className="h-7 w-7 cursor-pointer text-primary-main" />
+                <MinusIcon
+                  onClick={() => decreaseCartQuantity(product.id)}
+                  className="h-7 w-7 cursor-pointer text-primary-main"
+                />
+                <small className="text-xl font-bold">{quantity}</small>
+                <PlusIcon
+                  onClick={() => increaseCartQuantity(product.id)}
+                  className="h-7 w-7 cursor-pointer text-primary-main"
+                />
               </span>
             </div>
 

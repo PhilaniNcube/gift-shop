@@ -8,21 +8,22 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Navbar from '../components/Navbar'
 import supabase from '../lib/client';
 import Footer from '../components/Footer';
+import { ShoppingCartProvider } from '../context/ShoppingCartContext';
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient({}));
-
-
-
 
 
   return (
     <Fragment>
       <UserProvider supabaseClient={supabaseClient}>
         <QueryClientProvider client={queryClient}>
-          <Navbar />
-          <Component {...pageProps} />
-          <Footer />
+          <ShoppingCartProvider>
+            <Navbar />
+            <Component {...pageProps} />
+            <Footer />
+          </ShoppingCartProvider>
           <ReactQueryDevtools />
         </QueryClientProvider>
       </UserProvider>

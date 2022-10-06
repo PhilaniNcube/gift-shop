@@ -15,11 +15,13 @@ import supabase from '../lib/client';
 import { useRouter } from 'next/router';
 import Image from 'next/future/image';
 import { AnimatePresence } from 'framer-motion';
+import { useShoppingCart } from '../context/ShoppingCartContext';
+
 
 
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const {openCart, closeCart, cartQuantity} = useShoppingCart();
   const router = useRouter()
 
   const navLinks = [
@@ -30,6 +32,8 @@ export default function Navbar() {
   ];
 
   const { isLoading, user, error } = useUser();
+
+
 
   return (
     <header className="">
@@ -72,18 +76,24 @@ export default function Navbar() {
                   <Link href="/api/auth/logout">
                     <UserMinusIcon className="text-red-400 h-6 w-6 cursor-pointer" />
                   </Link>
-                  <>
+                  <span className="relative isolate flex">
+                    <span className="absolute flex justify-center items-center -top-2 -right-2 h-4 w-4 text-xs bg-red-500 text-white rounded-full">
+                      {cartQuantity}
+                    </span>
                     <ShoppingCartIcon className="text-primary-main cursor-pointer h-6 w-6" />
-                  </>
+                  </span>
                 </Fragment>
               ) : (
                 <Fragment>
                   <Link href="/sign-in">
                     <UserIcon className="text-primary-main h-6 w-6 cursor-pointer" />
                   </Link>
-                  <>
+                  <div className="relative flex justify-center items-center">
+                    <span className="absolute flex justify-center items-center -top-2 -right-2 h-4 w-4 text-xs bg-red-500 text-white rounded-full">
+                      {cartQuantity}
+                    </span>
                     <ShoppingCartIcon className="text-primary-main h-6 w-6 cursor-pointer" />
-                  </>
+                  </div>
                 </Fragment>
               )}
             </div>
