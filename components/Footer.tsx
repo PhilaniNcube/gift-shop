@@ -8,7 +8,7 @@ const Footer = () => {
 
   const date = new Date();
 
-  let year = date.getFullYear()
+  const year = date.getFullYear()
 
     const navLinks = [
       { text: "Home", href: "/", active: router.asPath === "/" },

@@ -1,5 +1,5 @@
 const formatCurrency = (amount: number):string => {
-  let zaCurrency = Intl.NumberFormat('en-ZA', {
+  const zaCurrency = Intl.NumberFormat('en-ZA', {
     style: 'currency',
     currency: 'ZAR'
   })

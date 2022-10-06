@@ -52,7 +52,7 @@ const SignIn: NextPage = () => {
               Or{" "}
               <Link href="/register">
                 <a className="font-medium text-indigo-600 hover:text-indigo-500">
-                  Register if you don't already have an account
+                  Register if you dont already have an account
                 </a>
               </Link>
             </p>

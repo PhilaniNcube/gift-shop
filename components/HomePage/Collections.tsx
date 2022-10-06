@@ -2,7 +2,7 @@ import Image from "next/future/image";
 
 const Collections = () => {
 
-  let collections = [
+  const collections = [
     {
       id:1,
       name:'Make Up',

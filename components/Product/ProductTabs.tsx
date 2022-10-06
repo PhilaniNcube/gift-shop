@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { Tab } from "@headlessui/react";
 import Link from "next/link";
 import Image from "next/future/image";
@@ -9,7 +9,7 @@ function classNames(...classes: string[]): string{
 
 export default function ProductTabs() {
 
-   let featured_products: Product[] = [
+   const featured_products: Product[] = [
      {
        id: 6,
        name: "Mohair Blanket",
@@ -42,46 +42,7 @@ export default function ProductTabs() {
    ];
 
 
-  let [product_meta] = useState({
-    'Product Description': [
-     {
-      id:1,
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur voluptate quo quaerat quasi ullam dolore facere distinctio doloremque rerum vero, esse animi aut odit incidunt! Nisi commodi repudiandae incidunt culpa illo necessitatibus nihil debitis a distinctio quaerat consequatur asperiores iste eum impedit laboriosam quasi, aspernatur officia numquam deleniti magni excepturi provident. Ipsam rem quam deserunt!"
-     }
-    ],
-    'Related Products': [
-      {
-        id: 1,
-        title: "Is tech making coffee better or worse?",
-        date: "Jan 7",
-        commentCount: 29,
-        shareCount: 16,
-      },
-      {
-        id: 2,
-        title: "The most innovative things happening in coffee",
-        date: "Mar 19",
-        commentCount: 24,
-        shareCount: 12,
-      },
-    ],
-    Trending: [
-      {
-        id: 1,
-        title: "Ask Me Anything: 10 answers to your questions about coffee",
-        date: "2d ago",
-        commentCount: 9,
-        shareCount: 5,
-      },
-      {
-        id: 2,
-        title: "The worst advice we've ever heard about coffee",
-        date: "4d ago",
-        commentCount: 1,
-        shareCount: 2,
-      },
-    ],
-  });
+
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-16 ">
