@@ -19,7 +19,10 @@ import { useShoppingCart } from '../context/ShoppingCartContext';
 
 
 
+
 export default function Navbar() {
+
+
 
   const router = useRouter()
 
@@ -32,7 +35,10 @@ export default function Navbar() {
 
   const {  user } = useUser();
 
-  const { cartQuantity } = useShoppingCart();
+
+
+  const { cartQuantity, openCart } = useShoppingCart();
+
 
 
 
@@ -81,7 +87,10 @@ export default function Navbar() {
                     <span className="absolute flex justify-center items-center -top-2 -right-2 h-4 w-4 text-xs bg-red-500 text-white rounded-full">
                       {cartQuantity}
                     </span>
-                    <ShoppingCartIcon className="text-primary-main cursor-pointer h-6 w-6" />
+                    <ShoppingCartIcon
+                      onClick={() => openCart()}
+                      className="text-primary-main cursor-pointer h-6 w-6"
+                    />
                   </span>
                 </Fragment>
               ) : (
@@ -93,7 +102,10 @@ export default function Navbar() {
                     <span className="absolute flex justify-center items-center -top-2 -right-2 h-4 w-4 text-xs bg-red-500 text-white rounded-full">
                       {cartQuantity}
                     </span>
-                    <ShoppingCartIcon className="text-primary-main h-6 w-6 cursor-pointer" />
+                    <ShoppingCartIcon
+                      onClick={() => openCart()}
+                      className="text-primary-main h-6 w-6 cursor-pointer"
+                    />
                   </div>
                 </Fragment>
               )}
