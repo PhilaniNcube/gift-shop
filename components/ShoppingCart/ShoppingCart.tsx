@@ -3,6 +3,9 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useShoppingCart } from "../../context/ShoppingCartContext";
 import ShoppingCartItem from "./ShoppingCartItem";
+import { getProducts } from "../../fetchers/products";
+import { useQuery } from "react-query";
+import formatCurrency from "../../lib/formatCurrency";
 
 
 
@@ -11,7 +14,7 @@ const ShoppingCart = ({isOpen}:{isOpen:boolean}) => {
 
   const {closeCart, cartItems} = useShoppingCart()
 
-
+const { data: products, isLoading, isSuccess } = useQuery(["products"], getProducts);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -66,7 +69,11 @@ const ShoppingCart = ({isOpen}:{isOpen:boolean}) => {
                             className="-my-6 divide-y divide-gray-200"
                           >
                             {cartItems.map((product) => (
-                             <ShoppingCartItem key={product.id} id={product.id} quantity={product.quantity} />
+                              <ShoppingCartItem
+                                key={product.id}
+                                id={product.id}
+                                quantity={product.quantity}
+                              />
                             ))}
                           </ul>
                         </div>
@@ -74,9 +81,17 @@ const ShoppingCart = ({isOpen}:{isOpen:boolean}) => {
                     </div>
 
                     <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                      <div className="flex justify-between text-base font-medium text-gray-900">
+                      <div className="flex justify-between  text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>$262.00</p>
+                        {isLoading ? (
+                          <p>loading...</p>
+                        ) : (
+                          isSuccess && <p>{formatCurrency(cartItems.reduce((total, cartItem) => {
+                            const item = products?.find(i => i.id === cartItem.id)
+
+                            return total + (item?.price || 0) * cartItem.quantity
+                          },0))}</p>
+                        )}
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.
