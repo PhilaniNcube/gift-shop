@@ -7,7 +7,7 @@ import formatCurrency from "../../lib/formatCurrency";
 const ProductDetail = ({product}:{product:IProduct}) => {
 
 
-  const {getItemQuantity, increaseCartQuantity, decreaseCartQuantity} = useShoppingCart()
+  const {getItemQuantity, increaseCartQuantity, decreaseCartQuantity, openCart} = useShoppingCart()
 
   const quantity = getItemQuantity(product.id)
 
@@ -94,8 +94,8 @@ const ProductDetail = ({product}:{product:IProduct}) => {
             </div>
 
             <div className="mt-4 flex flex-col md:flex-row justify-between gap-4">
-              <button className="p-3 text-white bg-primary-main md:w-1/3 rounded-lg flex justify-center space-x-2 items-center">
-                <ShoppingBagIcon className="h-6 w-6" /> <p>Add To Cart</p>
+              <button onClick={() => openCart()} className="p-3 text-white bg-primary-main md:w-1/3 rounded-lg flex justify-center space-x-2 items-center">
+                <ShoppingBagIcon className="h-6 w-6" /> <p>Open Cart</p>
               </button>
               <button className="p-3 text-primary-main border md:w-1/3 border-primary-main rounded-lg flex justify-center space-x-2 items-center">
                 <HeartIcon className="h-6 w-6" /> <p>Add To Wish List</p>

@@ -6,6 +6,7 @@ import ShoppingCartItem from "./ShoppingCartItem";
 import { getProducts } from "../../fetchers/products";
 import { useQuery } from "react-query";
 import formatCurrency from "../../lib/formatCurrency";
+import Link from "next/link";
 
 
 
@@ -86,30 +87,40 @@ const { data: products, isLoading, isSuccess } = useQuery(["products"], getProdu
                         {isLoading ? (
                           <p>loading...</p>
                         ) : (
-                          isSuccess && <p>{formatCurrency(cartItems.reduce((total, cartItem) => {
-                            const item = products?.find(i => i.id === cartItem.id)
+                          isSuccess && (
+                            <p>
+                              {formatCurrency(
+                                cartItems.reduce((total, cartItem) => {
+                                  const item = products?.find(
+                                    (i) => i.id === cartItem.id
+                                  );
 
-                            return total + (item?.price || 0) * cartItem.quantity
-                          },0))}</p>
+                                  return (
+                                    total +
+                                    (item?.price || 0) * cartItem.quantity
+                                  );
+                                }, 0)
+                              )}
+                            </p>
+                          )
                         )}
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.
                       </p>
                       <div className="mt-6">
-                        <a
-                          href="#"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                        >
-                          Checkout
-                        </a>
+                        <Link href="/checkout">
+                          <a className="flex items-center justify-center rounded-md border border-transparent bg-primary-main px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-main">
+                            Checkout
+                          </a>
+                        </Link>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>
                           or
                           <button
                             type="button"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                            className="font-medium text-primary-main hover:text-indigo-500"
                             onClick={() => closeCart()}
                           >
                             Continue Shopping
