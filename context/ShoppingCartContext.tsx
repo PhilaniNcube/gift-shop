@@ -2,6 +2,7 @@ import  { createContext, ReactNode, useContext, useState } from "react";
 import ShoppingCart from "../components/ShoppingCart/ShoppingCart";
 
 
+
 type ShoppingCartProviderProps = {
   children: ReactNode
 }
@@ -43,6 +44,8 @@ export const ShoppingCartProvider = ({children}:ShoppingCartProviderProps) => {
 
 
 
+
+
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
@@ -65,6 +68,8 @@ export const ShoppingCartProvider = ({children}:ShoppingCartProviderProps) => {
         })
       }
     })
+
+
   }
 
   function decreaseCartQuantity(id:string) {
@@ -82,12 +87,16 @@ export const ShoppingCartProvider = ({children}:ShoppingCartProviderProps) => {
         })
       }
     })
+
+
   }
 
   function removeFromCart(id:string){
     setCartItems(currItems => {
       return currItems.filter(item => item.id !== id)
     })
+
+
   }
 
   const cartQuantity = cartItems.reduce((quantity, item) => item.quantity + quantity, 0)
@@ -104,6 +113,7 @@ export const ShoppingCartProvider = ({children}:ShoppingCartProviderProps) => {
         cartQuantity,
         openCart,
         closeCart
+
       }}
     >
       {children}
