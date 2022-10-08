@@ -18,31 +18,7 @@ const order = props.order
 
 
 
-const handlePayment = async () => {
-  console.log(order)
 
-  const payment = await fetch("https://sandbox.payfast.co.za/eng/process", {
-    method: "POST",
-    body: JSON.stringify({
-      merchant_id: "10027336",
-      merchant_key: "retbvx8vz8gpw",
-      return_url: `https://gift-shop-nine.vercel.app/orders/${order.id}?result=success`,
-      cancel_url: `https://gift-shop-nine.vercel.app/orders/${order.id}?result=failed`,
-      notify_url: `https://gift-shop-nine.vercel.app/orders/${order.id}?result=notify`,
-      amount: order.total,
-      item_name:order.id,
-      name_first: order.first_name,
-      name_last: order.last_name,
-      email_address: order.email_address,
-      cell_number:order.phone_number,
-      email_confirmation: '1'
-    })
-  }).then(res => res.json());
-
-  console.log(payment)
-
-
-}
 
   return (
     <Fragment>
@@ -176,7 +152,7 @@ const handlePayment = async () => {
                   value={order.first_name}
                 />
                 <input type="hidden" name="name_last" value={order.last_name} />
-                <input type="hidden" name="email_address" value={order.email_address} />
+                <input type="hidden" name="email_address" value={'philani@crackerjack.co.za'} />
                 <input
                   type="hidden"
                   name="cell_number"
