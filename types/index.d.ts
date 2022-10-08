@@ -45,3 +45,27 @@ interface ICategory {
     height:number
   }
 }
+
+
+interface IOrder {
+  id: string;
+  created_at:string;
+  profile_id:string;
+  order_subtotal:number;
+  shipping:number;
+  total:number;
+  city: string;
+  postal_code:string;
+  first_name:string;
+  last_name:string;
+  delivery_method:string;
+  email_address:string;
+  phone_number:string;
+  street_address:string;
+  order_items: [{
+    id:string;
+    quantity:number;
+  }];
+  paid: boolean;
+  shipped: boolean;
+}
