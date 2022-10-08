@@ -58,8 +58,6 @@ const handlePayment = async () => {
                   {order.order_items?.map((item) => {
                     const product = products?.find((p) => p.id === item.id);
 
-
-
                     return (
                       <li key={product?.id} className="flex space-x-3">
                         <img
@@ -74,7 +72,12 @@ const handlePayment = async () => {
                             {product?.name} &times; {item.quantity} @{" "}
                             {formatCurrency(product?.price || 0)} each
                           </span>
-                          <p className="text-xl font-bold text-primary-main">Subtotal {formatCurrency(product?.price || 0 * item.quantity)}</p>
+                          <p className="text-xl font-bold text-primary-main">
+                            Subtotal{" "}
+                            {formatCurrency(
+                              product?.price || 0 * item.quantity
+                            )}
+                          </p>
                         </div>
                       </li>
                     );
@@ -130,9 +133,69 @@ const handlePayment = async () => {
                 </h3>
               </div>
 
-              <button onClick={() => handlePayment()} className="bg-primary-main rounded-md w-full py-2 text-white text-lg mt-3">
-                Pay Now
-              </button>
+              <form
+                action="https://sandbox.payfast.co.za/eng/process"
+                method="POST"
+              >
+                <input type="hidden" name="merchant_id" value={"10027336"} />
+                <input
+                  type="hidden"
+                  name="merchant_key"
+                  value={"retbvx8vz8gpw"}
+                />
+                <input
+                  type="hidden"
+                  name="return_url"
+                  value={
+                    "https://gift-shop-nine.vercel.app/orders/${order.id}?result=success"
+                  }
+                />
+                <input
+                  type="hidden"
+                  name="cancel_url"
+                  value={
+                    "https://gift-shop-nine.vercel.app/orders/${order.id}?result=cancel"
+                  }
+                />
+                <input
+                  type="hidden"
+                  name="notify_url"
+                  value={
+                    "https://gift-shop-nine.vercel.app/orders/${order.id}?result=notify"
+                  }
+                />
+                <input
+                  type="hidden"
+                  name="amount"
+                  value={order.total}
+                />
+                <input type="hidden" name="item_name" value={order.id} />
+                <input
+                  type="hidden"
+                  name="name_first"
+                  value={order.first_name}
+                />
+                <input type="hidden" name="name_last" value={order.last_name} />
+                <input type="hidden" name="email_address" value={order.email_address} />
+                <input
+                  type="hidden"
+                  name="cell_number"
+                  value={order.phone_number}
+                />
+                <input type="hidden" name="email_confirmation" value="1" />
+                <input
+                  type="hidden"
+                  name="confirmation_address"
+                  value={order.email_address}
+                />
+
+                <button
+                  type="submit"
+                  className="bg-primary-main rounded-md w-full py-2 text-white text-lg mt-3"
+                >
+                  Pay Now
+                </button>
+              </form>
             </div>
           </div>
         </div>
