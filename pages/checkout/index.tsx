@@ -4,6 +4,10 @@ import { Fragment, useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import formatCurrency from "../../lib/formatCurrency";
+import { useShoppingCart } from "../../context/ShoppingCartContext";
+import ShoppingCartItem from "../../components/ShoppingCart/ShoppingCartItem";
+import { getProducts } from "../../fetchers/products";
+import { useQuery } from "react-query";
 
 const deliveryMethods = [
   {
@@ -24,6 +28,36 @@ const index = () => {
 
 const [selected, setSelected] = useState(deliveryMethods[0]);
 
+const {
+  data: products,
+  isLoading,
+  isSuccess,
+} = useQuery(["products"], getProducts);
+
+const {cartItems} = useShoppingCart()
+
+
+  const handleSubmit =  async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const formData =
+      Object.fromEntries(new FormData(e.currentTarget));
+
+const data = {
+  ...formData,
+  shipping: selected.price,
+  delivery_method: selected.name,
+  cart_items: cartItems,
+  cartTotal: cartItems.reduce((total, cartItem) => {
+    const item = products?.find((i) => i.id === cartItem.id);
+
+    return total + (item?.price || 0) * cartItem.quantity;
+  }, 0),
+};
+
+      console.log(data);
+  }
+
   return (
     <Fragment>
       <Head>
@@ -31,12 +65,12 @@ const [selected, setSelected] = useState(deliveryMethods[0]);
       </Head>
       <main className="my-6">
         <section className="max-w-7xl mx-auto px-4 bg-slate-100 rounded-lg">
-          <div className="grid gap-8 grid-cols-2">
+          <form onSubmit={handleSubmit} className="grid gap-8 py-4 grid-cols-2">
             <div className="col-span-2 lg:col-span-1 p-3">
               <h2 className="text-xl font-bold text-slate-800">
                 Contact Information
               </h2>
-              <form className="mt-3">
+              <div className="mt-3">
                 <div className="w-full flex flex-col">
                   <label
                     htmlFor="email_address"
@@ -212,8 +246,12 @@ const [selected, setSelected] = useState(deliveryMethods[0]);
                                             : "text-gray-500"
                                         }`}
                                       >
-                                        <span>{formatCurrency(method.price)}</span>
-                                        <h2 className="font-bold">Delivery Time: {method.time}</h2>
+                                        <span>
+                                          {formatCurrency(method.price)}
+                                        </span>
+                                        <h2 className="font-bold">
+                                          Delivery Time: {method.time}
+                                        </h2>
                                       </RadioGroup.Description>
                                     </div>
                                   </div>
@@ -231,14 +269,81 @@ const [selected, setSelected] = useState(deliveryMethods[0]);
                     </RadioGroup>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
-            <div className="col-span-2 lg:col-span-1 p-3">
+            <div className="col-span-2 bg-white ring-1 ring-slate-300 rounded-lg lg:col-span-1 p-3">
               <h2 className="text-xl font-bold text-slate-800">
                 Order Summary
               </h2>
+              <div className="mt-8">
+                <div className="flow-root">
+                  <ul role="list" className="-my-6 divide-y divide-gray-200">
+                    {cartItems.map((product) => (
+                      <ShoppingCartItem
+                        key={product.id}
+                        id={product.id}
+                        quantity={product.quantity}
+                      />
+                    ))}
+                  </ul>
+
+                  <div className="block" aria-hidden="true">
+                    <div className="py-5">
+                      <div className="border-t border-gray-200" />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between  text-base font-medium text-gray-900">
+                    <p>Subtotal</p>
+                    {isLoading ? (
+                      <p>loading...</p>
+                    ) : (
+                      isSuccess && (
+                        <p>
+                          {formatCurrency(
+                            cartItems.reduce((total, cartItem) => {
+                              const item = products?.find(
+                                (i) => i.id === cartItem.id
+                              );
+
+                              return (
+                                total + (item?.price || 0) * cartItem.quantity
+                              );
+                            }, 0)
+                          )}
+                        </p>
+                      )
+                    )}
+                  </div>
+
+                  <div className="flex justify-between  text-base font-medium text-gray-900">
+                    <p>Shipping</p>
+                    <p>{formatCurrency(selected.price)}</p>
+                  </div>
+
+                  <div className="flex mt-4 justify-between  text-lg font-bold text-gray-900">
+                    <p>Total</p>
+                    <p className="">
+                      {formatCurrency(
+                        selected.price +
+                          cartItems.reduce((total, cartItem) => {
+                            const item = products?.find(
+                              (i) => i.id === cartItem.id
+                            );
+
+                            return (
+                              total + (item?.price || 0) * cartItem.quantity
+                            );
+                          }, 0)
+                      )}
+                    </p>
+                  </div>
+
+                  <button type="submit" className="w-full rounded-md bg-primary-main text-white py-2 text-base mt-4">Confirm Order</button>
+                </div>
+              </div>
             </div>
-          </div>
+          </form>
         </section>
       </main>
     </Fragment>
