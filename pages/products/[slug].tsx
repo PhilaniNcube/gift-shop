@@ -6,7 +6,7 @@ import { getProducts, getSingleProducts } from "../../fetchers/products";
 
 const Product = ({product}:{product:IProduct}) => {
 
-console.log(product.id)
+
 
   return <Fragment>
     <Head>
@@ -27,7 +27,7 @@ export const getStaticPaths = async () => {
     params: { slug: product.slug },
   }));
 
-  console.log({ paths });
+
 
   return {
     paths,

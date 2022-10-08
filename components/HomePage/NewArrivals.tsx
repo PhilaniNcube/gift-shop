@@ -2,6 +2,7 @@
 import { ChevronRightIcon, HeartIcon } from "@heroicons/react/24/outline";
 import Image from "next/future/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Fragment } from "react";
 import { useQuery } from "react-query";
 import { getFeaturedProducts } from "../../fetchers/products";
@@ -11,6 +12,8 @@ import formatCurrency from "../../lib/formatCurrency";
 const NewArrivals = () => {
 
   const {data:new_arrivals, isLoading, isSuccess} = useQuery(['featured_products'], getFeaturedProducts)
+
+  const router = useRouter()
 
   return (
     <section className="my-6 md:my-8">
@@ -28,8 +31,8 @@ const NewArrivals = () => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 mt-4 gap-y-4">
           {new_arrivals?.map((product) => (
-            <div key={product.id} className="w-full cursor-pointer">
-              <Link href={`/products/${product.slug}`}>
+            <div key={product.id} className="w-full cursor-pointer" onClick={() => router.push(`/products/${product.slug}`)}>
+
                 <Fragment>
                   <Image
                     alt={product.name}
@@ -51,7 +54,7 @@ const NewArrivals = () => {
                     {formatCurrency(product.price)}
                   </h4>
                 </Fragment>
-              </Link>
+
             </div>
           ))}
         </div>
