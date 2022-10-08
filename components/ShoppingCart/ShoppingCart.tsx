@@ -112,7 +112,7 @@ const { data: products, isLoading, isSuccess } = useQuery(["products"], getProdu
                       </p>
                       <div className="mt-6">
                         <Link href="/checkout">
-                          <a className="flex items-center justify-center rounded-md border border-transparent bg-primary-main px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-main">
+                          <a onClick={() => closeCart()} className="flex items-center justify-center rounded-md border border-transparent bg-primary-main px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-main">
                             Checkout
                           </a>
                         </Link>
