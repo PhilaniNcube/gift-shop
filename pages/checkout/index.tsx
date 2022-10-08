@@ -8,6 +8,8 @@ import { useShoppingCart } from "../../context/ShoppingCartContext";
 import ShoppingCartItem from "../../components/ShoppingCart/ShoppingCartItem";
 import { getProducts } from "../../fetchers/products";
 import { useQuery } from "react-query";
+import supabase from "../../lib/client";
+import { useUser } from "@supabase/auth-helpers-react";
 
 const deliveryMethods = [
   {
@@ -34,6 +36,8 @@ const {
   isSuccess,
 } = useQuery(["products"], getProducts);
 
+const {user} = useUser()
+
 const {cartItems} = useShoppingCart()
 
 
@@ -47,7 +51,7 @@ const data = {
   ...formData,
   shipping: selected.price,
   delivery_method: selected.name,
-  cart_items: cartItems,
+  order_items: cartItems,
   cartTotal: cartItems.reduce((total, cartItem) => {
     const item = products?.find((i) => i.id === cartItem.id);
 
@@ -56,6 +60,26 @@ const data = {
 };
 
       console.log(data);
+
+      const { data: order, error } = await supabase.from("orders").insert([
+        {
+          profile_id: !user ? null : user.id,
+          order_subtotal: data.cartTotal,
+          shipping: data.shipping,
+          total: data.shipping + data.cartTotal,
+          city: formData.city,
+          postal_code: formData.postal_code,
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          delivery_method: selected.name,
+          email_address: formData.email_address,
+          phone_number: formData.phone_number,
+          street_address: formData.street_address,
+          order_items: cartItems
+        },
+      ]);
+
+      console.log({order, error})
   }
 
   return (
