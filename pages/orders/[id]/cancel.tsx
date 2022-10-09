@@ -1,24 +1,18 @@
-
 import Head from "next/head";
 import { Fragment } from "react";
 import { useQuery } from "react-query";
-import { getProducts } from "../../fetchers/products";
-import supabase from "../../lib/client";
-import formatCurrency from "../../lib/formatCurrency";
+import { getProducts } from "../../../fetchers/products";
+import supabase from "../../../lib/client";
+import formatCurrency from "../../../lib/formatCurrency";
 
 type OrderProps = {
-  order: IOrder
-}
+  order: IOrder;
+};
 
-const Order = (props: OrderProps ) => {
+const Order = (props: OrderProps) => {
+  const { data: products } = useQuery(["products"], getProducts);
 
-  const {data:products} = useQuery(['products'], getProducts)
-
-const order = props.order
-
-
-
-
+  const order = props.order;
 
   return (
     <Fragment>
@@ -109,63 +103,7 @@ const order = props.order
                 </h3>
               </div>
 
-              <form
-                action="https://sandbox.payfast.co.za/eng/process"
-                method="POST"
-              >
-                <input type="hidden" name="merchant_id" value={"10027336"} />
-                <input
-                  type="hidden"
-                  name="merchant_key"
-                  value={"retbvx8vz8gpw"}
-                />
-                <input
-                  type="hidden"
-                  name="return_url"
-                  value={`https://gift-shop-nine.vercel.app/orders/${order.id}/success`}
-                />
-                <input
-                  type="hidden"
-                  name="cancel_url"
-                  value={`https://gift-shop-nine.vercel.app/orders/${order.id}/cancel`}
-                />
-                <input
-                  type="hidden"
-                  name="notify_url"
-                  value={`https://gift-shop-nine.vercel.app/orders/${order.id}/notify`}
-                />
-                <input type="hidden" name="amount" value={order.total} />
-                <input type="hidden" name="item_name" value={order.id} />
-                <input
-                  type="hidden"
-                  name="name_first"
-                  value={order.first_name}
-                />
-                <input type="hidden" name="name_last" value={order.last_name} />
-                <input
-                  type="hidden"
-                  name="email_address"
-                  value={"philani@crackerjack.co.za"}
-                />
-                <input
-                  type="hidden"
-                  name="cell_number"
-                  value={order.phone_number}
-                />
-                <input type="hidden" name="email_confirmation" value="1" />
-                <input
-                  type="hidden"
-                  name="confirmation_address"
-                  value={order.email_address}
-                />
 
-                <button
-                  type="submit"
-                  className="bg-primary-main rounded-md w-full py-2 text-white text-lg mt-3"
-                >
-                  Pay Now
-                </button>
-              </form>
             </div>
           </div>
         </div>
@@ -175,26 +113,28 @@ const order = props.order
 };
 export default Order;
 
+export async function getServerSideProps({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
+  const { data: orders, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-export async function getServerSideProps({params: {id}}:{params: {id: string}}) {
-
-  const { data: orders, error } = await supabase.from("orders").select("*").eq('id', id).single();
-
-
-  if(error) {
+  if (error) {
     return {
       props: {
-        order: {}
-      }
-    }
+        order: {},
+      },
+    };
   }
 
   return {
     props: {
       order: orders,
-
-    }
-  }
-
-
+    },
+  };
 }
