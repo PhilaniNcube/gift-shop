@@ -113,7 +113,7 @@ const Product = ({
                   {order.paid ? "Payment: Paid" : "Payment: Not Paid"}
                 </p>
                 <p className="text-slate-500 text-sm mt-3 font-bold">
-                  {order.paid ? "Shipped: Shipped" : "Shipped: Not Shipped"}
+                  {order.shipped ? "Shipped: Shipped" : "Shipped: Not Shipped"}
                 </p>
               </div>
               <div className="w-full text-slate-600 font-bold">
