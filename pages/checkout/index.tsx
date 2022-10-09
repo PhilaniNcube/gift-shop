@@ -10,6 +10,7 @@ import { getProducts } from "../../fetchers/products";
 import { useQuery } from "react-query";
 import supabase from "../../lib/client";
 import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 
 const deliveryMethods = [
   {
@@ -39,6 +40,8 @@ const {
 const {user} = useUser()
 
 const {cartItems} = useShoppingCart()
+
+const router = useRouter()
 
 
   const handleSubmit =  async (e: React.FormEvent<HTMLFormElement>) => {
@@ -77,9 +80,13 @@ const data = {
           street_address: formData.street_address,
           order_items: cartItems
         },
-      ]);
+      ]).single();
 
       console.log({order, error})
+
+
+
+      router.push(`/orders/${order?.id}`)
   }
 
   return (
