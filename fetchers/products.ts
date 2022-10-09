@@ -46,6 +46,21 @@ const getSingleProducts = async (slug:string) => {
 
 }
 
+const getSingleProductById = async (id:string) => {
+
+  const { data: products, error } = await supabase
+  .from('products')
+  .select('id, created_at, name, ingredients, details, details, weight, price,cost, brand, main_image, slug, category(*)').eq('id', id).single()
+
+  if(error) {
+    throw new Error(error.message)
+  }
+
+
+  return products as IProduct
+
+}
+
 const getCategories = async  () => {
 const { data: categories, error } = await supabase
   .from('categories')
@@ -77,4 +92,4 @@ const getCategoryProducts = async (id:string) => {
 
 }
 
-export {getProducts, getCategories, getCategoryProducts, getSingleProducts, getFeaturedProducts}
+export {getProducts, getCategories, getCategoryProducts, getSingleProducts, getFeaturedProducts, getSingleProductById}

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Layout from "../../../components/Admin/Layout";
-import { getCategories, getSingleProducts } from "../../../fetchers/products";
+import { getCategories, getSingleProductById } from "../../../fetchers/products";
 
 import formatCurrency from "../../../lib/formatCurrency";
 
@@ -183,7 +183,7 @@ export default Product;
 
 export async function getServerSideProps({params: {id}}:{params: {id: string}}) {
 
-  const product = await getSingleProducts(id) as IProduct;
+  const product = await getSingleProductById(id) as IProduct;
 
   const categories = await getCategories() as ICategory[]
 

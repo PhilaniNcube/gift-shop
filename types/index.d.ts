@@ -68,4 +68,5 @@ interface IOrder {
   }];
   paid: boolean;
   shipped: boolean;
+
 }
