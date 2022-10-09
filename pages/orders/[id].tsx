@@ -132,7 +132,7 @@ const order = props.order
                 <input
                   type="hidden"
                   name="notify_url"
-                  value={`https://gift-shop-nine.vercel.app/orders/${order.id}/notify`}
+                  value={`https://gift-shop-nine.vercel.app/api/orders/${order.id}/notify`}
                 />
                 <input type="hidden" name="amount" value={order.total} />
                 <input type="hidden" name="item_name" value={order.id} />
