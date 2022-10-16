@@ -4,7 +4,8 @@ import { useState } from "react";
 
 import Layout from "../../../components/Admin/Layout";
 
-import { getBundleById } from "../../../fetchers/bundles";
+import { getBundleById, getBundleProducts } from "../../../fetchers/bundles";
+import { getProducts } from "../../../fetchers/products";
 import supabase from "../../../lib/client";
 import formatCurrency from "../../../lib/formatCurrency";
 
@@ -12,103 +13,108 @@ import formatCurrency from "../../../lib/formatCurrency";
 
 const Product = ({
   bundle,
+  products,
+  bundleProducts,
 }: {
   bundle: IBundle;
-
+  products: IProduct[];
+  bundleProducts:IBundleProduct[];
 }) => {
-  console.log({ bundle });
+  console.log({ bundle, bundleProducts });
 
-    const [uploadData, setUploadData] = useState({});
+  const [uploadData, setUploadData] = useState({});
 
-    console.log(uploadData);
+  console.log(uploadData);
 
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-    const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setLoading(true);
+  const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
 
-      const { image } = Object.fromEntries(new FormData(e.currentTarget));
+    const { image } = Object.fromEntries(new FormData(e.currentTarget));
 
-      // const fileInput = Array.from(form.elements).find((item) => item.getAttribute('type') === 'file')
+    // const fileInput = Array.from(form.elements).find((item) => item.getAttribute('type') === 'file')
 
-      const formData = new FormData();
+    const formData = new FormData();
 
-      formData.append("file", image);
-      formData.append("upload_preset", "g02mzonw");
+    formData.append("file", image);
+    formData.append("upload_preset", "g02mzonw");
 
-      const data = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      )
-        .then((r) => r.json())
-        .catch((err) => err.json());
-      console.log({ data });
-
-
-      setUploadData(data);
-
-      setLoading(false);
-    };
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setLoading(true);
-
-      const {
-        name,
-        cost,
-        details,
-        price,
-        quantity,
-        brand,
-        ingredients,
-      } = Object.fromEntries(new FormData(e.currentTarget));
-
-
-
-
-      if (
-        typeof name !== "string" ||
-        typeof quantity !== "string" ||
-        typeof cost !== "string" ||
-        typeof price !== "string" ||
-        typeof brand !== "string" ||
-        typeof ingredients !== "string" ||
-        typeof details !== "string"
-
-      ) {
-        throw new Error("Please enter a valid data");
+    const data = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: formData,
       }
+    )
+      .then((r) => r.json())
+      .catch((err) => err.json());
+    console.log({ data });
 
+    setUploadData(data);
 
+    setLoading(false);
+  };
 
-         const { data, error } = await supabase
-           .from("bundles")
-           .update({
-             products: {
-               name: name,
-               quantity: quantity,
-               cost: cost,
-               price: price,
-               brand: brand,
-               ingredients: ingredients,
-               details: details,
-               image: uploadData,
-             },
-           })
-           .eq("id", bundle.id);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
 
-          console.log({data, error})
+    const { name, cost, details, price, quantity, brand, ingredients } =
+      Object.fromEntries(new FormData(e.currentTarget));
 
-      setLoading(false);
+    if (
+      typeof name !== "string" ||
+      typeof quantity !== "string" ||
+      typeof cost !== "string" ||
+      typeof price !== "string" ||
+      typeof brand !== "string" ||
+      typeof ingredients !== "string" ||
+      typeof details !== "string"
+    ) {
+      throw new Error("Please enter a valid data");
+    }
 
-    };
+    const { data, error } = await supabase
+      .from("bundles")
+      .update({
+        products: {
+          name: name,
 
+          cost: cost,
+          price: price,
+          brand: brand,
+          ingredients: ingredients,
+          details: details,
+          image: uploadData,
+        },
+      })
+      .eq("id", bundle.id);
 
+    console.log({ data, error });
+
+    setLoading(false);
+  };
+
+  const addBundleProduct = async (
+    e: React.FormEvent<HTMLFormElement>,
+    productId: string
+  ) => {
+    e.preventDefault();
+
+    const { quantity } = Object.fromEntries(new FormData(e.currentTarget));
+    console.log({ productId, quantity });
+
+    const { data, error } = await supabase
+      .from("bundle_products")
+      .insert([
+        { product_id: productId, bundle_id: bundle.id, quantity: quantity },
+      ])
+      .single();
+
+    console.log({ data, error });
+  };
 
   return (
     <Layout>
@@ -147,9 +153,53 @@ const Product = ({
           />
         </div>
         <div>
-          <h2 className="font-bold text-2xl text-primary-main my-4">
-            Add Bundle Product
-          </h2>
+          <h2>Add Bundle Product</h2>
+          <div className="p-8 my-4 border-spacing-3 border border-dashed rounded-lg border-slate-500">
+            <h3 className="font-bold text-xl text-primary-main my-1">
+              Select products to add to bundle
+            </h3>
+
+            <div className="w-full grid grid-cols-2 gap-2">
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="bg-slate-50 flex space-x-2 items-center my-2 p-2 rounded-lg w-full"
+                >
+                  <Image
+                    src={product.main_image}
+                    alt={product.name}
+                    width={500}
+                    height={500}
+                    className="h-12 w-12 rounded"
+                  />
+                  <form
+                    onSubmit={(e) => addBundleProduct(e, product.id)}
+                    className="flex-1"
+                  >
+                    <label
+                      htmlFor="quantity"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Quantity
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      name="quantity"
+                      id="quantity"
+                      className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                    <button
+                      type="submit"
+                      className="py-1 ml-2 px-2 rounded-md bg-primary-main text-xs text-white mt-2"
+                    >
+                      Add Product
+                    </button>
+                  </form>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <form
             className="p-8 border-spacing-3 border border-dashed rounded-lg border-slate-500"
@@ -197,21 +247,7 @@ const Product = ({
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="ingredients"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Product Ingredients/Contents
-                </label>
-                <input
-                  type="text"
-                  name="ingredients"
-                  id="ingredients"
-                  autoComplete="ingredients"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+
               <div className="col-span-6 ">
                 <label
                   htmlFor="details"
@@ -254,20 +290,6 @@ const Product = ({
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="quantity"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Quantity
-                </label>
-                <input
-                  type="number"
-                  name="quantity"
-                  id="quantity"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
 
               <div className="col-span-6 sm:col-span-3">
                 <label
@@ -307,12 +329,17 @@ export async function getServerSideProps({
 }) {
   const bundle = (await getBundleById(id)) as IBundle;
 
+   const products = (await getProducts()) as IProduct[];
+
+   const bundleProducts = await getBundleProducts(id)
+
 
 
   return {
     props: {
       bundle,
-
+      products,
+      bundleProducts,
     },
   };
 }

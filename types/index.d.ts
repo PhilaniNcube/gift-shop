@@ -26,7 +26,8 @@ interface IProduct {
   brand:string,
   category: ICategory,
   main_image:string,
-  slug:string
+  slug:string,
+  featured:boolean,
 }
 
 interface ICartProduct extends IProduct {
@@ -120,3 +121,6 @@ interface IBundle {
   cost:number;
 }
 
+interface IBundleProduct extends IProduct<Omit, 'id'> {
+  quantity:number;
+}

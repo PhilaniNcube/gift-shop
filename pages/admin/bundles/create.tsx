@@ -2,12 +2,14 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import slugify from "slugify";
 import Layout from "../../../components/Admin/Layout";
-import { getCategories } from "../../../fetchers/products";
+import { getCategories, getProducts } from "../../../fetchers/products";
 import supabase from "../../../lib/client";
 
 
-const Add = ({ categories }: { categories: ICategory[] }) => {
+const Add = ({ categories, products }: { categories: ICategory[], products: IProduct[] }) => {
   const router = useRouter();
+
+  console.log(products)
 
 
   const [uploadData, setUploadData] = useState({});
@@ -183,7 +185,7 @@ const Add = ({ categories }: { categories: ICategory[] }) => {
 
           <button
             type="submit"
-            className={`inline-flex mt-6 w-1/3 justify-center rounded-md border border-transparent  py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 bg-indigo-600 cursor-pointer`}
+            className={`inline-flex mt-6 w-1/3 justify-center rounded-md border border-transparent  py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 bg-primary-main cursor-pointer`}
           >
             Save
           </button>
@@ -196,10 +198,12 @@ export default Add;
 
 export async function getServerSideProps() {
   const categories = (await getCategories()) as ICategory[];
+  const products = (await getProducts()) as IProduct[];
 
   return {
     props: {
       categories,
+      products
     },
   };
 }

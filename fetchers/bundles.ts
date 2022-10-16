@@ -30,4 +30,21 @@ const getBundleById = async (id:string) => {
 
 }
 
-export {getBundles, getBundleById}
+
+const getBundleProducts = async (bundleId: string) => {
+
+
+   const { data: bundles, error } = await supabase
+  .from('bundle_products')
+  .select('*, product_id(*)').eq('bundle_id', bundleId)
+
+
+    if(error) {
+    throw new Error(error.message)
+  }
+
+  return bundles as IBundleProduct[]
+
+}
+
+export {getBundles, getBundleById, getBundleProducts}
