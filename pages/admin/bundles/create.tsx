@@ -81,12 +81,12 @@ const Add = ({ categories, products }: { categories: ICategory[], products: IPro
         description: description,
         main_image: uploadData,
       },
-    ]);
+    ]).single();
 
     console.log({ data, error });
 
     setLoading(false);
-    router.push("/admin/dashboard");
+    router.push(`/admin/bundles/${data.id}`);
   };
 
   return (

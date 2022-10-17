@@ -274,8 +274,8 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
           <button
             type="submit"
             disabled={imageSrc === ""}
-            className={`inline-flex mt-6 w-1/3 justify-center rounded-md border border-transparent  py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
-              imageSrc === "" ? "bg-gray-300" : "bg-indigo-600 cursor-pointer"
+            className={`inline-flex mt-6 w-1/3 justify-center rounded-md border border-transparent  py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2 ${
+              imageSrc === "" ? "bg-gray-300" : "bg-primary-main cursor-pointer"
             }`}
           >
             Save

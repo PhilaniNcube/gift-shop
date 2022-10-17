@@ -3,10 +3,10 @@ import Link from "next/link";
 import Layout from "../../../components/Admin/Layout";
 import { getBundles } from "../../../fetchers/bundles";
 
-import formatCurrency from "../../../lib/formatCurrency";
+
 
 const Products = ({ bundles }: { bundles: IBundle[] }) => {
-  console.log({ bundles });
+
 
   return (
     <Layout>
@@ -32,9 +32,7 @@ const Products = ({ bundles }: { bundles: IBundle[] }) => {
                   <p className="text-xs text-slate-600 font-medium">
                     {bundle.description}
                   </p>
-                  <p className="mt-1 font-bold text-slate-700">
-                    Price: {formatCurrency(bundle.price)}
-                  </p>
+
                 </div>
               </div>
             </Link>

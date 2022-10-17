@@ -28,7 +28,7 @@ const Layout = ({children}:{children: ReactNode}) => {
         </Link>
       </div>
     </aside>
-    <main className="flex-1 p-8 min-h-screen">{children}</main>
+    <main className="flex-1 p-8 min-h-screen max-h-screen overflow-y-scroll scroll-m-0 scroll-px-0 ">{children}</main>
   </section>;
 };
 export default Layout;

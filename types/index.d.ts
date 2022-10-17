@@ -121,6 +121,9 @@ interface IBundle {
   cost:number;
 }
 
-interface IBundleProduct extends IProduct<Omit, 'id'> {
+interface IBundleProduct  {
   quantity:number;
+  bundle_id:string;
+  created_at:string;
+  product_id: IProduct
 }

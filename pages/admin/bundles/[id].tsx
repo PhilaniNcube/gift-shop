@@ -1,5 +1,6 @@
 import Image from "next/future/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 import Layout from "../../../components/Admin/Layout";
@@ -21,6 +22,19 @@ const Product = ({
   bundleProducts:IBundleProduct[];
 }) => {
   console.log({ bundle, bundleProducts });
+
+  console.log('price',bundleProducts.reduce((acc, product) => acc + product.quantity * product.product_id.price, 0))
+
+  const router = useRouter()
+
+ const totalPrice = bundleProducts.reduce(
+    (acc, product) => acc + product.quantity * product.product_id.price,
+    0
+  );
+ const totalCost = bundleProducts.reduce(
+    (acc, product) => acc + product.quantity * product.product_id.cost,
+    0
+  );
 
   const [uploadData, setUploadData] = useState({});
 
@@ -99,22 +113,33 @@ const Product = ({
 
   const addBundleProduct = async (
     e: React.FormEvent<HTMLFormElement>,
-    productId: string
+    product: IProduct
   ) => {
     e.preventDefault();
 
     const { quantity } = Object.fromEntries(new FormData(e.currentTarget));
-    console.log({ productId, quantity });
+    console.log({ product, quantity });
 
     const { data, error } = await supabase
       .from("bundle_products")
       .insert([
-        { product_id: productId, bundle_id: bundle.id, quantity: quantity },
+        { product_id: product.id, bundle_id: bundle.id, quantity: quantity },
       ])
       .single();
 
-    console.log({ data, error });
+      // if(data) {
+      //       const { data: bundleProduct, error: errorProduct } = await supabase
+      //         .from("bundles")
+      //         .update({ price: totalPrice, cost: totalCost })
+      //         .eq("id", bundle.id);
+      //         console.log({ data, error, bundleProduct, errorProduct });
+      // }
+
+     console.log({ data, error});
+     router.reload()
   };
+
+
 
   return (
     <Layout>
@@ -131,16 +156,29 @@ const Product = ({
               Product Name: {bundle?.title}
             </h1>
             <h3 className="text-lg text-slate-500">
-              Selling Price {formatCurrency(bundle.price)}
+              Selling Price {formatCurrency(totalPrice)}
             </h3>
             <h3 className="text-lg font-bold text-primary-main">
-              Cost Price {formatCurrency(bundle.cost)}
+              Cost Price {formatCurrency(totalCost)}
             </h3>
             <div className="mt-3 flex gap-4">
               {" "}
               <p className="font-medium text-slate-600 mt-1">
                 {bundle.description}
               </p>
+            </div>
+            <div className="mt-3">
+              <h2 className="my-2">Products In Bundle</h2>
+              {bundleProducts.map((product) => (
+                <p
+                  key={product.product_id.id}
+                  className="text-sm text-gray-500"
+                >
+                  {product.product_id.name}
+                  {"----"} Price: {formatCurrency(product.product_id.price)} &times;
+                  {product.quantity}
+                </p>
+              ))}
             </div>
           </div>
 
@@ -160,44 +198,67 @@ const Product = ({
             </h3>
 
             <div className="w-full grid grid-cols-2 gap-2">
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className="bg-slate-50 flex space-x-2 items-center my-2 p-2 rounded-lg w-full"
-                >
-                  <Image
-                    src={product.main_image}
-                    alt={product.name}
-                    width={500}
-                    height={500}
-                    className="h-12 w-12 rounded"
-                  />
-                  <form
-                    onSubmit={(e) => addBundleProduct(e, product.id)}
-                    className="flex-1"
+              {products.map((product) => {
+
+                 const ID = bundleProducts.find((item) => item.product_id.id === product.id )
+
+
+
+                console.log({bundleID: ID})
+                   if (ID?.product_id.id === product.id) {
+                    return null
+                   }
+
+
+                return (
+                  <div
+                    key={product.id}
+                    className="bg-slate-100 shadow-sm flex space-x-5 items-center my-2 p-2 rounded-lg w-full"
                   >
-                    <label
-                      htmlFor="quantity"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Quantity
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      name="quantity"
-                      id="quantity"
-                      className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    <Image
+                      src={product.main_image}
+                      alt={product.name}
+                      width={500}
+                      height={500}
+                      className="h-32 w-32 rounded"
                     />
-                    <button
-                      type="submit"
-                      className="py-1 ml-2 px-2 rounded-md bg-primary-main text-xs text-white mt-2"
+                    <form
+                      onSubmit={(e) => addBundleProduct(e, product)}
+                      className="flex-1"
                     >
-                      Add Product
-                    </button>
-                  </form>
-                </div>
-              ))}
+                      <label
+                        htmlFor="quantity"
+                        className="flex flex-col text-sm font-medium text-gray-700"
+                      >
+                        <span className="font-bold text-lg">
+                        {product.name}
+                        </span>
+                        <span>
+                        Selling Price: {formatCurrency(product.price)}
+                        </span>
+                        <span>
+                        Cost Price: {formatCurrency(product.cost)}
+                        </span>
+
+                      </label>
+                      <input
+                        type="number"
+                        required
+                        placeholder="Quantity"
+                        name="quantity"
+                        id="quantity"
+                        className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                      <button
+                        type="submit"
+                        className="py-1 ml-2 px-2 rounded-md bg-primary-main text-xs text-white mt-2"
+                      >
+                        Add Product
+                      </button>
+                    </form>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
