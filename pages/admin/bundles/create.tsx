@@ -9,6 +9,7 @@ import supabase from "../../../lib/client";
 const Add = ({ categories, products }: { categories: ICategory[], products: IProduct[] }) => {
   const router = useRouter();
 
+
   console.log(products)
 
 
