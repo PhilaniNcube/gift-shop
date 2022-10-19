@@ -98,12 +98,12 @@ interface ImageObject {
 
 interface BundleProduct {
   name: string;
-  ingredients: string;
+
   detail:string;
   price:number;
   cost:number;
   quantity:number;
-  brand:string;
+
   image: ImageObject;
 }
 

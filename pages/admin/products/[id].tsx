@@ -33,10 +33,7 @@ const Product = ({product, categories}: {product: IProduct, categories: ICategor
             </h3>
           </div>
           <p className="font-medium text-slate-600 mt-1">{product.details}</p>
-          <p className="font-medium mt-1 text-slate-500">
-            <strong className="text-slate-800">Ingredients/Contains:</strong>{" "}
-            {product.ingredients}
-          </p>
+
         </div>
         <div>
           <h2 className="font-bold text-2xl text-primary-main my-4">
@@ -59,21 +56,7 @@ const Product = ({product, categories}: {product: IProduct, categories: ICategor
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="ingredients"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Product Ingredients/Contents
-                </label>
-                <input
-                  type="text"
-                  name="ingredients"
-                  id="ingredients"
-                  autoComplete="ingredients"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+
               <div className="col-span-6 ">
                 <label
                   htmlFor="details"
@@ -118,33 +101,19 @@ const Product = ({product, categories}: {product: IProduct, categories: ICategor
               </div>
               <div className="col-span-6 sm:col-span-3">
                 <label
-                  htmlFor="weight"
+                  htmlFor="size"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Product weight
-                </label>
-                <input
-                  type="number"
-                  name="weight"
-                  id="weight"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="brand"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Brand
+                  Product size
                 </label>
                 <input
                   type="text"
-                  name="brand"
-                  id="brand"
-                  autoComplete="brand"
+                  name="size"
+                  id="size"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
+
               <div className="col-span-6 sm:col-span-3">
                 <label
                   htmlFor="country"

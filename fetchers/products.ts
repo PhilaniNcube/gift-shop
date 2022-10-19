@@ -4,7 +4,7 @@ const getProducts = async () => {
 
   const { data: products, error } = await supabase
   .from('products')
-  .select('id, created_at, name, ingredients, details, details, weight, price,cost, brand, main_image, slug, category(*)')
+  .select('id, created_at, name,  details, details, size, price,cost,  main_image, slug, category(*)')
 
   if(error) {
     throw new Error(error.message)
@@ -19,7 +19,7 @@ const getFeaturedProducts = async () => {
 
   const { data: products, error } = await supabase
   .from('products')
-  .select('id, created_at, name, ingredients, details, details, weight, price,cost, brand, main_image, slug, category(*)').eq('featured', true)
+  .select('id, created_at, name,  details, details, size, price,cost,  main_image, slug, category(*)').eq('featured', true)
 
   if(error) {
     throw new Error(error.message)
@@ -35,7 +35,7 @@ const getSingleProducts = async (slug:string) => {
 
   const { data: products, error } = await supabase
   .from('products')
-  .select('id, created_at, name, ingredients, details, details, weight, price,cost, brand, main_image, slug, category(*)').eq('slug', slug).single()
+  .select('id, created_at, name,  details, details, size, price,cost,  main_image, slug, category(*)').eq('slug', slug).single()
 
   if(error) {
     throw new Error(error.message)
@@ -50,7 +50,7 @@ const getSingleProductById = async (id:string) => {
 
   const { data: products, error } = await supabase
   .from('products')
-  .select('id, created_at, name, ingredients, details, details, weight, price,cost, brand, main_image, slug, category(*)').eq('id', id).single()
+  .select('id, created_at, name,  details, details, size, price,cost,  main_image, slug, category(*)').eq('id', id).single()
 
   if(error) {
     throw new Error(error.message)
@@ -81,7 +81,7 @@ const getCategoryProducts = async (id:string) => {
 
    const { data: products, error } = await supabase
   .from('products')
-  .select('id, created_at, name, ingredients, details, details, weight, price, brand, main_image, slug, category(*)').eq('category', id)
+  .select('id, created_at, name,  details, details, size, price,  main_image, slug, category(*)').eq('category', id)
 
   if(error) {
     throw new Error(error.message)

@@ -75,7 +75,7 @@ const Product = ({
     e.preventDefault();
     setLoading(true);
 
-    const { name, cost, details, price, quantity, brand, ingredients } =
+    const { name, cost, details, price, quantity } =
       Object.fromEntries(new FormData(e.currentTarget));
 
     if (
@@ -83,8 +83,8 @@ const Product = ({
       typeof quantity !== "string" ||
       typeof cost !== "string" ||
       typeof price !== "string" ||
-      typeof brand !== "string" ||
-      typeof ingredients !== "string" ||
+
+
       typeof details !== "string"
     ) {
       throw new Error("Please enter a valid data");
@@ -98,8 +98,7 @@ const Product = ({
 
           cost: cost,
           price: price,
-          brand: brand,
-          ingredients: ingredients,
+
           details: details,
           image: uploadData,
         },
@@ -352,21 +351,7 @@ const Product = ({
                 />
               </div>
 
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="brand"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Brand
-                </label>
-                <input
-                  type="text"
-                  name="brand"
-                  id="brand"
-                  autoComplete="brand"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
+
             </div>
 
             <button
