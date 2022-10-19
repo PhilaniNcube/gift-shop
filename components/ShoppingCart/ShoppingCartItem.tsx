@@ -40,7 +40,7 @@ const {data:products, isLoading} = useQuery(['products'], getProducts)
             </Link>
             <p className="ml-4">{formatCurrency(product.price * quantity)}</p>
           </div>
-          <p className="mt-1 text-sm text-gray-500">{product.brand}</p>
+
           <p className="mt-1 text-sm text-gray-500">{formatCurrency(product.price)} each</p>
         </div>
         <div className="flex flex-1 items-end justify-between text-sm">
