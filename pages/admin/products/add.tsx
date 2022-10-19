@@ -53,7 +53,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setLoading(true)
 
-  const { name, cost, details, price, weight, brand, category, ingredients } = Object.fromEntries(
+  const { name, cost, details, price, size,  category } = Object.fromEntries(
     new FormData(e.currentTarget)
   );
   console.log({
@@ -61,10 +61,10 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     cost,
     details,
     price,
-    weight,
-    brand,
+    size,
+
     category,
-    ingredients,
+
 
   });
 
@@ -72,10 +72,10 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     typeof name !== "string" ||
     typeof cost !== "string" ||
     typeof price !== "string" ||
-    typeof weight !== "string" ||
-    typeof brand !== "string" ||
+    typeof size !== "string" ||
+
     typeof category !== "string" ||
-    typeof ingredients !== "string" ||
+
     typeof imageSrc !== "string" ||
     typeof details !== "string"
   ) {
@@ -92,10 +92,10 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         slug: slug,
         price: parseFloat(price),
         cost: parseFloat(cost),
-        weight: parseInt(weight),
-        brand: brand,
+        size: size,
+
         category: category,
-        ingredients: ingredients,
+
         details: details,
         main_image: imageSrc,
       },
@@ -164,21 +164,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
-            <div className="col-span-6 sm:col-span-3">
-              <label
-                htmlFor="ingredients"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Product Ingredients/Contents
-              </label>
-              <input
-                type="text"
-                name="ingredients"
-                id="ingredients"
-                autoComplete="ingredients"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
+
             <div className="col-span-6 ">
               <label
                 htmlFor="details"
@@ -223,36 +209,22 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             </div>
             <div className="col-span-6 sm:col-span-3">
               <label
-                htmlFor="weight"
+                htmlFor="size"
                 className="block text-sm font-medium text-gray-700"
               >
-                Product weight
-              </label>
-              <input
-                type="number"
-                name="weight"
-                id="weight"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-            <div className="col-span-6 sm:col-span-3">
-              <label
-                htmlFor="brand"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Brand
+                Product size
               </label>
               <input
                 type="text"
-                name="brand"
-                id="brand"
-                autoComplete="brand"
+                name="size"
+                id="size"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
+
             <div className="col-span-6 sm:col-span-3">
               <label
-                htmlFor="country"
+                htmlFor="category"
                 className="block text-sm font-medium text-gray-700"
               >
                 Category

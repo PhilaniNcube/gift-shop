@@ -18,12 +18,12 @@ interface IProduct {
   id:string,
   created_at:string,
   name:string,
-  ingredients:string,
+
   details:string,
-  weight:number,
+  size:string,
   price:number,
   cost: number,
-  brand:string,
+
   category: ICategory,
   main_image:string,
   slug:string,
