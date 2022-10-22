@@ -1,12 +1,19 @@
 import { LockClosedIcon } from "@heroicons/react/24/solid";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { Database } from "../db_types";
 
 
 const Reset: NextPage = () => {
   const router = useRouter();
+
+    const [supabaseClient] = useState(() =>
+      createBrowserSupabaseClient<Database>()
+    );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,7 +26,7 @@ const Reset: NextPage = () => {
       throw new Error("Please enter a valid data to register");
     }
 
-    const data = await supabaseClient.auth.update({ email, password });
+    const data = await supabaseClient.auth.updateUser({ email, password });
 
     if (data.error) {
       alert(data.error.message);
