@@ -1,10 +1,16 @@
 import { LockClosedIcon } from "@heroicons/react/24/solid";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { NextPage } from "next";
 import Link from "next/link";
+import { useState } from "react";
+import { Database } from "../db_types";
 
 
 const Register: NextPage = () => {
+
+    const [supabaseClient] = useState(() =>
+      createBrowserSupabaseClient<Database>()
+    );
 
 const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
   e.preventDefault()
@@ -15,12 +21,9 @@ const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     throw new Error('Please enter a valid data to register');
   }
 
-  const data = await supabaseClient.auth.signUp({email, password}, {
-    data: {
-      first_name,
-      last_name
-    }
-  })
+  const data = await supabaseClient.auth.signUp({email, password, options:{
+    data:{first_name, last_name}
+  }})
 
   console.log({data})
 
