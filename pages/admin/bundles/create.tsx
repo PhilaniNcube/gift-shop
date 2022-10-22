@@ -87,7 +87,7 @@ const Add = ({ categories, products }: { categories: ICategory[], products: IPro
     console.log({ data, error });
 
     setLoading(false);
-    router.push(`/admin/bundles/${data.id}`);
+    router.push(`/admin/bundles}`);
   };
 
   return (
