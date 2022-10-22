@@ -127,3 +127,12 @@ interface IBundleProduct  {
   created_at:string;
   product_id: IProduct
 }
+
+
+interface IOccasion {
+  id: string;
+  created_at: string;
+  title: string;
+  image: ImageObject;
+  slug: string;
+}

@@ -11,8 +11,11 @@ const Layout = ({children}:{children: ReactNode}) => {
         <Link href="/admin/categories/create">
           <a className="text-white text-xl font-bold">Create Category</a>
         </Link>
-        <Link href="/admin/occasion/create">
+        <Link href="/admin/occasions/create">
           <a className="text-white text-xl font-bold">Create Occasion</a>
+        </Link>
+        <Link href="/admin/occasions">
+          <a className="text-white text-xl font-bold">Occasions</a>
         </Link>
         <Link href="/admin/bundles/">
           <a className="text-white text-xl font-bold">Bundles</a>

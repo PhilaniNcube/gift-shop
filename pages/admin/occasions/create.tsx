@@ -57,16 +57,12 @@ const CreateOccasion = () => {
     const slug = slugify(title, { lower: true, trim: true });
 
     const { data, error } = await supabase
-      .from("categories")
+      .from("occasion")
       .insert([
         {
           title: title,
           slug: slug,
-          image: {
-            src: uploadData?.url,
-            width: uploadData?.width,
-            height: uploadData?.height,
-          },
+          image: uploadData,
         },
       ])
       .single();
