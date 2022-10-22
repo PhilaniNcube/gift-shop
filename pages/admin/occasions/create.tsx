@@ -70,6 +70,9 @@ const CreateOccasion = () => {
     console.log({ data, error });
 
     setLoading(false);
+
+    if(error) alert(`Error: ${error.details}`)
+
     router.push(`/admin/bundles`);
   };
 

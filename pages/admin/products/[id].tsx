@@ -61,7 +61,12 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
   console.log({ data, error });
 
+  if (error) {
+    alert(error.details);
+  }
+
   setLoading(false);
+  setProdData(data)
   router.push("/admin/products");
 };
 
