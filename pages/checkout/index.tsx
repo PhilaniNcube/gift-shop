@@ -11,6 +11,8 @@ import { useQuery } from "react-query";
 import supabase from "../../lib/client";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "../../db_types";
 
 const deliveryMethods = [
   {
@@ -31,13 +33,17 @@ const index = () => {
 
 const [selected, setSelected] = useState(deliveryMethods[0]);
 
+ const [supabaseClient] = useState(() =>
+   createBrowserSupabaseClient<Database>()
+ );
+
 const {
   data: products,
   isLoading,
   isSuccess,
 } = useQuery(["products"], getProducts);
 
-const {user} = useUser()
+const user = useUser()
 
 const {cartItems} = useShoppingCart()
 
@@ -64,29 +70,34 @@ const data = {
 
       console.log(data);
 
-      const { data: order, error } = await supabase.from("orders").insert([
-        {
-          profile_id: !user ? null : user.id,
-          order_subtotal: data.cartTotal,
-          shipping: data.shipping,
-          total: data.shipping + data.cartTotal,
-          city: formData.city,
-          postal_code: formData.postal_code,
-          first_name: formData.first_name,
-          last_name: formData.last_name,
-          delivery_method: selected.name,
-          email_address: formData.email_address,
-          phone_number: formData.phone_number,
-          street_address: formData.street_address,
-          order_items: cartItems
-        },
-      ]).single();
+      const { data:order, error } = await supabase.from("orders")
+        .insert([
+          {
+            profile_id: !user ? null : user.id,
+            order_subtotal: data.cartTotal,
+            shipping: data.shipping,
+            total: data.shipping + data.cartTotal,
+            city: formData.city,
+            postal_code: formData.postal_code,
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            delivery_method: selected.name,
+            email_address: formData.email_address,
+            phone_number: formData.phone_number,
+            street_address: formData.street_address,
+            order_items: cartItems,
+          },
+        ])
+        .single();
 
-      console.log({order, error})
+      console.log({ order, error });
 
 
+      if(error) {
+        console.log(error);
+      }
+  router.push(`/orders`);
 
-      router.push(`/orders/${order?.id}`)
   }
 
   return (
