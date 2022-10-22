@@ -131,6 +131,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             </label>
             <input
               type="file"
+              required
               name="image"
               id="image"
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -158,6 +159,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               </label>
               <input
                 type="text"
+                required
                 name="name"
                 id="name"
                 autoComplete="given-name"
@@ -175,6 +177,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               <textarea
                 name="details"
                 id="details"
+                required
                 rows={5}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
@@ -189,6 +192,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               <input
                 type="number"
                 name="price"
+                required
                 id="price"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
@@ -202,6 +206,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               </label>
               <input
                 type="number"
+                required
                 name="cost"
                 id="cost"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -217,6 +222,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               <input
                 type="text"
                 name="size"
+                required
                 id="size"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
