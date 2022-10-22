@@ -20,7 +20,9 @@ const Reset: NextPage = () => {
       throw new Error("Please enter a valid data to register");
     }
 
-   const { data, error } = await supabase.auth.api.resetPasswordForEmail(email);
+   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: '/update-password'
+   });
 
    console.log({data, error})
 
