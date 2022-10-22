@@ -1,12 +1,30 @@
 import { LockClosedIcon } from "@heroicons/react/24/solid";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Database } from "../db_types";
 
 
 
 const SignIn: NextPage = () => {
+const { isLoading, session, error } = useSessionContext();
+const supabaseClient = useSupabaseClient<Database>();
+
+  const [data, setData] = useState(null);
+
+  console.log({ data, isLoading, session, error });
+
+  useEffect(() => {
+    async function loadData() {
+      const { data } = await supabaseClient.from("test").select("*").single();
+      setData(data);
+    }
+
+    loadData();
+  }, [supabaseClient]);
+
   const router = useRouter()
 
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -20,17 +38,20 @@ const SignIn: NextPage = () => {
        throw new Error("Please enter a valid data to register");
      }
 
-     const data = await supabaseClient.auth.signIn({email, password} , {redirectTo: "/"});
+     const {
+       data: { user },
+       error,
+     } = await supabaseClient.auth.signInWithPassword({ email, password });
 
      console.log(data);
 
-     if(data.error) {
-      alert("Error: " + data.error.message);
-     } else if(data.user) {
-      alert("Signed In")
-      router.push("/")
+     if (error) {
+       alert("Error: " + error.message);
+     } else if (user) {
+       alert("Signed In");
+       router.push("/");
      } else {
-      alert("There was an error")
+       alert("There was an error");
      }
 
    };

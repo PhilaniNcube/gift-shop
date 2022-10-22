@@ -1,20 +1,16 @@
 import Link from 'next/link'
-import { Fragment } from "react";
-
+import { Fragment, useState } from "react";
 import {
-
   MagnifyingGlassIcon,
-
   ShoppingCartIcon,
   UserIcon,
   UserMinusIcon,
-
 } from "@heroicons/react/24/outline";
-import { useUser } from '@supabase/auth-helpers-react';
-
 import { useRouter } from 'next/router';
-
 import { useShoppingCart } from '../context/ShoppingCartContext';
+import { useUser } from '@supabase/auth-helpers-react';
+import { Database } from '../db_types';
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 
 
@@ -22,7 +18,9 @@ import { useShoppingCart } from '../context/ShoppingCartContext';
 
 export default function Navbar() {
 
-
+  const [supabaseClient] = useState(() =>
+    createBrowserSupabaseClient<Database>()
+  );
 
   const router = useRouter()
 
@@ -32,15 +30,10 @@ export default function Navbar() {
     { text: "Categories", href: "/categories", active: router.asPath === '/categories' },
     { text: "Bundles", href: "/bundles", active: router.asPath === '/bundles' },
   ];
+  const user = useUser();
 
-  const {  user } = useUser();
-
-
-
+  console.log(user)
   const { cartQuantity, openCart } = useShoppingCart();
-
-
-
 
   return (
     <header className="">
@@ -80,9 +73,14 @@ export default function Navbar() {
                   <Link href="/account">
                     <UserIcon className="text-primary-main h-6 w-6 cursor-pointer" />
                   </Link>
-                  <Link href="/api/auth/logout">
-                    <UserMinusIcon className="text-red-400 h-6 w-6 cursor-pointer" />
-                  </Link>
+                  <UserMinusIcon
+                    onClick={async () => {
+                      await supabaseClient.auth.signOut();
+                      router.push("/");
+                    }}
+                    className="text-red-400 h-6 w-6 cursor-pointer"
+                  />
+
                   <span className="relative isolate flex">
                     <span className="absolute flex justify-center items-center -top-2 -right-2 h-4 w-4 text-xs bg-red-500 text-white rounded-full">
                       {cartQuantity}

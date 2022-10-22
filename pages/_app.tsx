@@ -1,23 +1,28 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import React, { Fragment  } from 'react'
-import { UserProvider } from "@supabase/auth-helpers-react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import React, { Fragment, useState  } from 'react'
+import {
+  createBrowserSupabaseClient,
+} from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Navbar from '../components/Navbar'
-
+import { Database } from "../db_types";
 import Footer from '../components/Footer';
 import { ShoppingCartProvider } from '../context/ShoppingCartContext';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
+   const [supabaseClient] = useState(() =>
+     createBrowserSupabaseClient<Database>()
+   );
   const [queryClient] = React.useState(() => new QueryClient({}));
 
 
   return (
     <Fragment>
-      <UserProvider supabaseClient={supabaseClient}>
+      <SessionContextProvider supabaseClient={supabaseClient}>
         <QueryClientProvider client={queryClient}>
           <ShoppingCartProvider>
             <Navbar />
@@ -26,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </ShoppingCartProvider>
           <ReactQueryDevtools />
         </QueryClientProvider>
-      </UserProvider>
+      </SessionContextProvider>
     </Fragment>
   );
 }
