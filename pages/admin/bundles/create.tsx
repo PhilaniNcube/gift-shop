@@ -21,6 +21,7 @@ const Add = () => {
 
   const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation()
     setLoading(true);
 
     const { image } = Object.fromEntries(new FormData(e.currentTarget));
@@ -53,32 +54,31 @@ const Add = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { title, description,  category } =
+    const { title, description } =
       Object.fromEntries(new FormData(e.currentTarget));
     console.log({
       title,
 
       description,
 
-      category,
+
 
     });
 
     if (
       typeof title !== "string" ||
-      typeof category !== "string" ||
+
       typeof description !== "string"
     ) {
       throw new Error("Please enter a valid data");
     }
 
-    const slug = slugify(title);
+    const slug = slugify(title, {lower: true});
 
     const { data, error } = await supabase.from("bundles").insert([
       {
         title: title,
         slug: slug,
-        category: category,
         description: description,
         main_image: uploadData,
       },
@@ -86,10 +86,12 @@ const Add = () => {
 
     console.log({ data, error });
 
+    if(error) alert(`There was an error: ${error.message}. ${error.details}}`);
+
 
 
     setLoading(false);
-    router.push(`/admin/bundles}`);
+    router.push(`/admin/dashboard`);
   };
 
   return (
@@ -122,7 +124,7 @@ const Add = () => {
             disabled={loading}
             className="w-1/3 py-2 rounded-md bg-primary-main text-white mt-2"
           >
-            Save Image
+           {loading ? 'Loading...' : 'Save Image'}
           </button>
         </form>
         <form

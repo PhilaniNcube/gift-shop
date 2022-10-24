@@ -35,7 +35,6 @@ export type Json =
              id:string;
              created_at:string;
              title:string;
-             category:ICategory;
              main_image: ImageObject;
              slug:string;
              description:string;
