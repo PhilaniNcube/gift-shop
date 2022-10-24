@@ -5,8 +5,8 @@ import { useState } from "react";
 
 import Layout from "../../../components/Admin/Layout";
 
-import { getBundleById, getBundleProducts } from "../../../fetchers/bundles";
-import { getProducts } from "../../../fetchers/products";
+import { getBundleById, getBundleCategories, getBundleProducts } from "../../../fetchers/bundles";
+import { getCategories, getProducts } from "../../../fetchers/products";
 import supabase from "../../../lib/client";
 import formatCurrency from "../../../lib/formatCurrency";
 
@@ -16,15 +16,37 @@ const Product = ({
   bundle,
   products,
   bundleProducts,
+  categories,
+  bundleCategories,
 }: {
   bundle: IBundle;
   products: IProduct[];
-  bundleProducts:IBundleProduct[];
+  bundleProducts: IBundleProduct[];
+  categories: ICategory[];
+  bundleCategories: IBundleCategory[];
 }) => {
+  const router = useRouter();
 
-  const router = useRouter()
+  console.log(bundleCategories);
+
+  const ids = bundleCategories.map(c => c.category_id.id)
+
+  console.log({ids})
 
   const [uploadData, setUploadData] = useState({});
+  const [bundle_categories, setBundleCategories] = useState<string[]>([]);
+
+  function addBundleCategories(id: string) {
+    setBundleCategories((currItems) => {
+      if (currItems.find((item) => item === id) == null) {
+        return [...currItems, id];
+      } else {
+        return currItems.filter((item) => item !== id);
+      }
+    });
+  }
+
+  console.log({ bundle_categories });
 
   console.log(uploadData);
 
@@ -63,16 +85,15 @@ const Product = ({
     e.preventDefault();
     setLoading(true);
 
-    const { name, cost, details, price, quantity } =
-      Object.fromEntries(new FormData(e.currentTarget));
+    const { name, cost, details, price, quantity } = Object.fromEntries(
+      new FormData(e.currentTarget)
+    );
 
     if (
       typeof name !== "string" ||
       typeof quantity !== "string" ||
       typeof cost !== "string" ||
       typeof price !== "string" ||
-
-
       typeof details !== "string"
     ) {
       throw new Error("Please enter a valid data");
@@ -98,15 +119,13 @@ const Product = ({
     setLoading(false);
   };
 
-
   const deleteFromBundle = async (id: string) => {
     const { data, error } = await supabase
       .from("bundle_products")
       .delete()
-      .eq("product_id", id)
+      .eq("product_id", id);
 
-      console.log('delete product', data, error)
-
+    console.log("delete product", data, error);
 
     if (data) {
       const bundleItems = await getBundleProducts(bundle.id);
@@ -125,11 +144,23 @@ const Product = ({
         .update({ price: totalPrice, cost: totalCost })
         .eq("id", bundle.id);
       console.log({ data, error, bundleProduct, errorProduct });
-           router.reload();
+      router.reload();
     }
 
     console.log({ data, error });
-     router.reload()
+    router.reload();
+  };
+
+  const saveCategories = async () => {
+    bundle_categories.map(
+      async (item) =>
+        await supabase
+          .from("category_bundles")
+          .insert([{ bundle_id: bundle.id, category_id: item }])
+    );
+
+    setBundleCategories([]);
+    router.reload();
   };
 
   const addBundleProduct = async (
@@ -148,31 +179,28 @@ const Product = ({
       ])
       .single();
 
-      if(data) {
+    if (data) {
+      const bundleItems = await getBundleProducts(bundle.id);
 
-        const bundleItems = await getBundleProducts(bundle.id);
+      const totalPrice = bundleItems.reduce(
+        (acc, product) => acc + product.quantity * product.product_id.price,
+        0
+      );
+      const totalCost = bundleItems.reduce(
+        (acc, product) => acc + product.quantity * product.product_id.cost,
+        0
+      );
 
-         const totalPrice = bundleItems.reduce(
-           (acc, product) => acc + product.quantity * product.product_id.price,
-           0
-         );
-         const totalCost = bundleItems.reduce(
-           (acc, product) => acc + product.quantity * product.product_id.cost,
-           0
-         );
+      const { data: bundleProduct, error: errorProduct } = await supabase
+        .from("bundles")
+        .update({ price: totalPrice, cost: totalCost })
+        .eq("id", bundle.id);
+      console.log({ data, error, bundleProduct, errorProduct });
+    }
 
-            const { data: bundleProduct, error: errorProduct } = await supabase
-              .from("bundles")
-              .update({ price: totalPrice, cost: totalCost })
-              .eq("id", bundle.id);
-              console.log({ data, error, bundleProduct, errorProduct });
-      }
-
-     console.log({ data, error});
+    console.log({ data, error });
     //  router.reload()
   };
-
-
 
   return (
     <Layout>
@@ -211,7 +239,55 @@ const Product = ({
           />
         </div>
         <div className="mt-3">
-          <h2 className="my-2 font-extrabold text-2xl text-gray-500">Products In Bundle</h2>
+          <h2 className="my-2 font-extrabold text-2xl text-gray-500">
+            Products In Bundle
+          </h2>
+          <div className="col-span-6 sm:col-span-3 bg-slate-100 p-4 rounded-lg">
+            <fieldset>
+              <legend className="sr-only">Bundle Categories</legend>
+              <div
+                className="text-base font-medium text-gray-900"
+                aria-hidden="true"
+              >
+                Category
+              </div>
+              <div className="mt-4 grid grid-cols-4 gap-6">
+                {categories.map((category) => (
+                  <div key={category.id} className="flex items-start">
+                    <div className="flex h-5 items-center">
+                      <input
+                        id={category.slug}
+                        name={category.slug}
+                        type="checkbox"
+
+                        onChange={() => addBundleCategories(category.id)}
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label
+                        htmlFor={category.slug}
+                        className={`font-medium ${
+                          ids.includes(category.id)
+                            ? "text-indigo-700 font-bold"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {category.name}
+                      </label>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </fieldset>
+            <button
+              type="button"
+              onClick={saveCategories}
+              className="mt-5 bg-primary-main rounded-md text-white px-4 py-2"
+            >
+              Save Categories
+            </button>
+          </div>
           <div className="grid grid-cols-3 gap-2 mb-4">
             {bundleProducts.map((product) => (
               <div
@@ -427,13 +503,19 @@ export async function getServerSideProps({
 
    const bundleProducts = await getBundleProducts(id)
 
+   const categories = (await getCategories()) as ICategory[];
 
+   const bundleCategories = await getBundleCategories(id)
+
+   console.log(bundleCategories);
 
   return {
     props: {
       bundle,
       products,
       bundleProducts,
+      categories,
+      bundleCategories,
     },
   };
 }

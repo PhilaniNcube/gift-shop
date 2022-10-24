@@ -136,3 +136,9 @@ interface IOccasion {
   image: ImageObject;
   slug: string;
 }
+
+
+interface IBundleCategory {
+  bundle_id: IBundle;
+  category_id: ICategory;
+}
