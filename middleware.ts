@@ -8,7 +8,7 @@ export const config = {
 export const middleware = withMiddlewareAuth({
   authGuard: {
     isPermitted: async (user) => {
-      return user.email?.endsWith('ncbphi001@gmail.com') ?? false;
+      return user.email?.endsWith('@gmail.com') ?? false;
     },
     redirectTo: '/'
   }
