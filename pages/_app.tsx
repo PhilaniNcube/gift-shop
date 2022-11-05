@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import React, { Fragment, useState  } from 'react'
+import { Fragment, useState  } from 'react'
 import {
   createBrowserSupabaseClient,
 } from "@supabase/auth-helpers-nextjs";
@@ -17,12 +17,12 @@ function MyApp({ Component, pageProps }: AppProps) {
    const [supabaseClient] = useState(() =>
      createBrowserSupabaseClient<Database>()
    );
-  const [queryClient] = React.useState(() => new QueryClient({}));
+  const [queryClient] = useState(() => new QueryClient({}));
 
 
   return (
     <Fragment>
-      <SessionContextProvider supabaseClient={supabaseClient}>
+      <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
         <QueryClientProvider client={queryClient}>
           <ShoppingCartProvider>
             <Navbar />

@@ -2,6 +2,9 @@ import supabase from '../lib/client';
 
 const getProducts = async () => {
 
+
+
+
   const { data: products, error } = await supabase
   .from('products')
   .select('id, created_at, name,  details, details, size, price,cost,  main_image, slug, category(*)')

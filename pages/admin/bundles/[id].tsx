@@ -1,8 +1,8 @@
-import { iteratorSymbol } from "immer/dist/internal";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import Layout from "../../../components/Admin/Layout";
 
@@ -116,10 +116,8 @@ const Product = ({
       .update({
         products: {
           name: name,
-
           cost: cost,
           price: price,
-
           details: details,
           image: uploadData,
         },
@@ -129,13 +127,18 @@ const Product = ({
 
 
     setLoading(false);
+    if(error) {
+      alert(error.details)
+    } else {
+      console.log('Done', data)
+      router.reload();
+    }
   };
 
   const deleteFromBundle = async (id: string) => {
-    const { data, error } = await supabase
-      .from("bundle_products")
-      .delete()
-      .eq("product_id", id);
+     await supabase.from("bundle_products").delete().eq("product_id", id);
+
+
 
 
 
@@ -155,7 +158,14 @@ const Product = ({
        .update({ price: totalPrice, cost: totalCost })
        .eq("id", bundle.id);
 
-     router.reload();
+       if(errorProduct) {
+        alert(errorProduct.details)
+       } else {
+        console.log(bundleProduct);
+        router.reload()
+       }
+
+
 
   };
 
@@ -168,6 +178,9 @@ const Product = ({
           .from("bundles")
           .update({ price: price })
           .eq("id", bundle.id);
+
+          console.log({bundleProduct, errorProduct})
+
               router.reload();
       };
 
@@ -180,6 +193,7 @@ const Product = ({
           .from("bundles")
           .update({ cost: cost })
           .eq("id", bundle.id);
+          console.log({ bundleProduct, errorProduct });
               router.reload();
       };
 
@@ -209,6 +223,7 @@ const Product = ({
       .insert([
         { product_id: product.id, bundle_id: bundle.id, quantity: quantity },
       ])
+      console.log({addedProduct, error})
        router.reload();
   };
 
