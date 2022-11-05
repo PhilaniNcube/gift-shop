@@ -77,10 +77,11 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   return (
     <Layout>
       <div>
-        <Link href="/admin/dashboard">
-          <a className="font-bold text-primary-main text-2xl">
-            Back To Dashboard
-          </a>
+        <Link
+          href="/admin/dashboard"
+          className="font-bold text-primary-main text-2xl"
+        >
+          Back To Dashboard
         </Link>
         <div className="mt-4 border-t border-b border-gray-300 py-3">
           <h1 className="text-3xl font-bold text-primary-main">
@@ -218,7 +219,6 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 <select
                   id="category"
                   name="category"
-
                   className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 >
                   {categories.map((category) => (

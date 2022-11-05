@@ -1,4 +1,4 @@
-import Image from "next/future/image";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -172,15 +172,19 @@ const Product = ({
     const { quantity } = Object.fromEntries(new FormData(e.currentTarget));
     console.log({ product, quantity });
 
-    const { data, error } = await supabase
+    const { data: addedProduct, error } = await supabase
       .from("bundle_products")
       .insert([
         { product_id: product.id, bundle_id: bundle.id, quantity: quantity },
       ])
-      .single();
 
-    if (data) {
+
+      console.log({ addedProduct, error });
+
+    if (addedProduct) {
       const bundleItems = await getBundleProducts(bundle.id);
+
+      console.log({ bundleItems });
 
       const totalPrice = bundleItems.reduce(
         (acc, product) => acc + product.quantity * product.product_id.price,
@@ -191,24 +195,27 @@ const Product = ({
         0
       );
 
+      console.log({ totalCost, totalPrice });
+
       const { data: bundleProduct, error: errorProduct } = await supabase
         .from("bundles")
         .update({ price: totalPrice, cost: totalCost })
         .eq("id", bundle.id);
-      console.log({ data, error, bundleProduct, errorProduct });
+      console.log({ bundleProduct, errorProduct });
     }
 
-    console.log({ data, error });
+
     //  router.reload()
   };
 
   return (
     <Layout>
       <div>
-        <Link href="/admin/dashboard">
-          <a className="font-bold text-primary-main text-2xl">
-            Back To Dashboard
-          </a>
+        <Link
+          href="/admin/dashboard"
+          className="font-bold text-primary-main text-2xl"
+        >
+          Back To Dashboard
         </Link>
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-b border-gray-300 py-3">
           <div className="w-full">
@@ -259,7 +266,6 @@ const Product = ({
                         id={category.slug}
                         name={category.slug}
                         type="checkbox"
-
                         onChange={() => addBundleCategories(category.id)}
                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                       />
@@ -269,7 +275,7 @@ const Product = ({
                         htmlFor={category.slug}
                         className={`font-medium ${
                           ids.includes(category.id)
-                            ? "text-indigo-700 font-bold"
+                            ? "text-gray-700"
                             : "text-gray-700"
                         }`}
                       >

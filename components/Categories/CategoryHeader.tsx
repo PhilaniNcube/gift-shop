@@ -1,4 +1,4 @@
-import Image from "next/future/image";
+import Image from "next/image";
 import Link from "next/link";
 
 const CategoryHeader = () => {
@@ -28,10 +28,11 @@ const CategoryHeader = () => {
               We have a wide range of gift categories to meet any occassion.
             </p>
 
-            <Link href="/products">
-              <a className="bg-primary-main hover:bg-primary-main/70 cursor-pointer text-white text-md lg:text-xl font-bold uppercase px-4 lg:px-8 py-2 mt-6 w-fit">
-                Discover More
-              </a>
+            <Link
+              href="/products"
+              className="bg-primary-main hover:bg-primary-main/70 cursor-pointer text-white text-md lg:text-xl font-bold uppercase px-4 lg:px-8 py-2 mt-6 w-fit"
+            >
+              Discover More
             </Link>
           </div>{" "}
           <div className="w-full relative isolate rounded-lg overflow-hidden">

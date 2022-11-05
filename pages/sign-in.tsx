@@ -57,7 +57,6 @@ const supabaseClient = useSupabaseClient<Database>();
    };
   return (
     <>
-
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
@@ -67,21 +66,19 @@ const supabaseClient = useSupabaseClient<Database>();
               alt="Workflow"
             />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-             Sign In
+              Sign In
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Or{" "}
-              <Link href="/register">
-                <a className="font-medium text-indigo-600 hover:text-indigo-500">
-                  Register if you dont already have an account
-                </a>
+              <Link
+                href="/register"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Register if you dont already have an account
               </Link>
             </p>
           </div>
-          <form
-            onSubmit={handleSubmit}
-            className="mt-8 space-y-6"
-          >
+          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
@@ -98,7 +95,6 @@ const supabaseClient = useSupabaseClient<Database>();
                   placeholder="Email address"
                 />
               </div>
-
 
               <div>
                 <label htmlFor="password" className="sr-only">
@@ -133,12 +129,11 @@ const supabaseClient = useSupabaseClient<Database>();
               </div>
 
               <div className="text-sm">
-                <Link href="/password-reset">
-                    <a
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                      >
-                      Forgot your password?
-                    </a>
+                <Link
+                  href="/password-reset"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
+                  Forgot your password?
                 </Link>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import Image from 'next/future/image'
+import Image from 'next/image'
 import Link from 'next/link';
 
 const Hero = () => {
@@ -23,11 +23,12 @@ const Hero = () => {
                 No need to come up with great gift ideas. We have all the gifts
                 you may need.
               </p>
-              <Link href="/products">
-                <a className="mt-3 md:mt-6 bg-primary-main hover:bg-primary-main/70 cursor-pointer w-fit px-8 py-2 text-white flex items-center text-sm md:text-xl rounded-lg">
-                  <span>See More</span>{" "}
-                  <ChevronRightIcon className="text-white ml-4 h-6 w-6" />
-                </a>
+              <Link
+                href="/products"
+                className="mt-3 md:mt-6 bg-primary-main hover:bg-primary-main/70 cursor-pointer w-fit px-8 py-2 text-white flex items-center text-sm md:text-xl rounded-lg"
+              >
+                <span>See More</span>{" "}
+                <ChevronRightIcon className="text-white ml-4 h-6 w-6" />
               </Link>
             </div>
           </div>

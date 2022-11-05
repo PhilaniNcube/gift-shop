@@ -23,10 +23,11 @@ const Product = ({
   return (
     <Layout>
       <div>
-        <Link href="/admin/dashboard">
-          <a className="font-bold text-primary-main text-2xl">
-            Back To Dashboard
-          </a>
+        <Link
+          href="/admin/dashboard"
+          className="font-bold text-primary-main text-2xl"
+        >
+          Back To Dashboard
         </Link>
         <div className="w-full">
           <div className="flex gap-8 border-b py-2 border-slate-300">

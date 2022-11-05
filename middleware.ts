@@ -10,7 +10,15 @@ export const middleware = withMiddlewareAuth({
     isPermitted: async (user) => {
 
 
-      return user.email?.endsWith('ncbphi001@gmail.com' || 'khibanyakallo@gmail.com') ?? false;
+const admins = ['khibanyakallo@gmail.com', 'ncbphi001@gmail.com']
+
+       console.log(user.email)
+
+        if(user.email) {
+        return  admins.includes(user.email)
+      } else {
+        return false
+      }
     },
     redirectTo: '/'
   }

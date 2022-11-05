@@ -1,21 +1,34 @@
 import { ChevronRightIcon, HeartIcon } from '@heroicons/react/24/outline';
 
-import Image from 'next/future/image';
+import Image from 'next/image';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Fragment } from 'react';
+import { useQuery } from 'react-query';
 
 import Filter from '../../components/Filter';
-import {  getCategoryProducts } from '../../fetchers/products';
+import { getBundles } from '../../fetchers/bundles';
 import supabase from '../../lib/client';
 import formatCurrency from '../../lib/formatCurrency';
 
 
 
 
-export default function Category({ category, products }: { category:ICategory, products: IProduct[] }) {
+export default function Category({
+  category,
 
+}: {
+  category: ICategory;
 
+}) {
+
+//   const {
+//     data: products,
+//     isLoading,
+//     isSuccess,
+//   } = useQuery(["products"], getBundles());
+
+// console.log(products)
 
   return (
     <Fragment>
@@ -39,16 +52,18 @@ export default function Category({ category, products }: { category:ICategory, p
       <main className="py-4">
         <section className="max-w-7xl mx-auto px-4">
           <span className="flex items-center space-x-3">
-            <Link href="/">
-              <a className="text-primary-main text-md md:text-xl cursor-pointer font-bold">
-                Home
-              </a>
+            <Link
+              href="/"
+              className="text-primary-main text-md md:text-xl cursor-pointer font-bold"
+            >
+              Home
             </Link>
             <ChevronRightIcon className="h-6 w-6 text-primary-main" />
-            <Link href="/categories">
-              <a className="text-primary-main text-md md:text-xl cursor-pointer font-bold">
-                Categories
-              </a>
+            <Link
+              href="/categories"
+              className="text-primary-main text-md md:text-xl cursor-pointer font-bold"
+            >
+              Categories
             </Link>
             <ChevronRightIcon className="h-6 w-6 text-primary-main" />
             <p className="text-slate-500 text-md md:text-xl font-bold">
@@ -74,35 +89,38 @@ export default function Category({ category, products }: { category:ICategory, p
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16">
-              {products?.map((product) => (
-                <Link key={product.id} href={`/products/${product.slug}`}>
+              {/* {products?.map((product) => (
+                <Link
+                  key={product.bundle_id.id}
+                  href={`/products/${product.bundle_id.slug}`}
+                >
                   <div className="w-full group cursor-pointer">
                     <Image
-                      src={product.main_image}
+                      src={product.bundle_id.main_image.url}
                       height={1000}
                       width={1000}
-                      alt={product.name}
+                      alt={product.bundle_id.title}
                       className="w-full object-cover group-hover:opacity-90 aspect-square rounded-lg shadow-lg"
                     />
                     <span className="w-full mt-2 flex justify-between items-center">
                       <h3 className="text-md font-bold text-primary-main">
-                        {product.name}
+                        {product.bundle_id.title}
                       </h3>
                       <HeartIcon className="h-6 w-6 text-primary-main" />
                     </span>
 
                     <h2 className="text-2xl text-primary-main font-bold">
-                      {formatCurrency(product.price)}
+                      {formatCurrency(product.bundle_id.price)}
                     </h2>
                   </div>
                 </Link>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>
       </main>
     </Fragment>
-  )
+  );
 }
 
 
@@ -121,7 +139,7 @@ export const getStaticPaths = async () =>{
     params: { slug: category.slug },
   }));
 
-  console.log({paths})
+
 
 return {
  paths ,
@@ -139,12 +157,18 @@ export const getStaticProps = async ({params: {slug}}: {params: {slug: string}})
 
   const category = categories?.filter(c => c.slug === slug) as ICategory[]
 
-    const products = await getCategoryProducts(category[0].id) as IProduct[];
+  const { data: category_bundles, error } = await supabase
+    .from("category_bundles")
+    .select("bundle_id(*),category_id(*) ");
+
+    console.log( category[0]);
+
+
 
   return {
     props: {
       category: category[0],
-      products: products
+
     },
     revalidate: 10
   }

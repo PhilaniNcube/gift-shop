@@ -1,16 +1,19 @@
 import { ChevronRightIcon, HeartIcon } from "@heroicons/react/24/outline";
-import Image from "next/future/image";
+import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
 import { Fragment } from "react";
 import ProductsBanner from "../../components/Banner/ProductsBanner";
 import Filter from "../../components/Filter";
-import { getProducts } from "../../fetchers/products";
+import BundleFilter from "../../components/Filter/BundleFilter";
+import { getBundles } from "../../fetchers/bundles";
 import formatCurrency from "../../lib/formatCurrency";
 
 
 
-const Products = ({ products }: { products: IProduct[] }) => {
+const Products = ({ products }: { products: IBundle[] }) => {
+
+  console.log({bundles: products})
 
 
   return (
@@ -20,10 +23,11 @@ const Products = ({ products }: { products: IProduct[] }) => {
       <main className="py-4">
         <section className="max-w-7xl mx-auto px-4">
           <span className="flex items-center space-x-3">
-            <Link href="/">
-              <a className="text-primary-main text-md md:text-xl cursor-pointer font-bold">
-                Home
-              </a>
+            <Link
+              href="/"
+              className="text-primary-main text-md md:text-xl cursor-pointer font-bold"
+            >
+              Home
             </Link>
             <ChevronRightIcon className="h-6 w-6 text-primary-main" />
 
@@ -37,7 +41,7 @@ const Products = ({ products }: { products: IProduct[] }) => {
         </section>
         <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-4 gap-6">
           <aside className="hidden md:flex flex-col col-span-1 w-full">
-            <Filter />
+            <BundleFilter />
           </aside>{" "}
           <div className="flex-1 col-span-4 md:col-span-3 ">
             <div className="flex justify-between items-center mb-2">
@@ -51,23 +55,23 @@ const Products = ({ products }: { products: IProduct[] }) => {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
               {products.map((product) => (
-                <Link key={product.id} href={`/products/${product.slug}`}>
+                <Link key={product.id} href={`/bundles/${product.slug}`}>
                   <div className="w-full group cursor-pointer">
                     <Image
-                      src={product.main_image}
+                      src={product.main_image.url}
                       height={1000}
                       width={1000}
-                      alt={product.name}
+                      alt={product.title}
                       className="w-full object-cover group-hover:opacity-90 aspect-square rounded-lg shadow-lg"
                     />
                     <span className="w-full mt-2 flex justify-between items-center">
                       <h3 className="text-md font-bold text-primary-main">
-                        {product.name}
+                        {product.title}
                       </h3>
                       <HeartIcon className="h-6 w-6 text-primary-main" />
                     </span>
                     <p className="mt-1 text-xs text-slate-600 font-medium flex space-x-1">
-                      {product.details}
+                      {product.description}
                     </p>
                     <h2 className="text-2xl text-primary-main font-bold">
                       {formatCurrency(product.price)}
@@ -89,7 +93,7 @@ export default Products;
 
 export const getStaticProps = async () => {
 
-  const products = await getProducts() as IProduct[];
+  const products = await getBundles() as IBundle[];
 
   return {
     props: {

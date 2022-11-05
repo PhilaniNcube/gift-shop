@@ -45,10 +45,11 @@ const Reset: NextPage = () => {
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Or{" "}
-              <Link href="/register">
-                <a className="font-medium text-indigo-600 hover:text-indigo-500">
-                  Register if you dont already have an account
-                </a>
+              <Link
+                href="/register"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Register if you dont already have an account
               </Link>
             </p>
           </div>
@@ -69,11 +70,7 @@ const Reset: NextPage = () => {
                   placeholder="Email address"
                 />
               </div>
-
-
             </div>
-
-
 
             <div>
               <button
@@ -86,7 +83,7 @@ const Reset: NextPage = () => {
                     aria-hidden="true"
                   />
                 </span>
-               Reset
+                Reset
               </button>
             </div>
           </form>

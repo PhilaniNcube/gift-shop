@@ -43,12 +43,11 @@ const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Or{" "}
-              <Link href="/sign-in">
-                 <a
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                  Sign in if you already have an account
-                 </a>
+              <Link
+                href="/sign-in"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Sign in if you already have an account
               </Link>
             </p>
           </div>
@@ -130,12 +129,11 @@ const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
               </div>
 
               <div className="text-sm">
-                <Link href="/password-reset">
-                    <a
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Forgot your password?
-                    </a>
+                <Link
+                  href="/password-reset"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
+                  Forgot your password?
                 </Link>
               </div>
             </div>

@@ -1,7 +1,7 @@
 
 import { Tab } from "@headlessui/react";
 import Link from "next/link";
-import Image from "next/future/image";
+import Image from "next/image";
 
 function classNames(...classes: string[]): string{
   return classes.filter(Boolean).join(" ");

@@ -51,31 +51,36 @@ const Footer = () => {
 
             <p className="font-medium text-gray-300 mt-5 text-md">
               Copyright {year}. All Rights Reserved. Developed by{" "}
-              <Link href="https://athenamedia.co.za">
-                <a className="text-white">Athena Media</a>
+              <Link className="text-white" href="https://athenamedia.co.za">
+                Athena Media
               </Link>
             </p>
           </div>
           <div className="w-full flex flex-col justify-between items-end">
             <div className="w-full flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-around col-span-2 md:col-span-1">
               {navLinks.map((link, i) => (
-                <Link key={i} href={link.href}>
-                  <a
-                    className={`text-xl uppercase ${
-                      link.active ? "text-slate-200" : "text-white"
-                    }`}
-                  >
-                    {link.text}
-                  </a>
+                <Link
+                  key={i}
+                  href={link.href}
+                  className={`text-xl uppercase ${
+                    link.active ? "text-slate-200" : "text-white"
+                  }`}
+                >
+                  {link.text}
                 </Link>
               ))}
             </div>
             <div className="flex space-x-4">
-                {socialLinks.map((link, i) => (
-                  <Link key={i} href={link.href}><a className="text-white hover:text-primary-main h-16 w-16">{link.icon}</a></Link>
-                ))}
+              {socialLinks.map((link, i) => (
+                <Link
+                  key={i}
+                  href={link.href}
+                  className="text-white hover:text-primary-main h-16 w-16"
+                >
+                  {link.icon}
+                </Link>
+              ))}
             </div>
-
           </div>
         </div>
       </div>

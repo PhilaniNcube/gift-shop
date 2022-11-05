@@ -3,10 +3,11 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useShoppingCart } from "../../context/ShoppingCartContext";
 import ShoppingCartItem from "./ShoppingCartItem";
-import { getProducts } from "../../fetchers/products";
+
 import { useQuery } from "react-query";
 import formatCurrency from "../../lib/formatCurrency";
 import Link from "next/link";
+import { getBundles } from "../../fetchers/bundles";
 
 
 
@@ -15,7 +16,7 @@ const ShoppingCart = ({isOpen}:{isOpen:boolean}) => {
 
   const {closeCart, cartItems} = useShoppingCart()
 
-const { data: products, isLoading, isSuccess } = useQuery(["products"], getProducts);
+const { data: products, isLoading, isSuccess } = useQuery(["products"], getBundles);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -106,15 +107,16 @@ const { data: products, isLoading, isSuccess } = useQuery(["products"], getProdu
                         )}
                       </div>
 
-
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.
                       </p>
                       <div className="mt-6">
-                        <Link href="/checkout">
-                          <a onClick={() => closeCart()} className="flex items-center justify-center rounded-md border border-transparent bg-primary-main px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-main">
-                            Checkout
-                          </a>
+                        <Link
+                          href="/checkout"
+                          onClick={() => closeCart()}
+                          className="flex items-center justify-center rounded-md border border-transparent bg-primary-main px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-main"
+                        >
+                          Checkout
                         </Link>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">

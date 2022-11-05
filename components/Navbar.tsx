@@ -46,14 +46,14 @@ export default function Navbar() {
             </h2>
             <ul className="flex pl-4 items-center space-x-3">
               {navLinks.map((link, i) => (
-                <Link key={i} href={link.href}>
-                  <a
-                    className={`text-lg font-bold ${
-                      link.active ? "text-primary-main" : "text-slate-800"
-                    }`}
-                  >
-                    {link.text}
-                  </a>
+                <Link
+                  key={i}
+                  href={link.href}
+                  className={`text-lg font-bold ${
+                    link.active ? "text-primary-main" : "text-slate-800"
+                  }`}
+                >
+                  {link.text}
                 </Link>
               ))}
             </ul>
