@@ -1,7 +1,8 @@
+import { iteratorSymbol } from "immer/dist/internal";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Layout from "../../../components/Admin/Layout";
 
@@ -27,11 +28,20 @@ const Product = ({
 }) => {
   const router = useRouter();
 
-  console.log(bundleCategories);
+   const totalPrice = bundleProducts.reduce(
+     (acc, product) => acc + product.quantity * product.product_id.price,
+     0
+   );
+   const totalCost = bundleProducts.reduce(
+     (acc, product) => acc + product.quantity * product.product_id.cost,
+     0
+   );
+
+
 
   const ids = bundleCategories.map(c => c.category_id.id)
 
-  console.log({ids})
+
 
   const [uploadData, setUploadData] = useState({});
   const [bundle_categories, setBundleCategories] = useState<string[]>([]);
@@ -44,11 +54,13 @@ const Product = ({
         return currItems.filter((item) => item !== id);
       }
     });
+
+    router.reload()
   }
 
-  console.log({ bundle_categories });
 
-  console.log(uploadData);
+
+
 
   const [loading, setLoading] = useState(false);
 
@@ -74,7 +86,7 @@ const Product = ({
     )
       .then((r) => r.json())
       .catch((err) => err.json());
-    console.log({ data });
+
 
     setUploadData(data);
 
@@ -114,7 +126,7 @@ const Product = ({
       })
       .eq("id", bundle.id);
 
-    console.log({ data, error });
+
 
     setLoading(false);
   };
@@ -125,31 +137,51 @@ const Product = ({
       .delete()
       .eq("product_id", id);
 
-    console.log("delete product", data, error);
 
-    if (data) {
-      const bundleItems = await getBundleProducts(bundle.id);
 
-      const totalPrice = bundleItems.reduce(
-        (acc, product) => acc + product.quantity * product.product_id.price,
-        0
-      );
-      const totalCost = bundleItems.reduce(
-        (acc, product) => acc + product.quantity * product.product_id.cost,
-        0
-      );
+     const bundleItems = await getBundleProducts(bundle.id);
 
-      const { data: bundleProduct, error: errorProduct } = await supabase
-        .from("bundles")
-        .update({ price: totalPrice, cost: totalCost })
-        .eq("id", bundle.id);
-      console.log({ data, error, bundleProduct, errorProduct });
-      router.reload();
-    }
+     const totalPrice = bundleItems.reduce(
+       (acc, product) => acc + product.quantity * product.product_id.price,
+       0
+     );
+     const totalCost = bundleItems.reduce(
+       (acc, product) => acc + product.quantity * product.product_id.cost,
+       0
+     );
 
-    console.log({ data, error });
-    router.reload();
+     const { data: bundleProduct, error: errorProduct } = await supabase
+       .from("bundles")
+       .update({ price: totalPrice, cost: totalCost })
+       .eq("id", bundle.id);
+
+     router.reload();
+
   };
+
+      const updateBundlePrice = async (e: React.FormEvent<HTMLFormElement>) => {
+
+         const { price } = Object.fromEntries(new FormData(e.currentTarget));
+
+        e.preventDefault()
+        const { data: bundleProduct, error: errorProduct } = await supabase
+          .from("bundles")
+          .update({ price: price })
+          .eq("id", bundle.id);
+              router.reload();
+      };
+
+      const updateBundleCost = async (e: React.FormEvent<HTMLFormElement>) => {
+
+         const { cost } = Object.fromEntries(new FormData(e.currentTarget));
+
+        e.preventDefault()
+        const { data: bundleProduct, error: errorProduct } = await supabase
+          .from("bundles")
+          .update({ cost: cost })
+          .eq("id", bundle.id);
+              router.reload();
+      };
 
   const saveCategories = async () => {
     bundle_categories.map(
@@ -170,42 +202,14 @@ const Product = ({
     e.preventDefault();
 
     const { quantity } = Object.fromEntries(new FormData(e.currentTarget));
-    console.log({ product, quantity });
+
 
     const { data: addedProduct, error } = await supabase
       .from("bundle_products")
       .insert([
         { product_id: product.id, bundle_id: bundle.id, quantity: quantity },
       ])
-
-
-      console.log({ addedProduct, error });
-
-    if (addedProduct) {
-      const bundleItems = await getBundleProducts(bundle.id);
-
-      console.log({ bundleItems });
-
-      const totalPrice = bundleItems.reduce(
-        (acc, product) => acc + product.quantity * product.product_id.price,
-        0
-      );
-      const totalCost = bundleItems.reduce(
-        (acc, product) => acc + product.quantity * product.product_id.cost,
-        0
-      );
-
-      console.log({ totalCost, totalPrice });
-
-      const { data: bundleProduct, error: errorProduct } = await supabase
-        .from("bundles")
-        .update({ price: totalPrice, cost: totalCost })
-        .eq("id", bundle.id);
-      console.log({ bundleProduct, errorProduct });
-    }
-
-
-    //  router.reload()
+       router.reload();
   };
 
   return (
@@ -220,21 +224,72 @@ const Product = ({
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-b border-gray-300 py-3">
           <div className="w-full">
             {" "}
-            <h1 className="text-3xl font-bold text-primary-main">
+            <h1 className="text-xl font-bold text-primary-main">
               Product Name: {bundle?.title}
             </h1>
-            <h3 className="text-lg text-slate-500">
-              Selling Price {formatCurrency(bundle?.price)}
-            </h3>
-            <h3 className="text-lg font-bold text-primary-main">
-              Cost Price {formatCurrency(bundle.cost)}
-            </h3>
-            <div className="mt-3 flex gap-4">
-              {" "}
-              <p className="font-medium text-slate-600 mt-1">
-                {bundle.description}
-              </p>
-            </div>
+            <form
+              onSubmit={(e) => updateBundlePrice(e)}
+              className="text-lg mt-5 text-slate-500 "
+            >
+              <div>
+                <label
+                  htmlFor="price"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Selling Price{" "}
+                  <span className="text-xs pl-5 text-red-500">
+                    Suggested Cost Price {formatCurrency(totalPrice)}
+                  </span>
+                </label>
+                <div className="relative mt-1 rounded-md shadow-sm">
+                  <input
+                    type="number"
+                    name="price"
+                    id="price"
+                    className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    placeholder={formatCurrency(bundle?.price)}
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="inline-flex mt-2 justify-center rounded-md border border-transparent bg-primary-main py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2"
+              >
+                Save Price
+              </button>
+            </form>
+            <form
+              onSubmit={(e) => updateBundleCost(e)}
+              className="text-lg mt-5 text-slate-500 "
+            >
+              <div>
+                <label
+                  htmlFor="price"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Cost Price{" "}
+                  <span className="text-xs pl-5 text-red-500">
+                    Suggested Cost Price {formatCurrency(totalCost)}
+                  </span>
+                </label>
+                <div className="relative mt-1 rounded-md shadow-sm">
+                  <input
+                    type="number"
+                    name="cost"
+                    id="cost"
+                    className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    placeholder={formatCurrency(bundle?.cost)}
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="inline-flex mt-2 justify-center rounded-md border border-transparent bg-primary-main py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2"
+              >
+                Save Price
+              </button>
+            </form>
+            <div className="mt-3 flex gap-4"> </div>
           </div>
 
           <Image
@@ -244,6 +299,43 @@ const Product = ({
             alt={bundle.title}
             className="w-60 h-60 object-cover"
           />
+        </div>
+        <div className="grid grid-cols-3 gap-2 mb-4">
+          {bundleProducts.map((product) => (
+            <div
+              key={product.product_id.id}
+              className="text-sm p-3 flex items-center space-x-3 my-1 rounded-lg bg-gray-300"
+            >
+              <div className="text-bold flex flex-1 flex-col space-y-2">
+                <p>{product.product_id.name}</p>
+                <p>
+                  Price: {formatCurrency(product.product_id.price)} &times;
+                  {product.quantity}
+                </p>
+              </div>
+              <svg
+                onClick={() => deleteFromBundle(product.product_id.id)}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-10 h-10 cursor-pointer text-red-600"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                />
+              </svg>
+            </div>
+          ))}
+        </div>
+        <p className="font-medium text-slate-600 mt-1">{bundle.description}</p>
+        <div className="hidden sm:block" aria-hidden="true">
+          <div className="py-5">
+            <div className="border-t border-gray-200" />
+          </div>
         </div>
         <div className="mt-3">
           <h2 className="my-2 font-extrabold text-2xl text-gray-500">
@@ -267,7 +359,7 @@ const Product = ({
                         name={category.slug}
                         type="checkbox"
                         onChange={() => addBundleCategories(category.id)}
-                        className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        className="h-4 w-4 rounded border-gray-300 text-primary-main focus:ring-indigo-500"
                       />
                     </div>
                     <div className="ml-3 text-sm">
@@ -293,37 +385,6 @@ const Product = ({
             >
               Save Categories
             </button>
-          </div>
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            {bundleProducts.map((product) => (
-              <div
-                key={product.product_id.id}
-                className="text-sm p-3 flex items-center space-x-3 my-1 rounded-lg bg-gray-300"
-              >
-                <div className="text-bold flex flex-1 flex-col space-y-2">
-                  <p>{product.product_id.name}</p>
-                  <p>
-                    Price: {formatCurrency(product.product_id.price)} &times;
-                    {product.quantity}
-                  </p>
-                </div>
-                <svg
-                  onClick={() => deleteFromBundle(product.product_id.id)}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-10 h-10 cursor-pointer text-red-600"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                  />
-                </svg>
-              </div>
-            ))}
           </div>
         </div>
 
@@ -486,7 +547,7 @@ const Product = ({
 
             <button
               type="submit"
-              className="inline-flex mt-6 w-1/3 justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="inline-flex mt-6 w-1/3 justify-center rounded-md border border-transparent bg-primary-main py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Save
             </button>
