@@ -1,19 +1,26 @@
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import slugify from "slugify";
 import Layout from "../../../components/Admin/Layout";
+import { Database } from "../../../db_types";
 import { getCategories, getProducts } from "../../../fetchers/products";
-import supabase from "../../../lib/client";
+
 
 
 const Add = () => {
+
+     const [supabaseClient] = useState(() =>
+       createBrowserSupabaseClient<Database>()
+     );
   const router = useRouter();
 
 
 
 
 
-  const [uploadData, setUploadData] = useState({});
+  const [uploadData, setUploadData] = useState<ImageObject>();
 
   console.log(uploadData);
 
@@ -58,16 +65,11 @@ const Add = () => {
       Object.fromEntries(new FormData(e.currentTarget));
     console.log({
       title,
-
       description,
-
-
-
     });
 
     if (
       typeof title !== "string" ||
-
       typeof description !== "string"
     ) {
       throw new Error("Please enter a valid data");
@@ -75,14 +77,17 @@ const Add = () => {
 
     const slug = slugify(title, {lower: true});
 
-    const { data, error } = await supabase.from("bundles").insert([
-      {
-        title: title,
-        slug: slug,
-        description: description,
-        main_image: uploadData,
-      },
-    ]).single();
+    const { data, error } = await supabaseClient
+      .from("bundles")
+      .insert([
+        {
+          title: title,
+          slug: slug,
+          description: description,
+          main_image: uploadData,
+        },
+      ])
+      .single();
 
     console.log({ data, error });
 
@@ -91,7 +96,9 @@ const Add = () => {
 
 
     setLoading(false);
-    router.push(`/admin/dashboard`);
+
+    router.push(`/admin/bundles`);
+
   };
 
   return (
@@ -124,8 +131,18 @@ const Add = () => {
             disabled={loading}
             className="w-1/3 py-2 rounded-md bg-primary-main text-white mt-2"
           >
-           {loading ? 'Loading...' : 'Save Image'}
+            {loading ? "Loading..." : "Save Image"}
           </button>
+
+          {uploadData && (
+            <Image
+              src={uploadData?.url}
+              width={uploadData?.width}
+              height={uploadData?.height}
+              alt="Product Image"
+              className="w-40 h-40 object-cover mt-3"
+            />
+          )}
         </form>
         <form
           onSubmit={handleSubmit}
@@ -162,8 +179,6 @@ const Add = () => {
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
-
-
           </div>
 
           <button
