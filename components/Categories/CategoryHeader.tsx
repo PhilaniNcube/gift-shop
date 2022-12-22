@@ -29,7 +29,7 @@ const CategoryHeader = () => {
             </p>
 
             <Link
-              href="/products"
+              href="/bundles"
               className="bg-primary-main hover:bg-primary-main/70 cursor-pointer text-white text-md lg:text-xl font-bold uppercase px-4 lg:px-8 py-2 mt-6 w-fit"
             >
               Discover More

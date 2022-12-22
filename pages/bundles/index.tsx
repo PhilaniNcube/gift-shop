@@ -4,17 +4,17 @@ import Head from "next/head";
 import Link from "next/link";
 import { Fragment } from "react";
 import ProductsBanner from "../../components/Banner/ProductsBanner";
-import Filter from "../../components/Filter";
 import BundleFilter from "../../components/Filter/BundleFilter";
 import { getBundles } from "../../fetchers/bundles";
 import formatCurrency from "../../lib/formatCurrency";
+import supabase from "../../lib/client";
 
 
 
-const Products = ({ products }: { products: IBundle[] }) => {
+const Products = ({ bundles, count }: { bundles: IBundle[], count:number }) => {
 
-  console.log({bundles: products})
-
+  console.log("count ",count)
+  console.log({ bundles: bundles });
 
   return (
     <Fragment>
@@ -46,35 +46,35 @@ const Products = ({ products }: { products: IBundle[] }) => {
           <div className="flex-1 col-span-4 md:col-span-3 ">
             <div className="flex justify-between items-center mb-2">
               <p className="text-primary-main text-md font-bold">
-                Showing 1 - 12 of 50 items
+                Showing {count} items
               </p>
-              <p className="text-primary-main text-md font-bold">To Show 8</p>
-              <p className="text-primary-main text-md font-bold">
+              {/* <p className="text-primary-main text-md font-bold">To Show 8</p> */}
+              {/* <p className="text-primary-main text-md font-bold">
                 Sort By Position
-              </p>
+              </p> */}
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-              {products.map((product) => (
-                <Link key={product.id} href={`/bundles/${product.slug}`}>
+              {bundles.map((bundle) => (
+                <Link key={bundle.id} href={`/bundles/${bundle.slug}`}>
                   <div className="w-full group cursor-pointer">
                     <Image
-                      src={product.main_image.url}
+                      src={bundle.main_image.url}
                       height={1000}
                       width={1000}
-                      alt={product.title}
+                      alt={bundle.title}
                       className="w-full object-cover group-hover:opacity-90 aspect-square rounded-lg shadow-lg"
                     />
                     <span className="w-full mt-2 flex justify-between items-center">
                       <h3 className="text-md font-bold text-primary-main">
-                        {product.title}
+                        {bundle.title}
                       </h3>
                       <HeartIcon className="h-6 w-6 text-primary-main" />
                     </span>
                     <p className="mt-1 text-xs text-slate-600 font-medium flex space-x-1">
-                      {product.description}
+                      {bundle.description}
                     </p>
                     <h2 className="text-2xl text-primary-main font-bold">
-                      {formatCurrency(product.price)}
+                      {formatCurrency(bundle.price)}
                     </h2>
                   </div>
                 </Link>
@@ -91,14 +91,22 @@ export default Products;
 
 
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
 
-  const products = await getBundles() as IBundle[];
+  const bundles = await getBundles() as IBundle[];
+
+  const { count, error } = await supabase
+    .from("bundles")
+    .select("*", { count: "exact", head: true });
+
+    console.log(error)
 
   return {
     props: {
-      products: products,
+      bundles: bundles,
+      count,
+
     },
-    revalidate: 60,
+
   };
 };

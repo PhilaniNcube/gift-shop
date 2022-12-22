@@ -24,7 +24,7 @@ const Hero = () => {
                 you may need.
               </p>
               <Link
-                href="/products"
+                href="/bundles"
                 className="mt-3 md:mt-6 bg-primary-main hover:bg-primary-main/70 cursor-pointer w-fit px-8 py-2 text-white flex items-center text-sm md:text-xl rounded-lg"
               >
                 <span>See More</span>{" "}

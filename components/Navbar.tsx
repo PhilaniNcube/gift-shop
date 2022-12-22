@@ -26,8 +26,6 @@ export default function Navbar() {
 
   const navLinks = [
     { text: "Home", href: "/", active: router.asPath === '/' },
-    { text: "Products", href: "/products" ,active: router.asPath === '/products'},
-    { text: "Categories", href: "/categories", active: router.asPath === '/categories' },
     { text: "Bundles", href: "/bundles", active: router.asPath === '/bundles' },
   ];
   const user = useUser();

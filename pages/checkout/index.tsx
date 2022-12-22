@@ -13,6 +13,7 @@ import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "../../db_types";
+import { getBundles } from "../../fetchers/bundles";
 
 const deliveryMethods = [
   {
@@ -38,10 +39,10 @@ const [selected, setSelected] = useState(deliveryMethods[0]);
  );
 
 const {
-  data: products,
+  data: bundles,
   isLoading,
   isSuccess,
-} = useQuery(["products"], getProducts);
+} = useQuery(["bundles"], getBundles);
 
 const user = useUser()
 
@@ -62,15 +63,16 @@ const data = {
   delivery_method: selected.name,
   order_items: cartItems,
   cartTotal: cartItems.reduce((total, cartItem) => {
-    const item = products?.find((i) => i.id === cartItem.id);
+    const item = bundles?.find((i) => i.id === cartItem.id);
 
     return total + (item?.price || 0) * cartItem.quantity;
   }, 0),
 };
 
-      console.log(data);
 
-      const { data:order, error } = await supabase.from("orders")
+
+      const { data: order, error } = await supabaseClient
+        .from("orders")
         .insert([
           {
             profile_id: !user ? null : user.id,
@@ -87,16 +89,16 @@ const data = {
             street_address: formData.street_address,
             order_items: cartItems,
           },
-        ])
-        .single();
+        ]).select('*').single()
 
       console.log({ order, error });
 
 
       if(error) {
         console.log(error);
+        return
       }
-  router.push(`/orders`);
+  router.push(`/orders/${order?.id}`);
 
   }
 
@@ -344,7 +346,7 @@ const data = {
                         <p>
                           {formatCurrency(
                             cartItems.reduce((total, cartItem) => {
-                              const item = products?.find(
+                              const item = bundles?.find(
                                 (i) => i.id === cartItem.id
                               );
 
@@ -369,7 +371,7 @@ const data = {
                       {formatCurrency(
                         selected.price +
                           cartItems.reduce((total, cartItem) => {
-                            const item = products?.find(
+                            const item = bundles?.find(
                               (i) => i.id === cartItem.id
                             );
 

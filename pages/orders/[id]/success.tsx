@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Fragment } from "react";
 import { useQuery } from "react-query";
-import { getProducts } from "../../../fetchers/products";
+import { getBundles } from "../../../fetchers/bundles";
 import supabase from "../../../lib/client";
 import formatCurrency from "../../../lib/formatCurrency";
 
@@ -11,7 +11,7 @@ type OrderProps = {
 };
 
 const Order = (props: OrderProps) => {
-  const { data: products } = useQuery(["products"], getProducts);
+  const { data: bundles } = useQuery(["bundles"], getBundles);
 
   const order = props.order;
 
@@ -27,12 +27,12 @@ const Order = (props: OrderProps) => {
               <div className="my-3">
                 <ul>
                   {order.order_items?.map((item) => {
-                    const product = products?.find((p) => p.id === item.id);
+                    const product = bundles?.find((p) => p.id === item.id);
 
                     return (
                       <li key={product?.id} className="flex space-x-3">
                         <img
-                          src={product?.main_image}
+                          src={product?.main_image.url}
                           alt="Product"
                           width={150}
                           height={150}
@@ -40,7 +40,7 @@ const Order = (props: OrderProps) => {
                         />
                         <div className="flex flex-col justify-between">
                           <span className="text-xl font-bold text-slate-700">
-                            {product?.name} &times; {item.quantity} @{" "}
+                            {product?.title} &times; {item.quantity} @{" "}
                             {formatCurrency(product?.price || 0)} each
                           </span>
                           <p className="text-xl font-bold text-primary-main">

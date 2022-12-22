@@ -28,7 +28,7 @@ const NewArrivals = () => {
             New Arrivals
           </h2>
           <Link
-            href="/products"
+            href="/bundles"
             className="flex items-center space-x-4 text-primary-main text-md md:text-lg"
           >
             <span className="font-bold">View All</span>

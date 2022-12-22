@@ -50,6 +50,8 @@ const Product = ({
 
 
 
+
+
   const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
