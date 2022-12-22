@@ -17,7 +17,6 @@ const Product = ({
   bundle,
   products,
   bundleProducts,
-  categories,
   bundleCategories,
 }: {
   bundle: IBundle;
@@ -43,21 +42,11 @@ const Product = ({
 
 
 
-  const ids = bundleCategories.map(c => c.category_id.id)
+
   const [loading, setLoading] = useState(false);
   const [uploadData, setUploadData] = useState({});
-  const [bundle_categories, setBundleCategories] = useState<string[]>([]);
 
-  function addBundleCategories(id: string) {
-    setBundleCategories((currItems) => {
-      if (currItems.find((item) => item === id) == null) {
-        return [...currItems, id];
-      } else {
-        return currItems.filter((item) => item !== id);
-      }
-    });
-    router.reload()
-  }
+
 
 
 
@@ -195,17 +184,7 @@ const Product = ({
               router.reload();
       };
 
-  const saveCategories = async () => {
-    bundle_categories.map(
-      async (item) =>
-        await supabase
-          .from("category_bundles")
-          .insert([{ bundle_id: bundle.id, category_id: item }])
-    );
 
-    setBundleCategories([]);
-    router.reload();
-  };
 
   const addBundleProduct = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -439,51 +418,9 @@ const Product = ({
           <h2 className="my-2 font-extrabold text-2xl text-gray-500">
             Products In Bundle
           </h2>
-          <div className="col-span-6 sm:col-span-3 bg-slate-100 p-4 rounded-lg">
-            <fieldset>
-              <legend className="sr-only">Bundle Categories</legend>
-              <div
-                className="text-base font-medium text-gray-900"
-                aria-hidden="true"
-              >
-                Category
-              </div>
-              <div className="mt-4 grid grid-cols-4 gap-6">
-                {categories.map((category) => (
-                  <div key={category.id} className="flex items-start">
-                    <div className="flex h-5 items-center">
-                      <input
-                        id={category.slug}
-                        name={category.slug}
-                        type="checkbox"
-                        onChange={() => addBundleCategories(category.id)}
-                        className="h-4 w-4 rounded border-gray-300 text-primary-main focus:ring-indigo-500"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor={category.slug}
-                        className={`font-medium ${
-                          ids.includes(category.id)
-                            ? "text-gray-700"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {category.name}
-                      </label>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </fieldset>
-            <button
-              type="button"
-              onClick={saveCategories}
-              className="mt-5 bg-primary-main rounded-md text-white px-4 py-2"
-            >
-              Save Categories
-            </button>
-          </div>
+
+
+
         </div>
 
         <div>
