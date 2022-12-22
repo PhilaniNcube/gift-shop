@@ -28,6 +28,10 @@ const Product = ({
 }) => {
   const router = useRouter();
 
+  const [bundleData, setBundleData] = useState(bundle)
+
+  console.log({bundle: bundleData})
+
    const totalPrice = bundleProducts.reduce(
      (acc, product) => acc + product.quantity * product.product_id.price,
      0
@@ -40,9 +44,7 @@ const Product = ({
 
 
   const ids = bundleCategories.map(c => c.category_id.id)
-
-
-
+  const [loading, setLoading] = useState(false);
   const [uploadData, setUploadData] = useState({});
   const [bundle_categories, setBundleCategories] = useState<string[]>([]);
 
@@ -54,15 +56,10 @@ const Product = ({
         return currItems.filter((item) => item !== id);
       }
     });
-
     router.reload()
   }
 
 
-
-
-
-  const [loading, setLoading] = useState(false);
 
   const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,58 +86,30 @@ const Product = ({
 
 
     setUploadData(data);
+    console.log(uploadData)
+
+      const { data: bundleProduct, error: errorProduct } = await supabase
+        .from("bundles")
+        .update({ main_image: data })
+        .eq("id", bundle.id);
+
+      console.log({ bundleProduct, errorProduct });
+
+      if(errorProduct) {
+        alert(errorProduct.details)
+      } else {
+        alert("Upload Successful")
+      }
+
+      // router.reload();
 
     setLoading(false);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
 
-    const { name, cost, details, price, quantity } = Object.fromEntries(
-      new FormData(e.currentTarget)
-    );
-
-    if (
-      typeof name !== "string" ||
-      typeof quantity !== "string" ||
-      typeof cost !== "string" ||
-      typeof price !== "string" ||
-      typeof details !== "string"
-    ) {
-      throw new Error("Please enter a valid data");
-    }
-
-    const { data, error } = await supabase
-      .from("bundles")
-      .update({
-        products: {
-          name: name,
-          cost: cost,
-          price: price,
-          details: details,
-          image: uploadData,
-        },
-      })
-      .eq("id", bundle.id);
-
-
-
-    setLoading(false);
-    if(error) {
-      alert(error.details)
-    } else {
-      console.log('Done', data)
-      router.reload();
-    }
-  };
 
   const deleteFromBundle = async (id: string) => {
      await supabase.from("bundle_products").delete().eq("product_id", id);
-
-
-
-
 
      const bundleItems = await getBundleProducts(bundle.id);
 
@@ -164,10 +133,39 @@ const Product = ({
         console.log(bundleProduct);
         router.reload()
        }
-
-
-
   };
+
+
+      const updateBundleDescription = async (e: React.FormEvent<HTMLFormElement>) => {
+
+         const { description } = Object.fromEntries(new FormData(e.currentTarget));
+
+        e.preventDefault()
+        const { data: bundleProduct, error: errorProduct } = await supabase
+          .from("bundles")
+          .update({ description: description })
+          .eq("id", bundle.id);
+
+          console.log({bundleProduct, errorProduct})
+
+              router.reload();
+      };
+
+
+      const updateBundleTitle = async (e: React.FormEvent<HTMLFormElement>) => {
+
+         const { title } = Object.fromEntries(new FormData(e.currentTarget));
+
+        e.preventDefault()
+        const { data: bundleProduct, error: errorProduct } = await supabase
+          .from("bundles")
+          .update({ title: title })
+          .eq("id", bundle.id);
+
+          console.log({bundleProduct, errorProduct})
+
+              router.reload();
+      };
 
       const updateBundlePrice = async (e: React.FormEvent<HTMLFormElement>) => {
 
@@ -242,6 +240,62 @@ const Product = ({
             <h1 className="text-xl font-bold text-primary-main">
               Product Name: {bundle?.title}
             </h1>
+            <form
+              onSubmit={(e) => updateBundleTitle(e)}
+              className="text-lg mt-5 text-slate-500 "
+            >
+              <div>
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Bundle Title
+                </label>
+                <div className="relative mt-1 rounded-md shadow-sm">
+                  <input
+                    type="text"
+                    name="title"
+                    id="title"
+                    className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    placeholder={bundle?.title}
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="inline-flex mt-2 justify-center rounded-md border border-transparent bg-primary-main py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2"
+              >
+                Save Title
+              </button>
+            </form>
+            <form
+              onSubmit={(e) => updateBundleDescription(e)}
+              className="text-lg mt-5 text-slate-500 "
+            >
+              <div>
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Bundle Description
+                </label>
+                <div className="relative mt-1 rounded-md shadow-sm">
+                  <textarea
+                    name="description"
+                    id="description"
+                    rows={5}
+                    className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    placeholder={bundle?.description}
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="inline-flex mt-2 justify-center rounded-md border border-transparent bg-primary-main py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2"
+              >
+                Save Description
+              </button>
+            </form>
             <form
               onSubmit={(e) => updateBundlePrice(e)}
               className="text-lg mt-5 text-slate-500 "
@@ -346,6 +400,35 @@ const Product = ({
             </div>
           ))}
         </div>
+
+        <form
+          className="p-8 border-spacing-3 border border-dashed rounded-lg border-slate-500"
+          onSubmit={handleImageUpload}
+        >
+          <div className="col-span-6 sm:col-span-3">
+            <label
+              htmlFor="image"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Upload Image
+            </label>
+            <input
+              type="file"
+              name="image"
+              id="image"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-1/3 py-2 rounded-md bg-primary-main text-white mt-2"
+          >
+            Save Image
+          </button>
+        </form>
+
+
         <p className="font-medium text-slate-600 mt-1">{bundle.description}</p>
         <div className="hidden sm:block" aria-hidden="true">
           <div className="py-5">
@@ -468,105 +551,6 @@ const Product = ({
               })}
             </div>
           </div>
-
-          <form
-            className="p-8 border-spacing-3 border border-dashed rounded-lg border-slate-500"
-            onSubmit={handleImageUpload}
-          >
-            <div className="col-span-6 sm:col-span-3">
-              <label
-                htmlFor="image"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Upload Image
-              </label>
-              <input
-                type="file"
-                name="image"
-                id="image"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-1/3 py-2 rounded-md bg-primary-main text-white mt-2"
-            >
-              Save Image
-            </button>
-          </form>
-          <form
-            onSubmit={handleSubmit}
-            className="ring-1 p-8 ring-offset-1 rounded-xl mt-4"
-          >
-            <div className="grid grid-cols-6 gap-6">
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Product name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  autoComplete="given-name"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-
-              <div className="col-span-6 ">
-                <label
-                  htmlFor="details"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Product Details/Description
-                </label>
-                <textarea
-                  name="details"
-                  id="details"
-                  rows={5}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="price"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Product price
-                </label>
-                <input
-                  type="number"
-                  name="price"
-                  id="price"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div className="col-span-6 sm:col-span-3">
-                <label
-                  htmlFor="cost"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Product cost
-                </label>
-                <input
-                  type="number"
-                  name="cost"
-                  id="cost"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="inline-flex mt-6 w-1/3 justify-center rounded-md border border-transparent bg-primary-main py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              Save
-            </button>
-          </form>
         </div>
       </div>
     </Layout>

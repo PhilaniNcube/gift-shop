@@ -1,7 +1,40 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
+import supabase from "../../lib/client";
 
 const Layout = ({children}:{children: ReactNode}) => {
+
+    const router = useRouter()
+
+    const createProduct = async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .insert([
+          {
+            slug: Math.random().toString(),
+            name: "Draft Product",
+            details: "",
+            size: "",
+            main_image: "",
+            category: null,
+          },
+        ])
+        .select("*")
+        .single();
+
+        console.log({data, error})
+
+        if(error) {
+          alert(error.details);
+        } else if (data) {
+          router.push(`/admin/products/${data.id}`);
+        }
+
+
+    };
+
+
   return (
     <section className="flex gap-6 relative isolate">
       <aside className="bg-primary-main relative border-b border-slate-100  w-72 max-w-md min-h-screen">
@@ -42,12 +75,12 @@ const Layout = ({children}:{children: ReactNode}) => {
           <Link href="/admin/products" className="text-white text-xl font-bold">
             Products
           </Link>
-          <Link
-            href="/admin/products/add"
-            className="text-white text-xl font-bold"
+          <div
+          onClick={createProduct}
+            className="text-white text-xl font-bold cursor-pointer"
           >
             Add/Create Product
-          </Link>
+          </div>
           <Link href="/admin/orders" className="text-white text-xl font-bold">
             Orders
           </Link>

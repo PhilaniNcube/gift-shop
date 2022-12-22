@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -15,6 +16,49 @@ const Product = ({product, categories}: {product: IProduct, categories: ICategor
   const [loading, setLoading] = useState(false)
 
   const [prodData, setProdData] = useState(product)
+
+
+console.log({product: prodData})
+
+     const [uploadData, setUploadData] = useState<ImageObject>();
+
+
+
+
+
+     const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+       e.preventDefault();
+       e.stopPropagation();
+       setLoading(true);
+
+       const { image } = Object.fromEntries(new FormData(e.currentTarget));
+
+       // const fileInput = Array.from(form.elements).find((item) => item.getAttribute('type') === 'file')
+
+       const formData = new FormData();
+
+       formData.append("file", image);
+       formData.append("upload_preset", "g02mzonw");
+
+       const data = await fetch(
+         `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/image/upload`,
+         {
+           method: "POST",
+           body: formData,
+         }
+       ).then((r) => r.json()).catch((err) => err.json());
+
+
+       console.log({data})
+
+       setUploadData(data);
+
+
+       setLoading(false);
+     };
+
+
+
 
 
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -56,6 +100,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       size: size,
       category: category,
       details: details,
+      main_image:uploadData?.url
     },
   ]).eq('id', product.id).single();
 
@@ -97,6 +142,48 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
           </div>
           <p className="font-medium text-slate-600 mt-1">{product.details}</p>
         </div>
+
+        <form
+          onSubmit={handleImageUpload}
+          className="w-full my-6 border border-primary-main rounded-lg p-4"
+        >
+          <h2 className="font-bold text-primary-main text-xl">
+            Upload Product Image
+          </h2>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="w-full flex flex-col">
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                className="border-none text-slate-700 mt-3"
+              />
+              <button type="submit" className="text-center w-fit text-white bg-primary-main font-bold px-8 py-2 mt-4 rounded-lg">Save Image</button>
+            </div>
+            <div className="w-full max-w-[200px]">
+              {prodData.main_image === "" ||
+              prodData.main_image === undefined ? (
+                <Image
+                  src="/images/placeholder.png"
+                  alt="Placeholder"
+                  width={1500}
+                  height={1500}
+                  className="w-full object-cover aspect-square"
+                />
+              ) : (
+                <Image
+                  src={prodData.main_image}
+                  alt="Placeholder"
+                  width={1500}
+                  height={1500}
+                  className="w-full object-cover aspect-square"
+                />
+              )}
+            </div>
+          </div>
+        </form>
+
         <div>
           <h2 className="font-bold text-2xl text-primary-main my-4">
             Edit Product
@@ -120,6 +207,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                   id="name"
                   value={prodData.name}
                   onChange={(e) => {
+
                     setProdData({ ...prodData, name: e.target.value });
                   }}
                   autoComplete="given-name"

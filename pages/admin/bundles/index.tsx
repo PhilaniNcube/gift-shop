@@ -11,12 +11,17 @@ const Products = ({ bundles }: { bundles: IBundle[] }) => {
   return (
     <Layout>
       <div>
-        <Link
-          href="/admin/dashboard"
-          className="font-bold text-primary-main text-2xl"
-        >
-          Back To Dashboard
-        </Link>
+        <div className="flex justify-between items-center w-full">
+          <Link
+            href="/admin/dashboard"
+            className="font-bold text-primary-main text-2xl"
+          >
+            Back To Dashboard
+          </Link>
+
+          <button className="text-white bg-primary-main font-bold text-lg uppercase px-8 py-2 rounded-lg">New Bundle</button>
+        </div>
+
         <div className="w-full">
           {bundles?.map((bundle) => (
             <Link key={bundle.id} href={`/admin/bundles/${bundle.id}`}>
