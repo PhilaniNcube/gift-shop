@@ -17,7 +17,7 @@ const Order = (props: OrderProps ) => {
 const order = props.order
 
 
-
+console.log({order})
 
 
   return (
@@ -35,7 +35,7 @@ const order = props.order
                     const product = bundles?.find((bundle) => bundle.id === item.id);
 
                     return (
-                      <li key={product?.id} className="flex space-x-3">
+                      <li key={item?.id} className="flex space-x-3">
                         <img
                           src={product?.main_image.url}
                           alt="Product"
@@ -179,6 +179,8 @@ export default Order;
 export async function getServerSideProps({params: {id}}:{params: {id: string}}) {
 
   const { data: orders, error } = await supabase.from("orders").select("*").eq('id', id).single();
+
+  console.log({orders, error});
 
 
   if(error) {

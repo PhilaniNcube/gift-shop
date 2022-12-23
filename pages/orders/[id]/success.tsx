@@ -30,7 +30,7 @@ const Order = (props: OrderProps) => {
                     const product = bundles?.find((p) => p.id === item.id);
 
                     return (
-                      <li key={product?.id} className="flex space-x-3">
+                      <li key={item?.id} className="flex space-x-3">
                         <img
                           src={product?.main_image.url}
                           alt="Product"
@@ -57,16 +57,24 @@ const Order = (props: OrderProps) => {
               </div>
             </div>
             <div className="w-full">
-              <h1 className="text-xl md:text-3xl font-bold text-primary-bold">
-                Complete Your Order
+              <h1 className="text-xl md:text-3xl font-bold text-primary-main">
+              Payment Complete
               </h1>
-              <p className="text-base text-slate-400 mt-2">
-                Click the pay now button below to complete your payment
-              </p>
 
-              <div className="my-3">
-                <p className="text-lg font-bold text-slate-400">Order ID</p>
-                <p className="text-lg font-bold text-slate-800">{order.id}</p>
+              <div className="w-full flex flex-col justify-between">
+                <div className="flex gap-3">
+                  <p className="font-bold text-primary-main text-lg">Delivery Method:</p>
+                  <p className="font-medium text-primary-main text-lg">{order.delivery_method}</p>
+                </div>
+                <div className="flex gap-3">
+                  <p className="font-bold text-primary-main text-lg">Delivery Status:</p>
+                  <p className="font-medium text-primary-main text-lg">{order.shipped ? "Shipped" : "Pending Shipping"}</p>
+                </div>
+              </div>
+
+              <div className="my-3 flex gap-3">
+                <p className="text-lg font-bold text-primary-main">Order ID:</p>
+                <p className="text-lg font-medium text-primary-main">{order.id}</p>
               </div>
 
               <div className="block" aria-hidden="true">
@@ -95,8 +103,8 @@ const Order = (props: OrderProps) => {
                 </p>
               </div>
 
-              <div>
-                <h3 className="text-lg font-bold text-slate-600">
+              <div className="mt-4">
+                <h3 className="text-lg font-medium text-slate-600">
                   Shipping Cost: {formatCurrency(order.shipping)}
                 </h3>
                 <h3 className="text-2xl font-bold text-slate-600 mt-4">
