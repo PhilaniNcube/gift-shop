@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import Layout from "../../../components/Admin/Layout";
 import { getOrders } from "../../../fetchers/orders";
 import formatCurrency from "../../../lib/formatCurrency";
+import {format} from "date-fns"
 
 const Orders = ({orders}: {orders: IOrder[]}) => {
 
@@ -32,6 +33,7 @@ const Orders = ({orders}: {orders: IOrder[]}) => {
               <table className="w-full whitespace-nowrap">
                 <thead>
                   <tr className="h-20 w-full text-sm leading-none text-gray-600">
+                    <th className="font-normal text-left pl-4">Date</th>
                     <th className="font-normal text-left pl-4">Email</th>
                     <th className="font-normal text-left pl-10">City</th>
                     <th className="font-normal text-left pl-10">Customer</th>
@@ -49,6 +51,9 @@ const Orders = ({orders}: {orders: IOrder[]}) => {
                       key={order.id}
                       className="h-20 text-sm leading-none text-gray-700 border-b border-t border-gray-200 bg-white hover:bg-gray-50"
                     >
+                      <td className="pl-4">
+                        {format(new Date(order.created_at), "dd-MM-yy")}
+                      </td>
                       <td className="pl-4">{order.email_address}</td>
                       <td className="pl-10 text-xs">{order.city}</td>
                       <td className="pl-10">
@@ -57,7 +62,11 @@ const Orders = ({orders}: {orders: IOrder[]}) => {
                       <td className="pl-10">{formatCurrency(order.total)}</td>
                       <td className="pl-10">
                         <div className="w-20 h-6 flex items-center justify-center bg-blue-50 rounded-full">
-                          <p className={`text-xs leading-3 font-bold uppercase ${order.paid ? 'text-green-500' : 'text-red-500'}`}>
+                          <p
+                            className={`text-xs leading-3 font-bold uppercase ${
+                              order.paid ? "text-green-500" : "text-red-500"
+                            }`}
+                          >
                             {order.paid ? "Paid" : "Not Paid"}
                           </p>
                         </div>
@@ -65,7 +74,12 @@ const Orders = ({orders}: {orders: IOrder[]}) => {
                       <td className="pl-10 text-xs">{order.phone_number}</td>
                       <td className="pl-10">
                         <div className="flex items-center">
-                          <button onClick={() => router.push(`/admin/orders/${order.id}`)} className="focus:outline-none bg-gray-100 mr-5 hover:bg-gray-200 py-2.5 px-5 rounded text-sm leading-3 text-gray-500">
+                          <button
+                            onClick={() =>
+                              router.push(`/admin/orders/${order.id}`)
+                            }
+                            className="focus:outline-none bg-gray-100 mr-5 hover:bg-gray-200 py-2.5 px-5 rounded text-sm leading-3 text-gray-500"
+                          >
                             View
                           </button>
                         </div>
