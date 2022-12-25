@@ -3,6 +3,8 @@ import ShoppingCart from "../components/ShoppingCart/ShoppingCart";
 
 
 
+
+
 type ShoppingCartProviderProps = {
   children: ReactNode
 }
@@ -11,6 +13,7 @@ type CartItem = {
   id: string,
   quantity: number,
 }
+
 
 type IShoppingCartContext = {
   openCart: () => void,
@@ -32,18 +35,11 @@ export  function useShoppingCart(){
 
 
 
+
 export const ShoppingCartProvider = ({children}:ShoppingCartProviderProps) => {
 
   const [isOpen, setIsOpen] = useState(false)
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
-
-
-
-
-
-
-
 
 
   const openCart = () => setIsOpen(true);
@@ -68,6 +64,7 @@ export const ShoppingCartProvider = ({children}:ShoppingCartProviderProps) => {
         })
       }
     })
+
 
 
   }
@@ -113,7 +110,6 @@ export const ShoppingCartProvider = ({children}:ShoppingCartProviderProps) => {
         cartQuantity,
         openCart,
         closeCart
-
       }}
     >
       {children}
