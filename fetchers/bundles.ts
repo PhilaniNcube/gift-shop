@@ -1,5 +1,9 @@
 import supabase from '../lib/client';
 
+type BundlesFilters = {
+  category? : string;
+}
+
 const getBundles = async () => {
 
   const { data: bundles, error } = await supabase

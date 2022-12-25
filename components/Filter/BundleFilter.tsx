@@ -15,7 +15,7 @@ const BundleFilter = () => {
       {categories?.map((category) => (
         <Link
           key={category.id}
-          href={`/categories/${category.slug}`}
+          href={`/bundles?category=${category.slug}`}
           className="text-lg font-medium hover:text-slate-900 text-primary-main"
         >
           {category.name}
