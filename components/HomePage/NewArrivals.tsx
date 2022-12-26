@@ -37,10 +37,10 @@ const NewArrivals = () => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 mt-4 gap-y-4">
           {bundles?.map((product) => (
-            <div
+            <Link
+              href={`/bundles/${product.slug}`}
               key={product.id}
               className="w-full cursor-pointer"
-              onClick={() => router.push(`/products/${product.slug}`)}
             >
               <Fragment>
                 <Image
@@ -63,7 +63,7 @@ const NewArrivals = () => {
                   {formatCurrency(product.price)}
                 </h4>
               </Fragment>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
