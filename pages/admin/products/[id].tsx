@@ -17,9 +17,6 @@ const Product = ({product, categories}: {product: IProduct, categories: ICategor
 
   const [prodData, setProdData] = useState(product)
 
-
-console.log({product: prodData})
-
      const [uploadData, setUploadData] = useState<ImageObject>();
 
 
@@ -49,7 +46,7 @@ console.log({product: prodData})
        ).then((r) => r.json()).catch((err) => err.json());
 
 
-       console.log({data})
+
 
        setUploadData(data);
 
@@ -68,15 +65,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   const { name, cost, details, price, size, category } = Object.fromEntries(
     new FormData(e.currentTarget)
   );
-  console.log({
-    name,
-    cost,
-    details,
-    price,
-    size,
 
-    category,
-  });
 
   if (
     typeof name !== "string" ||
@@ -104,7 +93,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     },
   ]).eq('id', product.id).single();
 
-  console.log({ data, error });
+
 
   if (error) {
     alert(error.details);

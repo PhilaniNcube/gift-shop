@@ -122,7 +122,7 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
     if (errorProduct) {
       alert(errorProduct.details);
     } else {
-      console.log(bundleProduct);
+
       router.reload();
     }
   };
@@ -138,7 +138,7 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       .update({ description: description })
       .eq("id", bundle.id);
 
-    console.log({ bundleProduct, errorProduct });
+
 
     router.reload();
   };
@@ -158,8 +158,6 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       .update({ title: title, slug: slug })
       .eq("id", bundle.id);
 
-    console.log({ bundleProduct, errorProduct });
-
     router.reload();
   };
 
@@ -172,8 +170,6 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       .update({ price: price })
       .eq("id", bundle.id);
 
-    console.log({ bundleProduct, errorProduct });
-
     router.reload();
   };
 
@@ -185,7 +181,7 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       .from("bundles")
       .update({ cost: cost })
       .eq("id", bundle.id);
-    console.log({ bundleProduct, errorProduct });
+
     router.reload();
   };
 
@@ -202,7 +198,7 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       .insert([
         { product_id: product.id, bundle_id: bundle.id, quantity: quantity },
       ]);
-    console.log({ addedProduct, error });
+
     router.reload();
   };
 
@@ -222,7 +218,7 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       );
     } else {
       alert("Bundle Updated");
-      console.log(data);
+
       router.reload();
     }
   };
@@ -572,7 +568,7 @@ export async function getServerSideProps({
 
    const bundleCategories = await getBundleCategories(id)
 
-   console.log(bundleCategories);
+
 
   return {
     props: {

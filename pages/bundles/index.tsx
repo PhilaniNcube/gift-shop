@@ -10,8 +10,7 @@ import formatCurrency from "../../lib/formatCurrency";
 
 const Products = ({ bundles, count }: { bundles: IBundle[], count:number }) => {
 
-  console.log("count ",count)
-  console.log({ bundles: bundles });
+
 
   return (
     <Fragment>

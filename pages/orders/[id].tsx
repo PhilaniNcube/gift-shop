@@ -17,7 +17,7 @@ const Order = (props: OrderProps ) => {
 const order = props.order
 
 
-console.log({order})
+
 
 
   return (
@@ -180,7 +180,7 @@ export async function getServerSideProps({params: {id}}:{params: {id: string}}) 
 
   const { data: orders, error } = await supabase.from("orders").select("*").eq('id', id).single();
 
-  console.log({orders, error});
+
 
 
   if(error) {

@@ -10,7 +10,7 @@ const CreateCategories = () => {
 
   const [uploadData, setUploadData] = useState<ImageObject | undefined>();
 
-  console.log(uploadData);
+
 
   const [loading, setLoading] = useState(false);
 
@@ -36,7 +36,7 @@ const CreateCategories = () => {
     )
       .then((r) => r.json())
       .catch((err) => err.json());
-    console.log({ data });
+
 
     setUploadData(data);
 
@@ -76,7 +76,7 @@ const CreateCategories = () => {
         ])
         .single();
 
-      console.log({ data, error });
+
 
       setLoading(false);
       router.push(`/admin/bundles`);

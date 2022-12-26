@@ -22,14 +22,6 @@ export default function Category({
 
 }) {
 
-//   const {
-//     data: products,
-//     isLoading,
-//     isSuccess,
-//   } = useQuery(["products"], getBundles());
-
-// console.log(products)
-
   return (
     <Fragment>
       <Head>
@@ -161,7 +153,7 @@ export const getStaticProps = async ({params: {slug}}: {params: {slug: string}})
     .from("category_bundles")
     .select("bundle_id(*),category_id(*) ");
 
-    console.log( category[0]);
+
 
 
 

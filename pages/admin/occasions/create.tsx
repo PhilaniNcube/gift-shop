@@ -9,7 +9,7 @@ const CreateOccasion = () => {
 
   const [uploadData, setUploadData] = useState<ImageObject | undefined>();
 
-  console.log(uploadData);
+
 
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +35,7 @@ const CreateOccasion = () => {
     )
       .then((r) => r.json())
       .catch((err) => err.json());
-    console.log({ data });
+
 
     if(data.error) alert(data.error.message);
 
@@ -67,7 +67,7 @@ const CreateOccasion = () => {
       ])
       .single();
 
-    console.log({ data, error });
+
 
     setLoading(false);
 

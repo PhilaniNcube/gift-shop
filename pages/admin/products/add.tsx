@@ -13,7 +13,7 @@ const Add = ({categories}:{categories:ICategory[]}) => {
   const [imageSrc, setImageSrc] = useState<string>('')
   const [uploadData, setUploadData] = useState({})
 
-  console.log(uploadData)
+
 
   const [loading, setLoading] = useState(false)
 
@@ -39,7 +39,7 @@ const handleImageUpload = async (e:React.FormEvent<HTMLFormElement>) => {
     body: formData
    }
  ).then(r => r.json()).catch(err => err.json());
- console.log({data})
+
 
  setImageSrc(data.secure_url)
  setUploadData(data)
@@ -56,17 +56,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   const { name, cost, details, price, size,  category } = Object.fromEntries(
     new FormData(e.currentTarget)
   );
-  console.log({
-    name,
-    cost,
-    details,
-    price,
-    size,
 
-    category,
-
-
-  });
 
   if (
     typeof name !== "string" ||
@@ -101,7 +91,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       },
     ]);
 
-    console.log({data, error})
+
 
     setLoading(false)
     router.push('/admin/products')

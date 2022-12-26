@@ -6,7 +6,7 @@ import formatCurrency from "../../../lib/formatCurrency";
 
  const Products = ({products}:{products:IProduct[]}) => {
 
-  console.log({products})
+
 
   return (
     <Layout>

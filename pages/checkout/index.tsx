@@ -91,11 +91,11 @@ const data = {
           },
         ]).select('*').single()
 
-      console.log({ order, error });
+
 
 
       if(error) {
-        console.log(error);
+
         return
       }
   router.push(`/orders/${order?.id}`);

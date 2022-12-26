@@ -22,7 +22,7 @@ const Add = () => {
 
   const [uploadData, setUploadData] = useState<ImageObject>();
 
-  console.log(uploadData);
+
 
   const [loading, setLoading] = useState(false);
 
@@ -49,7 +49,7 @@ const Add = () => {
     )
       .then((r) => r.json())
       .catch((err) => err.json());
-    console.log({ data });
+
 
 
     setUploadData(data);
@@ -63,10 +63,7 @@ const Add = () => {
 
     const { title, description } =
       Object.fromEntries(new FormData(e.currentTarget));
-    console.log({
-      title,
-      description,
-    });
+
 
     if (
       typeof title !== "string" ||
@@ -89,7 +86,7 @@ const Add = () => {
       ])
       .single();
 
-    console.log({ data, error });
+
 
     if(error) alert(`There was an error: ${error.message}. ${error.details}}`);
 

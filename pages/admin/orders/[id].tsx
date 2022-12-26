@@ -23,7 +23,7 @@ const Product = ({
 
   const router = useRouter()
 
-  console.log({ order , categories});
+
 
 
   const { data: bundles } = useQuery(["bundles"], getBundles);

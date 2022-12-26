@@ -32,7 +32,7 @@ export default async function handler(
   .update({ payment_details: payload })
   .eq('id', id).single()
 
-  console.log({data, error})
+
 
   res.status(200).json({message: id});
 }
