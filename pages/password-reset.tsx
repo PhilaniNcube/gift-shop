@@ -15,7 +15,7 @@ const Reset: NextPage = () => {
     const { email } = Object.fromEntries(
       new FormData(e.currentTarget)
     );
-    console.log({ email});
+
 
     if (typeof email !== "string") {
       throw new Error("Please enter a valid data to register");
@@ -24,8 +24,6 @@ const Reset: NextPage = () => {
    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: '/update-password'
    });
-
-   console.log({data, error})
 
    if(data) {
     alert("Check your email for a password reset link")

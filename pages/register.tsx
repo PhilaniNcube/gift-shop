@@ -16,17 +16,22 @@ const Register: NextPage = () => {
 const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
   e.preventDefault()
   const {email, password, last_name, first_name} = Object.fromEntries(new FormData(e.currentTarget))
-  console.log({ email, password, last_name, first_name });
+
 
   if(typeof email !== 'string' || typeof password !== 'string' || typeof first_name !== 'string' || typeof last_name !== 'string') {
     throw new Error('Please enter a valid data to register');
   }
 
-  const data = await supabaseClient.auth.signUp({email, password, options:{
+  const {data, error} = await supabaseClient.auth.signUp({email, password, options:{
     data:{first_name, last_name}
   }})
 
-  console.log({data})
+  if(error) {
+    alert(`There was an error signing up: ${error.message}`)
+  } else if(data) {
+    alert(`Successfully signed up. Please check your email address to confirm your account`)
+  }
+
 
 }
   return (

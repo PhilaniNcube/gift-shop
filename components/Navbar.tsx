@@ -4,7 +4,7 @@ import {
   MagnifyingGlassIcon,
   ShoppingCartIcon,
   UserIcon,
-  UserMinusIcon,
+
 } from "@heroicons/react/24/outline";
 import { useRouter } from 'next/router';
 import { useShoppingCart } from '../context/ShoppingCartContext';
@@ -30,7 +30,7 @@ export default function Navbar() {
   ];
   const user = useUser();
 
-  console.log(user)
+
   const { cartQuantity, openCart } = useShoppingCart();
 
   return (

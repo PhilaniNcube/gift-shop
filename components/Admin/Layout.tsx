@@ -23,7 +23,7 @@ const Layout = ({children}:{children: ReactNode}) => {
         .select("*")
         .single();
 
-        console.log({data, error})
+
 
         if(error) {
           alert(error.details);

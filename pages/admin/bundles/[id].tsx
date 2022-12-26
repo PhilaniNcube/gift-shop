@@ -38,11 +38,11 @@ const Product = ({
   const [price, setPrice] = useState(bundle.price)
   const [cost, setCost] = useState(bundle.cost)
 
-console.log({bundle})
+
 
 const selectedCategory = categories.find(c => c.id === bundle.category?.id)
 
-console.log({selectedCategory})
+
 
   const totalPrice = bundleProducts.reduce(
     (acc, product) => acc + product.quantity * product.product_id.price,
@@ -80,14 +80,14 @@ console.log({selectedCategory})
       .catch((err) => err.json());
 
     setUploadData(data);
-    console.log(uploadData);
+
 
     const { data: bundleProduct, error: errorProduct } = await supabase
       .from("bundles")
       .update({ main_image: data })
       .eq("id", bundle.id);
 
-    console.log({ bundleProduct, errorProduct });
+
 
     if (errorProduct) {
       alert(errorProduct.details);

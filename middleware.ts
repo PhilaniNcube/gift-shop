@@ -12,7 +12,7 @@ export const middleware = withMiddlewareAuth({
 
 const admins = ['khibanyakallo@gmail.com', 'ncbphi001@gmail.com']
 
-       console.log(user.email)
+
 
         if(user.email) {
         return  admins.includes(user.email)

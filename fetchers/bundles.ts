@@ -2,7 +2,7 @@ import { Database } from '../db_types';
 import supabase from '../lib/client';
 
 type Bundle = Database["public"]["Tables"]["bundles"]["Row"]
-type Product = Database["public"]["Tables"]["products"]["Row"]
+// type Product = Database["public"]["Tables"]["products"]["Row"]
 type BundleProduct = Database["public"]["Tables"]["bundle_products"]["Row"]
 type Category = Database["public"]["Tables"]["categories"]["Row"]
 

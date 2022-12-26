@@ -80,7 +80,7 @@ const { data: categories, error } = await supabase
 
 const getCategoryProducts = async (id:string) => {
 
-  console.log({id})
+
 
    const { data: products, error } = await supabase
   .from('products')

@@ -7,9 +7,6 @@ import ProductsBanner from "../../components/Banner/ProductsBanner";
 import BundleFilter from "../../components/Filter/BundleFilter";
 import { countBundles, getBundles } from "../../fetchers/bundles";
 import formatCurrency from "../../lib/formatCurrency";
-import supabase from "../../lib/client";
-
-
 
 const Products = ({ bundles, count }: { bundles: IBundle[], count:number }) => {
 

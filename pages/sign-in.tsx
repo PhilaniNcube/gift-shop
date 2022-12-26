@@ -15,7 +15,7 @@ const supabaseClient = useSupabaseClient<Database>();
 
   const [data, setData] = useState(null);
 
-  console.log({ data, isLoading, session, error });
+
 
   useEffect(() => {
     async function loadData() {
@@ -33,7 +33,7 @@ const supabaseClient = useSupabaseClient<Database>();
      const { email, password } = Object.fromEntries(
        new FormData(e.currentTarget)
      );
-     console.log({ email, password });
+
 
      if (typeof email !== "string" || typeof password !== "string") {
        throw new Error("Please enter a valid data to register");
@@ -44,7 +44,7 @@ const supabaseClient = useSupabaseClient<Database>();
        error,
      } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-     console.log(data);
+
 
      if (error) {
        alert("Error: " + error.message);

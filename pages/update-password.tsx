@@ -21,7 +21,7 @@ const Reset: NextPage = () => {
     const { email, password } = Object.fromEntries(
       new FormData(e.currentTarget)
     );
-    console.log({ email, password });
+
 
     if (typeof email !== "string" || typeof password !== "string") {
       throw new Error("Please enter a valid data to register");
