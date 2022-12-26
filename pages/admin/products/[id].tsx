@@ -1,3 +1,4 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -5,11 +6,13 @@ import { useState } from "react";
 import slugify from "slugify";
 import Layout from "../../../components/Admin/Layout";
 import { getCategories, getSingleProductById } from "../../../fetchers/products";
-import supabase from "../../../lib/client";
+
 
 import formatCurrency from "../../../lib/formatCurrency";
 
 const Product = ({product, categories}: {product: IProduct, categories: ICategory[]}) => {
+
+  const supabase = useSupabaseClient()
 
   const router = useRouter()
 
@@ -44,6 +47,8 @@ const Product = ({product, categories}: {product: IProduct, categories: ICategor
            body: formData,
          }
        ).then((r) => r.json()).catch((err) => err.json());
+
+
 
 
 
@@ -91,17 +96,22 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       details: details,
       main_image:uploadData?.url
     },
-  ]).eq('id', product.id).single();
+  ]).eq('id', product.id).select('*')
 
 
 
   if (error) {
     alert(error.details);
+    setLoading(false);
+  } else if(data) {
+    alert(`Success`)
+    setLoading(false);
+    router.push("/admin/products");
   }
 
-  setLoading(false);
+
+
   // setProdData(data)
-  router.push("/admin/products");
 };
 
 

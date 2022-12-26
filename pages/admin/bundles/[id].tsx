@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import slugify from "slugify";
 
 import Layout from "../../../components/Admin/Layout";
@@ -37,6 +37,7 @@ const Product = ({
   const [title, setTitle] = useState(bundle.title)
   const [price, setPrice] = useState(bundle.price)
   const [cost, setCost] = useState(bundle.cost)
+  const [filter, setFilter] = useState("")
 
 
 
@@ -55,6 +56,16 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
 
   const [loading, setLoading] = useState(false);
   const [uploadData, setUploadData] = useState({});
+
+
+    const filteredProducts = useMemo(
+      () =>
+        products?.filter(
+          (product) =>
+            product.name.toLowerCase().includes(filter.toLowerCase())
+        ),
+      [filter, products]
+    );
 
   const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -403,10 +414,10 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
           </div>
 
           <Image
-            src={bundle.main_image.url}
-            width={bundle.main_image.width}
-            height={bundle.main_image.height}
-            alt={bundle.title}
+            src={bundle.main_image?.url}
+            width={bundle.main_image?.width}
+            height={bundle.main_image?.height}
+            alt={bundle?.title}
             className="w-60 h-60 object-cover"
           />
         </div>
@@ -488,8 +499,15 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
               Select products to add to bundle
             </h3>
 
+            <input
+              type="text"
+              className="block w-1/2 rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              onChange={(e) => setFilter(e.target.value)}
+              placeholder="Search Product"
+            />
+
             <div className="w-full grid grid-cols-2 gap-2">
-              {products.map((product) => {
+              {filteredProducts.map((product) => {
                 const ID = bundleProducts.find(
                   (item) => item.product_id.id === product.id
                 );
@@ -536,7 +554,7 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
                       />
                       <button
                         type="submit"
-                        className="py-1 ml-2 px-2 rounded-md bg-primary-main text-xs text-white mt-2"
+                        className="py-3 ml-2 px-8 rounded-md bg-primary-main text-sm text-white mt-2"
                       >
                         Add Product
                       </button>
