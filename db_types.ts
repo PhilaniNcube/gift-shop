@@ -40,6 +40,17 @@ export type Json =
              description:string;
              price:number;
              cost:number;
+             category:{
+              id:string,
+              created_at:string,
+              name:string,
+              slug:string,
+              image: {
+                src: string,
+                width:number,
+                height:number
+              }
+            };
           };
           Insert:{
              id?:string;
@@ -202,6 +213,41 @@ export type Json =
         shipped?: boolean;
     };
   };
+  categories: {
+   Row: {
+     id:string,
+     created_at:string,
+     name:string,
+     slug:string,
+      image: {
+        src: string,
+        width:number,
+        height:number
+      }
+   }
+   Insert: {
+       id?:string,
+     created_at?:string,
+     name?:string,
+     slug?:string,
+      image?: {
+        src: string,
+        width:number,
+        height:number
+      }
+   }
+   Update: {
+     id?:string,
+     created_at?:string,
+     name?:string,
+     slug?:string,
+      image?: {
+        src: string,
+        width:number,
+        height:number
+      }
+   }
+  }
   profiles:{
     Row: {
       id: string;

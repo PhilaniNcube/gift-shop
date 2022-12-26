@@ -2,14 +2,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useState } from "react";
+import slugify from "slugify";
 
 import Layout from "../../../components/Admin/Layout";
+import { Database } from "../../../db_types";
 
 import { getBundleById, getBundleCategories, getBundleProducts } from "../../../fetchers/bundles";
 import { getCategories, getProducts } from "../../../fetchers/products";
 import supabase from "../../../lib/client";
 import formatCurrency from "../../../lib/formatCurrency";
+
+type Bundle = Database["public"]["Tables"]["bundles"]["Row"]
+type Product = Database["public"]["Tables"]["products"]["Row"]
+type BundleProduct = Database["public"]["Tables"]["bundle_products"]["Row"]
+type Category = Database["public"]["Tables"]["categories"]["Row"]
 
 
 
@@ -17,40 +24,37 @@ const Product = ({
   bundle,
   products,
   bundleProducts,
-  bundleCategories,
+  categories,
 }: {
-  bundle: IBundle;
-  products: IProduct[];
-  bundleProducts: IBundleProduct[];
-  categories: ICategory[];
-  bundleCategories: IBundleCategory[];
+  bundle: Bundle;
+  products: Product[];
+  bundleProducts: BundleProduct[];
+  categories: Category[];
 }) => {
   const router = useRouter();
 
-  const [bundleData, setBundleData] = useState(bundle)
+  const [description, setDescription] = useState(bundle.description)
+  const [title, setTitle] = useState(bundle.title)
+  const [price, setPrice] = useState(bundle.price)
+  const [cost, setCost] = useState(bundle.cost)
 
-  console.log({bundle: bundleData})
+console.log({bundle})
 
-   const totalPrice = bundleProducts.reduce(
-     (acc, product) => acc + product.quantity * product.product_id.price,
-     0
-   );
-   const totalCost = bundleProducts.reduce(
-     (acc, product) => acc + product.quantity * product.product_id.cost,
-     0
-   );
+const selectedCategory = categories.find(c => c.id === bundle.category?.id)
 
+console.log({selectedCategory})
 
-
+  const totalPrice = bundleProducts.reduce(
+    (acc, product) => acc + product.quantity * product.product_id.price,
+    0
+  );
+  const totalCost = bundleProducts.reduce(
+    (acc, product) => acc + product.quantity * product.product_id.cost,
+    0
+  );
 
   const [loading, setLoading] = useState(false);
   const [uploadData, setUploadData] = useState({});
-
-
-
-
-
-
 
   const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -75,118 +79,115 @@ const Product = ({
       .then((r) => r.json())
       .catch((err) => err.json());
 
-
     setUploadData(data);
-    console.log(uploadData)
+    console.log(uploadData);
 
-      const { data: bundleProduct, error: errorProduct } = await supabase
-        .from("bundles")
-        .update({ main_image: data })
-        .eq("id", bundle.id);
+    const { data: bundleProduct, error: errorProduct } = await supabase
+      .from("bundles")
+      .update({ main_image: data })
+      .eq("id", bundle.id);
 
-      console.log({ bundleProduct, errorProduct });
+    console.log({ bundleProduct, errorProduct });
 
-      if(errorProduct) {
-        alert(errorProduct.details)
-      } else {
-        alert("Upload Successful")
-      }
+    if (errorProduct) {
+      alert(errorProduct.details);
+    } else {
+      alert("Upload Successful");
+    }
 
-      // router.reload();
+    // router.reload();
 
     setLoading(false);
   };
 
-
-
   const deleteFromBundle = async (id: string) => {
-     await supabase.from("bundle_products").delete().eq("product_id", id);
+    await supabase.from("bundle_products").delete().eq("product_id", id);
 
-     const bundleItems = await getBundleProducts(bundle.id);
+    const bundleItems = await getBundleProducts(bundle.id);
 
-     const totalPrice = bundleItems.reduce(
-       (acc, product) => acc + product.quantity * product.product_id.price,
-       0
-     );
-     const totalCost = bundleItems.reduce(
-       (acc, product) => acc + product.quantity * product.product_id.cost,
-       0
-     );
+    const totalPrice = bundleItems.reduce(
+      (acc, product) => acc + product.quantity * product.product_id.price,
+      0
+    );
+    const totalCost = bundleItems.reduce(
+      (acc, product) => acc + product.quantity * product.product_id.cost,
+      0
+    );
 
-     const { data: bundleProduct, error: errorProduct } = await supabase
-       .from("bundles")
-       .update({ price: totalPrice, cost: totalCost })
-       .eq("id", bundle.id);
+    const { data: bundleProduct, error: errorProduct } = await supabase
+      .from("bundles")
+      .update({ price: totalPrice, cost: totalCost })
+      .eq("id", bundle.id);
 
-       if(errorProduct) {
-        alert(errorProduct.details)
-       } else {
-        console.log(bundleProduct);
-        router.reload()
-       }
+    if (errorProduct) {
+      alert(errorProduct.details);
+    } else {
+      console.log(bundleProduct);
+      router.reload();
+    }
   };
 
+  const updateBundleDescription = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    const { description } = Object.fromEntries(new FormData(e.currentTarget));
 
-      const updateBundleDescription = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { data: bundleProduct, error: errorProduct } = await supabase
+      .from("bundles")
+      .update({ description: description })
+      .eq("id", bundle.id);
 
-         const { description } = Object.fromEntries(new FormData(e.currentTarget));
+    console.log({ bundleProduct, errorProduct });
 
-        e.preventDefault()
-        const { data: bundleProduct, error: errorProduct } = await supabase
-          .from("bundles")
-          .update({ description: description })
-          .eq("id", bundle.id);
+    router.reload();
+  };
 
-          console.log({bundleProduct, errorProduct})
+  const updateBundleTitle = async (e: React.FormEvent<HTMLFormElement>) => {
+    const { title } = Object.fromEntries(new FormData(e.currentTarget));
 
-              router.reload();
-      };
+    e.preventDefault();
 
+    if(typeof title !== 'string') {
+      throw new Error(`Invalid title`)
+    }
 
-      const updateBundleTitle = async (e: React.FormEvent<HTMLFormElement>) => {
+    const slug = slugify(title,{lower: true, replacement: '_'} )
+    const { data: bundleProduct, error: errorProduct } = await supabase
+      .from("bundles")
+      .update({ title: title, slug: slug })
+      .eq("id", bundle.id);
 
-         const { title } = Object.fromEntries(new FormData(e.currentTarget));
+    console.log({ bundleProduct, errorProduct });
 
-        e.preventDefault()
-        const { data: bundleProduct, error: errorProduct } = await supabase
-          .from("bundles")
-          .update({ title: title })
-          .eq("id", bundle.id);
+    router.reload();
+  };
 
-          console.log({bundleProduct, errorProduct})
+  const updateBundlePrice = async (e: React.FormEvent<HTMLFormElement>) => {
+    const { price } = Object.fromEntries(new FormData(e.currentTarget));
 
-              router.reload();
-      };
+    e.preventDefault();
+    const { data: bundleProduct, error: errorProduct } = await supabase
+      .from("bundles")
+      .update({ price: price })
+      .eq("id", bundle.id);
 
-      const updateBundlePrice = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log({ bundleProduct, errorProduct });
 
-         const { price } = Object.fromEntries(new FormData(e.currentTarget));
+    router.reload();
+  };
 
-        e.preventDefault()
-        const { data: bundleProduct, error: errorProduct } = await supabase
-          .from("bundles")
-          .update({ price: price })
-          .eq("id", bundle.id);
+  const updateBundleCost = async (e: React.FormEvent<HTMLFormElement>) => {
+    const { cost } = Object.fromEntries(new FormData(e.currentTarget));
 
-          console.log({bundleProduct, errorProduct})
-
-              router.reload();
-      };
-
-      const updateBundleCost = async (e: React.FormEvent<HTMLFormElement>) => {
-
-         const { cost } = Object.fromEntries(new FormData(e.currentTarget));
-
-        e.preventDefault()
-        const { data: bundleProduct, error: errorProduct } = await supabase
-          .from("bundles")
-          .update({ cost: cost })
-          .eq("id", bundle.id);
-          console.log({ bundleProduct, errorProduct });
-              router.reload();
-      };
-
-
+    e.preventDefault();
+    const { data: bundleProduct, error: errorProduct } = await supabase
+      .from("bundles")
+      .update({ cost: cost })
+      .eq("id", bundle.id);
+    console.log({ bundleProduct, errorProduct });
+    router.reload();
+  };
 
   const addBundleProduct = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -196,14 +197,34 @@ const Product = ({
 
     const { quantity } = Object.fromEntries(new FormData(e.currentTarget));
 
-
     const { data: addedProduct, error } = await supabase
       .from("bundle_products")
       .insert([
         { product_id: product.id, bundle_id: bundle.id, quantity: quantity },
-      ])
-      console.log({addedProduct, error})
-       router.reload();
+      ]);
+    console.log({ addedProduct, error });
+    router.reload();
+  };
+
+  const setCategory = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const { category } = Object.fromEntries(new FormData(e.currentTarget));
+
+    const { data, error: errorBundle } = await supabase
+      .from("bundles")
+      .update({ category: category })
+      .eq("id", bundle.id);
+
+    if (errorBundle) {
+      alert(
+        `There was an error updating the bundle: ${errorBundle.message}, ${errorBundle.hint} `
+      );
+    } else {
+      alert("Bundle Updated");
+      console.log(data);
+      router.reload();
+    }
   };
 
   return (
@@ -237,6 +258,8 @@ const Product = ({
                     type="text"
                     name="title"
                     id="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder={bundle?.title}
                   />
@@ -264,6 +287,8 @@ const Product = ({
                   <textarea
                     name="description"
                     id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     rows={5}
                     className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder={bundle?.description}
@@ -275,6 +300,41 @@ const Product = ({
                 className="inline-flex mt-2 justify-center rounded-md border border-transparent bg-primary-main py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2"
               >
                 Save Description
+              </button>
+            </form>
+            <form
+              onSubmit={setCategory}
+              className="text-lg mt-5 text-slate-500 "
+            >
+              <div>
+                <label
+                  htmlFor="category"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Bundle Category
+                </label>
+                <div className="relative mt-1 rounded-md shadow-sm">
+                  <select
+                    id="category"
+                    name="category"
+                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <option value={bundle.category?.id}>
+                      {bundle.category?.name}
+                    </option>
+                    {categories.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="inline-flex mt-2 justify-center rounded-md border border-transparent bg-primary-main py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2"
+              >
+                Save Category
               </button>
             </form>
             <form
@@ -296,6 +356,8 @@ const Product = ({
                     type="number"
                     name="price"
                     id="price"
+                    value={price}
+                    onChange={(e) => setPrice(parseInt(e.target.value))}
                     className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder={formatCurrency(bundle?.price)}
                   />
@@ -326,6 +388,8 @@ const Product = ({
                   <input
                     type="number"
                     name="cost"
+                    value={cost}
+                    onChange={(e) => setCost(parseInt(e.target.value))}
                     id="cost"
                     className="block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder={formatCurrency(bundle?.cost)}
@@ -409,7 +473,6 @@ const Product = ({
           </button>
         </form>
 
-
         <p className="font-medium text-slate-600 mt-1">{bundle.description}</p>
         <div className="hidden sm:block" aria-hidden="true">
           <div className="py-5">
@@ -420,9 +483,6 @@ const Product = ({
           <h2 className="my-2 font-extrabold text-2xl text-gray-500">
             Products In Bundle
           </h2>
-
-
-
         </div>
 
         <div>

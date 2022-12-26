@@ -2,6 +2,7 @@ import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 import { NextPage } from "next";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -36,6 +37,9 @@ const Reset: NextPage = () => {
   };
   return (
     <>
+    <Head>
+      <title>Update Password | Gift Shop</title>
+    </Head>
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>

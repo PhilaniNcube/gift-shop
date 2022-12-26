@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Fragment } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../../../fetchers/products";
 import supabase from "../../../lib/client";
 import formatCurrency from "../../../lib/formatCurrency";

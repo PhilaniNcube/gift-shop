@@ -11,7 +11,7 @@ const Products = ({ bundles }: { bundles: IBundle[] }) => {
   return (
     <Layout>
       <div>
-        <div className="flex justify-between items-center w-full">
+        <div className="flex justify-between items-center w-full my-3">
           <Link
             href="/admin/dashboard"
             className="font-bold text-primary-main text-2xl"
@@ -38,6 +38,9 @@ const Products = ({ bundles }: { bundles: IBundle[] }) => {
                   <p className="text-xs text-slate-600 font-medium">
                     {bundle.description}
                   </p>
+                  <h4 className="text-md mt-2 text-primary-main font-bold">
+                    {bundle.category?.name}
+                  </h4>
                 </div>
               </div>
             </Link>

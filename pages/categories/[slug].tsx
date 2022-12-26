@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import Filter from '../../components/Filter';
 import { getBundles } from '../../fetchers/bundles';
@@ -33,8 +33,8 @@ export default function Category({
   return (
     <Fragment>
       <Head>
-        <title>{category.name} | Gifts</title>
-      </Head>{" "}
+        <title>{category.name} | Gift Shop</title>
+      </Head>
       <header className="max-w-7xl mx-auto relative my-12 isolate">
         <Image
           src={category.image.src}

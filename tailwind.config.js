@@ -13,11 +13,11 @@ module.exports = {
       },
       colors: {
         primary: {
-          main: '#1B4B66',
-          light: '#FBAF85             '
-        }
-      }
+          main: "#1B4B66",
+          light: "#FBAF85             ",
+        },
+      },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar")],
 };

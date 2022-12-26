@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useShoppingCart } from "../../context/ShoppingCartContext";
 import { getBundles } from "../../fetchers/bundles";
 import formatCurrency from "../../lib/formatCurrency";

@@ -4,7 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useShoppingCart } from "../../context/ShoppingCartContext";
 import ShoppingCartItem from "./ShoppingCartItem";
 
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import formatCurrency from "../../lib/formatCurrency";
 import Link from "next/link";
 import { getBundles } from "../../fetchers/bundles";

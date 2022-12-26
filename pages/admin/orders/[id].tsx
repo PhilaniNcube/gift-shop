@@ -2,7 +2,7 @@ import { Switch } from "@headlessui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import Layout from "../../../components/Admin/Layout";
 import { getBundleProducts, getBundles } from "../../../fetchers/bundles";
 import { getOrderById } from "../../../fetchers/orders";

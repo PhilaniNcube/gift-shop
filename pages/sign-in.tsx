@@ -1,6 +1,7 @@
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { useSessionContext, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { NextPage } from "next";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -60,6 +61,9 @@ const supabaseClient = useSupabaseClient<Database>();
 
   return (
     <>
+      <Head>
+        <title>Sign In | Gift Shop</title>
+      </Head>
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>

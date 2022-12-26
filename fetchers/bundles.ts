@@ -1,21 +1,25 @@
+import { Database } from '../db_types';
 import supabase from '../lib/client';
 
-type BundlesFilters = {
-  category? : string;
-}
+type Bundle = Database["public"]["Tables"]["bundles"]["Row"]
+type Product = Database["public"]["Tables"]["products"]["Row"]
+type BundleProduct = Database["public"]["Tables"]["bundle_products"]["Row"]
+type Category = Database["public"]["Tables"]["categories"]["Row"]
+
+
 
 const getBundles = async () => {
 
   const { data: bundles, error } = await supabase
   .from('bundles')
-  .select('*')
+  .select('*, category(id, name, created_at, image, slug )')
 
   if(error) {
     throw new Error(error.message)
   }
 
 
-  return bundles as IBundle[]
+  return bundles as Bundle[]
 
 }
 
@@ -23,14 +27,14 @@ const getBundleById = async (id:string) => {
 
   const { data: bundles, error } = await supabase
   .from('bundles')
-  .select('*').eq('id', id).single()
+  .select('*,category(id, name, created_at, image, slug )').eq('id', id).single()
 
   if(error) {
     throw new Error(error.message)
   }
 
 
-  return bundles as IBundle
+  return bundles as Bundle
 
 }
 
@@ -38,14 +42,14 @@ const getBundleBySlug = async (slug:string) => {
 
   const { data: bundles, error } = await supabase
   .from('bundles')
-  .select('*').eq('slug', slug).single()
+  .select('*, category(id, name, created_at, image, slug )').eq('slug', slug).single()
 
   if(error) {
     throw new Error(error.message)
   }
 
 
-  return bundles as IBundle
+  return bundles as Bundle
 
 }
 
@@ -62,7 +66,7 @@ const getBundleProducts = async (bundleId: string) => {
     throw new Error(error.message)
   }
 
-  return bundles as IBundleProduct[]
+  return bundles as BundleProduct[]
 
 }
 
@@ -94,13 +98,31 @@ const getBundlesByCategoryId = async (id:string) => {
   }
 
   return category_bundles as {
-    bundle_id: IBundle;
-    category_id: ICategory;
+    bundle_id: Bundle;
+    category_id: Category;
   }[]
+
+}
+
+const countBundles = async ():Promise<number> => {
+
+    const { count, error } = await supabase
+    .from("bundles")
+    .select("*", { count: "exact", head: true });
+
+    if(error) throw new Error(error.details)
+
+   if(typeof count !== "number") {
+    return 0
+   } else if(typeof count === "number") {
+    return count
+   }
+
+   return 0
 
 }
 
 
 
 
-export {getBundles, getBundleById, getBundleProducts, getBundleCategories, getBundleBySlug, getBundlesByCategoryId}
+export {getBundles, getBundleById, getBundleProducts, getBundleCategories, getBundleBySlug, getBundlesByCategoryId, countBundles}

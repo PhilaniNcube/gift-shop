@@ -1,6 +1,7 @@
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { NextPage } from "next";
+import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
 import { Database } from "../db_types";
@@ -30,6 +31,9 @@ const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
 }
   return (
     <>
+      <Head>
+        <title>Register Account | Gift Shop</title>
+      </Head>
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>

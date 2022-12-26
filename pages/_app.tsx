@@ -5,12 +5,13 @@ import {
   createBrowserSupabaseClient,
 } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { QueryClient, QueryClientProvider } from "react-query";
+
 import Navbar from '../components/Navbar'
 import { Database } from "../db_types";
 import Footer from '../components/Footer';
 import { ShoppingCartProvider } from '../context/ShoppingCartContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 
 function MyApp({ Component, pageProps }: AppProps) {

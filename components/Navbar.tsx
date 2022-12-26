@@ -71,13 +71,13 @@ export default function Navbar() {
                   <Link href="/account">
                     <UserIcon className="text-primary-main h-6 w-6 cursor-pointer" />
                   </Link>
-                  <UserMinusIcon
+                  <button
                     onClick={async () => {
                       await supabaseClient.auth.signOut();
                       router.push("/");
                     }}
-                    className="text-red-400 h-6 w-6 cursor-pointer"
-                  />
+                    className="text-red-400 w-fit px-3 cursor-pointer"
+                  >Log Out</button>
 
                   <span className="relative isolate flex">
                     <span className="absolute flex justify-center items-center -top-2 -right-2 h-4 w-4 text-xs bg-red-500 text-white rounded-full">

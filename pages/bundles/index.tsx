@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 import ProductsBanner from "../../components/Banner/ProductsBanner";
 import BundleFilter from "../../components/Filter/BundleFilter";
-import { getBundles } from "../../fetchers/bundles";
+import { countBundles, getBundles } from "../../fetchers/bundles";
 import formatCurrency from "../../lib/formatCurrency";
 import supabase from "../../lib/client";
 
@@ -95,11 +95,7 @@ export const getServerSideProps = async () => {
 
   const bundles = await getBundles() as IBundle[];
 
-  const { count, error } = await supabase
-    .from("bundles")
-    .select("*", { count: "exact", head: true });
-
-    console.log(error)
+ const count = await countBundles();
 
   return {
     props: {

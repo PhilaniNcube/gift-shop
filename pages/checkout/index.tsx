@@ -7,7 +7,7 @@ import formatCurrency from "../../lib/formatCurrency";
 import { useShoppingCart } from "../../context/ShoppingCartContext";
 import ShoppingCartItem from "../../components/ShoppingCart/ShoppingCartItem";
 import { getProducts } from "../../fetchers/products";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import supabase from "../../lib/client";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";

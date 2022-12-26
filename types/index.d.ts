@@ -115,7 +115,7 @@ interface IBundle {
   main_image: ImageObject;
   slug:string;
   description:string;
-
+  category: ICategory;
   price:number;
   cost:number;
 }
