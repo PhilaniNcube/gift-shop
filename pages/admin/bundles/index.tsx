@@ -51,7 +51,7 @@ const Products = ({ bundles }: { bundles: IBundle[] }) => {
           <button onClick={createProduct} className="text-white bg-primary-main font-bold text-lg uppercase px-8 py-2 rounded-lg">New Bundle</button>
         </div>
 
-        <div className="w-full grid grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="w-full grid grid-cols-2 gap-6">
           {bundles?.map((bundle) => (
             <Link key={bundle.id} href={`/admin/bundles/${bundle.id}`}>
               <div className="flex gap-3 hover:bg-gray-200 py-4 px-3 cursor-pointer">
@@ -63,10 +63,10 @@ const Products = ({ bundles }: { bundles: IBundle[] }) => {
                   className="h-full aspect-square object-cover rounded"
                 />
                 <div className="">
-                  <h3>{bundle.title}</h3>
+                  <h3 className="text-primary-main font-bold">{bundle.title}</h3>
                   <div className="w-full flex justify-between font-medium text-md py-2">
                     <p>Price: {formatCurrency(bundle.price)}</p>
-                    <p>Price: {formatCurrency(bundle.cost)}</p>
+                    <p>Cost: {formatCurrency(bundle.cost)}</p>
                   </div>
                   <p className="text-xs text-slate-600 font-medium">
                     {bundle.description}

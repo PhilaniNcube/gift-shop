@@ -7,8 +7,21 @@ import ProductsBanner from "../../components/Banner/ProductsBanner";
 import BundleFilter from "../../components/Filter/BundleFilter";
 import { countBundles, getBundles } from "../../fetchers/bundles";
 import formatCurrency from "../../lib/formatCurrency";
+import { GetServerSideProps } from "next";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "../../db_types";
+
+type Bundle = Database["public"]["Tables"]["bundles"]["Row"];
 
 const Products = ({ bundles, count }: { bundles: IBundle[], count:number }) => {
+
+  const supabase = useSupabaseClient<Database>()
+
+  const router = useRouter()
+
+
 
 
 
@@ -28,11 +41,11 @@ const Products = ({ bundles, count }: { bundles: IBundle[], count:number }) => {
             <ChevronRightIcon className="h-6 w-6 text-primary-main" />
 
             <p className="text-slate-500 text-md md:text-xl font-bold">
-              Products
+              Bundles
             </p>
           </span>
           <h1 className="text-3xl mt-3 font-bold text-primary-main">
-            Our Products
+            Our Bundles
           </h1>
         </section>
         <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-4 gap-6">
@@ -87,18 +100,17 @@ export default Products;
 
 
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  console.log({ query });
 
-  const bundles = await getBundles() as IBundle[];
+  const bundles = (await getBundles()) as IBundle[];
 
- const count = await countBundles();
+  const count = await countBundles();
 
   return {
     props: {
       bundles: bundles,
       count,
-
     },
-
   };
 };

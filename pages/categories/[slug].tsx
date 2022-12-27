@@ -10,6 +10,9 @@ import Filter from '../../components/Filter';
 import { getBundles } from '../../fetchers/bundles';
 import supabase from '../../lib/client';
 import formatCurrency from '../../lib/formatCurrency';
+import { Database } from '../../db_types';
+
+type Bundle = Database["public"]["Tables"]["bundles"]["Row"];
 
 
 
@@ -19,8 +22,21 @@ export default function Category({
 
 }: {
   category: ICategory;
-
 }) {
+
+
+  const {data, isLoading, isSuccess} = useQuery(["bundles " + category.slug], async() => {
+    const { data, error } = await supabase
+      .from("bundles")
+      .select("*,  category(id, name, created_at, image, slug )").eq('category', category.id);
+
+      if(error) {
+        throw new Error(error.details)
+      }
+
+      return data as IBundle[]
+  })
+
 
   return (
     <Fragment>
@@ -81,32 +97,32 @@ export default function Category({
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16">
-              {/* {products?.map((product) => (
+               {isSuccess && data?.map((product) => (
                 <Link
-                  key={product.bundle_id.id}
-                  href={`/products/${product.bundle_id.slug}`}
+                  key={product.id}
+                  href={`/bundles/${product.slug}`}
                 >
                   <div className="w-full group cursor-pointer">
                     <Image
-                      src={product.bundle_id.main_image.url}
+                      src={product.main_image.url}
                       height={1000}
                       width={1000}
-                      alt={product.bundle_id.title}
+                      alt={product.title}
                       className="w-full object-cover group-hover:opacity-90 aspect-square rounded-lg shadow-lg"
                     />
                     <span className="w-full mt-2 flex justify-between items-center">
                       <h3 className="text-md font-bold text-primary-main">
-                        {product.bundle_id.title}
+                        {product.title}
                       </h3>
                       <HeartIcon className="h-6 w-6 text-primary-main" />
                     </span>
 
                     <h2 className="text-2xl text-primary-main font-bold">
-                      {formatCurrency(product.bundle_id.price)}
+                      {formatCurrency(product.price)}
                     </h2>
                   </div>
                 </Link>
-              ))} */}
+              ))}
             </div>
           </div>
         </div>
@@ -146,6 +162,8 @@ export const getStaticProps = async ({params: {slug}}: {params: {slug: string}})
   const { data: categories } = await supabase
     .from("categories")
     .select("*");
+
+    console.log(slug)
 
   const category = categories?.filter(c => c.slug === slug) as ICategory[]
 

@@ -1,9 +1,15 @@
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 
 import { getCategories } from "../../fetchers/products";
+import { useRouter } from "next/router";
 
 const BundleFilter = () => {
+
+  const queryClient = new QueryClient()
+
+  const router = useRouter()
+
   const {
     isLoading,
     isSuccess,
@@ -15,7 +21,7 @@ const BundleFilter = () => {
       {categories?.map((category) => (
         <Link
           key={category.id}
-          href={`/bundles?category=${category.slug}`}
+          href={`/categories/${category.slug}`}
           className="text-lg font-medium hover:text-slate-900 text-primary-main"
         >
           {category.name}

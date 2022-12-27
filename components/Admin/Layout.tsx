@@ -66,12 +66,12 @@ const Layout = ({children}:{children: ReactNode}) => {
           <Link href="/admin/bundles/" className="text-white text-xl font-bold">
             Bundles
           </Link>
-          <Link
+          {/* <Link
             href="/admin/bundles/create"
             className="text-white text-xl font-bold"
           >
             Create Bundle
-          </Link>
+          </Link> */}
           <Link href="/admin/products" className="text-white text-xl font-bold">
             Products
           </Link>
