@@ -1,13 +1,17 @@
 import { ChevronRightIcon, HeartIcon, MinusIcon, PlusIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useShoppingCart } from "../../context/ShoppingCartContext";
+import { getBundleProducts } from "../../fetchers/bundles";
 import formatCurrency from "../../lib/formatCurrency";
 
 const ProductDetail = ({product}:{product:IBundle}) => {
 
 
   const {getItemQuantity, increaseCartQuantity, decreaseCartQuantity, openCart} = useShoppingCart()
+
+  const {data, isLoading, isSuccess, error} = useQuery(["bundle_products"], async () => getBundleProducts(product.id))
 
   const quantity = getItemQuantity(product.id)
 

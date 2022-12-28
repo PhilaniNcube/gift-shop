@@ -9,13 +9,15 @@ const Product = ({product}:{product:IBundle}) => {
 
 
 
-  return <Fragment>
-    <Head>
-      <title>{product.title} | ATG </title>
-    </Head>
-    <ProductDetail product={product}  />
-    <ProductTabs />
-  </Fragment>;
+  return (
+    <Fragment>
+      <Head>
+        <title>{product.title} | ATG </title>
+      </Head>
+      <ProductDetail product={product} />
+      <ProductTabs product={product} />
+    </Fragment>
+  );
 };
 export default Product;
 

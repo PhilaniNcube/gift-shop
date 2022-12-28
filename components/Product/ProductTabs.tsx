@@ -2,12 +2,20 @@
 import { Tab } from "@headlessui/react";
 import Link from "next/link";
 import Image from "next/image";
+import { getBundleProducts } from "../../fetchers/bundles";
+import { useQuery } from "@tanstack/react-query";
 
 function classNames(...classes: string[]): string{
   return classes.filter(Boolean).join(" ");
 }
 
-export default function ProductTabs() {
+export default function ProductTabs({product}: {product: IBundle}) {
+
+
+   const { data, isLoading, isSuccess, error } = useQuery(
+     ["bundle_products"],
+     async () => getBundleProducts(product.id)
+   );
 
    const featured_products: Product[] = [
      {
@@ -72,9 +80,8 @@ export default function ProductTabs() {
               )
             }
           >
-            Featured Products
+        Products In Bundle
           </Tab>
-
         </Tab.List>
         <Tab.Panels className="mt-2">
           <Tab.Panel
@@ -84,13 +91,7 @@ export default function ProductTabs() {
             )}
           >
             <p className="text-sm md:text-md text-primary-main font-bold md:max-w-3xl">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Consectetur voluptate quo quaerat quasi ullam dolore facere
-              distinctio doloremque rerum vero, esse animi aut odit incidunt!
-              Nisi commodi repudiandae incidunt culpa illo necessitatibus nihil
-              debitis a distinctio quaerat consequatur asperiores iste eum
-              impedit laboriosam quasi, aspernatur officia numquam deleniti
-              magni excepturi provident. Ipsam rem quam deserunt!
+              {product.description}
             </p>
           </Tab.Panel>
           <Tab.Panel
@@ -100,20 +101,28 @@ export default function ProductTabs() {
             )}
           >
             <div className="flex gap-6 flex-wrap">
-              {featured_products.map((product) => (
-                <Link href={product.slug} key={product.id}>
-                  <div className="group">
-                    <Image
-                      src={product.image.src}
-                      width={product.image.width}
-                      height={product.image.height}
-                      alt={product.name}
-                      className="w-36 rounded-lg aspect-square group-hover:opacity-60 cursor-pointer object-cover"
-                    />
-                    <p className="text-xs text-primary-main">{product.name}</p>
-                  </div>
-                </Link>
-              ))}
+              {isLoading
+                ? "Loading..."
+                : isSuccess &&
+                  data.map((product) => (
+                    <Link
+                      href={`/products/${product.product_id.slug}`}
+                      key={product.product_id.id}
+                    >
+                      <div className="group">
+                        <Image
+                          src={product.product_id.main_image}
+                          width={500}
+                          height={500}
+                          alt={product.product_id.name}
+                          className="w-36 rounded-lg aspect-square group-hover:opacity-60 cursor-pointer object-cover"
+                        />
+                        <p className="text-xs text-primary-main">
+                          {product.product_id.name}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
             </div>
           </Tab.Panel>
         </Tab.Panels>

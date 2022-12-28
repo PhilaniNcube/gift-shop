@@ -34,7 +34,7 @@ export default function Category({
         throw new Error(error.details)
       }
 
-      return data as IBundle[]
+      return data as Bundle[];
   })
 
 
@@ -97,7 +97,7 @@ export default function Category({
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16">
-               {isSuccess && data?.map((product) => (
+               {isLoading ? 'Loading...' : isSuccess && data.map((product) => (
                 <Link
                   key={product.id}
                   href={`/bundles/${product.slug}`}
