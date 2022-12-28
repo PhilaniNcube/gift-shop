@@ -40,11 +40,14 @@ export type Json =
              description:string;
              price:number;
              cost:number;
+            featured: boolean;
+            gender: "him" | "her";
              category:{
               id:string,
               created_at:string,
               name:string,
               slug:string,
+
               image: {
                 src: string,
                 width:number,
@@ -62,6 +65,8 @@ export type Json =
              description?:string;
              price?:number;
              cost?:number;
+             featured?: boolean;
+             gender?: "him" | "her"
         };
         Update: {
              id?:string;
@@ -73,6 +78,8 @@ export type Json =
              description?:string;
              price?:number;
              cost?:number;
+             featured?: boolean;
+             gender?: "him" | "her"
         };
       };
       category_bundles:{

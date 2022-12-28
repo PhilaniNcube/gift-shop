@@ -18,6 +18,11 @@ const Footer = () => {
         href: "/bundles",
         active: router.asPath === "/bundles",
       },
+      {
+        text: "Categories",
+        href: "/categories",
+        active: router.asPath === "/categories",
+      },
     ];
 
     const socialLinks = [

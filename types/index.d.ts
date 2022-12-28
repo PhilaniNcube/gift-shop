@@ -118,6 +118,8 @@ interface IBundle {
   category: ICategory;
   price:number;
   cost:number;
+  featured: boolean;
+  gender: "him" | "her"
 }
 
 interface IBundleProduct  {

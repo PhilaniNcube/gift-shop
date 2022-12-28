@@ -12,44 +12,10 @@ function classNames(...classes: string[]): string{
 export default function ProductTabs({product}: {product: IBundle}) {
 
 
-   const { data, isLoading, isSuccess, error } = useQuery(
+   const { data, isLoading, isSuccess } = useQuery(
      ["bundle_products"],
      async () => getBundleProducts(product.id)
    );
-
-   const featured_products: Product[] = [
-     {
-       id: 6,
-       name: "Mohair Blanket",
-       slug: "mohair_blanket",
-       price: 1299,
-       category: "Blanket",
-       description:
-         "Soft blanket made from the finest mohair wool from the highlands of South Africa & Lesotho",
-       tags: ["blanket", "ladies"],
-       image: {
-         src: "/images/blanket.jpg",
-         height: 1500,
-         width: 1500,
-       },
-     },
-     {
-       id: 7,
-       name: "Cuban Cigars",
-       slug: "cuban_cigars",
-       price: 1299,
-       category: "For Him",
-       description: "Hand rolled tobacco filled cuban cigars",
-       tags: ["cigars", "men"],
-       image: {
-         src: "/images/cigar.jpg",
-         height: 1500,
-         width: 1500,
-       },
-     },
-   ];
-
-
 
 
   return (
@@ -80,7 +46,7 @@ export default function ProductTabs({product}: {product: IBundle}) {
               )
             }
           >
-        Products In Bundle
+            Products In Bundle
           </Tab>
         </Tab.List>
         <Tab.Panels className="mt-2">
@@ -100,28 +66,29 @@ export default function ProductTabs({product}: {product: IBundle}) {
               "text-primary-main"
             )}
           >
-            <div className="flex gap-6 flex-wrap">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3">
               {isLoading
                 ? "Loading..."
                 : isSuccess &&
                   data.map((product) => (
-                    <Link
-                      href={`/products/${product.product_id.slug}`}
+                    <div
+                      // href={`/products/${product.product_id.slug}`}
                       key={product.product_id.id}
+                      className="group flex flex-col justify-center"
                     >
-                      <div className="group">
+
                         <Image
                           src={product.product_id.main_image}
                           width={500}
                           height={500}
                           alt={product.product_id.name}
-                          className="w-36 rounded-lg aspect-square group-hover:opacity-60 cursor-pointer object-cover"
+                          className="w-full rounded-lg aspect-square group-hover:opacity-60 cursor-pointer object-cover"
                         />
-                        <p className="text-xs text-primary-main">
+                        <p className="text-sm font-medium mt-2 text-primary-main">
                           {product.product_id.name}
                         </p>
-                      </div>
-                    </Link>
+
+                    </div>
                   ))}
             </div>
           </Tab.Panel>

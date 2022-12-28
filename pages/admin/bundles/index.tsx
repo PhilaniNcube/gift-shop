@@ -48,7 +48,12 @@ const Products = ({ bundles }: { bundles: IBundle[] }) => {
             Back To Dashboard
           </Link>
 
-          <button onClick={createProduct} className="text-white bg-primary-main font-bold text-lg uppercase px-8 py-2 rounded-lg">New Bundle</button>
+          <button
+            onClick={createProduct}
+            className="text-white bg-primary-main font-bold text-lg uppercase px-8 py-2 rounded-lg"
+          >
+            New Bundle
+          </button>
         </div>
 
         <div className="w-full grid grid-cols-2 gap-6">
@@ -63,7 +68,9 @@ const Products = ({ bundles }: { bundles: IBundle[] }) => {
                   className="h-full aspect-square object-cover rounded"
                 />
                 <div className="">
-                  <h3 className="text-primary-main font-bold">{bundle.title}</h3>
+                  <h3 className="text-primary-main font-bold">
+                    {bundle.title}
+                  </h3>
                   <div className="w-full flex justify-between font-medium text-md py-2">
                     <p>Price: {formatCurrency(bundle.price)}</p>
                     <p>Cost: {formatCurrency(bundle.cost)}</p>
@@ -71,9 +78,14 @@ const Products = ({ bundles }: { bundles: IBundle[] }) => {
                   <p className="text-xs text-slate-600 font-medium">
                     {bundle.description}
                   </p>
-                  <h4 className="text-md mt-2 text-primary-main font-bold">
-                    {bundle.category?.name}
-                  </h4>
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-md mt-2 text-primary-main font-bold">
+                      {bundle.category?.name}
+                    </h4>
+                    <h4 className="text-md capitalize mt-2 text-primary-main font-bold">
+                      {bundle.gender}
+                    </h4>
+                  </div>
                 </div>
               </div>
             </Link>

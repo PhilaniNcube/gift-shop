@@ -27,6 +27,7 @@ export default function Navbar() {
   const navLinks = [
     { text: "Home", href: "/", active: router.asPath === '/' },
     { text: "Bundles", href: "/bundles", active: router.asPath === '/bundles' },
+    { text: "Categories", href: "/categories", active: router.asPath === '/categories' },
   ];
   const user = useUser();
 
@@ -54,6 +55,7 @@ export default function Navbar() {
                   {link.text}
                 </Link>
               ))}
+
             </ul>
           </nav>
 
@@ -77,7 +79,9 @@ export default function Navbar() {
                       router.push("/");
                     }}
                     className="text-red-400 w-fit px-3 cursor-pointer"
-                  >Log Out</button>
+                  >
+                    Log Out
+                  </button>
 
                   <span className="relative isolate flex">
                     <span className="absolute flex justify-center items-center -top-2 -right-2 h-4 w-4 text-xs bg-red-500 text-white rounded-full">
@@ -111,9 +115,7 @@ export default function Navbar() {
       </div>
       <div className="hidden md:block bg-slate-300 py-4">
         <div className="max-w-7xl mx-auto px-4 flex justify-center items-center">
-          <p className="slate-800 text-sm font-medium">
-            Order your gifts in time for the christmas rush.
-          </p>
+          <p className="slate-800 text-sm font-medium"></p>
         </div>
       </div>
       {/* Desktop navigation ends */}

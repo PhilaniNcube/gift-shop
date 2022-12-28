@@ -184,6 +184,32 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
     router.reload();
   };
 
+  const toggleFeatured = async (featured:boolean) => {
+    // const { featured } = Object.fromEntries(new FormData(e.currentTarget));
+
+    // e.preventDefault();
+    const { data: bundleProduct, error: errorProduct } = await supabase
+      .from("bundles")
+      .update({ featured:featured })
+      .eq("id", bundle.id);
+
+      // console.log({bundleProduct, errorProduct})
+
+    router.reload();
+  };
+
+  const setGender = async (e: React.FormEvent<HTMLFormElement>) => {
+    const { gender } = Object.fromEntries(new FormData(e.currentTarget));
+
+    e.preventDefault();
+    const { data: bundleProduct, error: errorProduct } = await supabase
+      .from("bundles")
+      .update({ gender })
+      .eq("id", bundle.id);
+
+    router.reload();
+  };
+
   const updateBundleCost = async (e: React.FormEvent<HTMLFormElement>) => {
     const { cost } = Object.fromEntries(new FormData(e.currentTarget));
 
@@ -344,6 +370,63 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
                 Save Category
               </button>
             </form>
+            <form onSubmit={setGender} className="text-lg mt-5 text-slate-500 ">
+              <div>
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Bundle Gender
+                </label>
+                <div className="relative mt-1 rounded-md shadow-sm">
+                  <select
+                    id="gender"
+                    name="gender"
+                    className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <option className="capitalize" value={bundle.gender}>
+                      {bundle.gender}
+                    </option>
+                    <option className="capitalize" value="him">
+                      Him
+                    </option>
+                    <option className="capitalize" value="her">
+                      Her
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="inline-flex mt-2 justify-center rounded-md border border-transparent bg-primary-main py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2"
+              >
+                Save Gender
+              </button>
+            </form>
+            <div
+
+              className="text-lg mt-5 text-slate-500 p-5 border border-dashed border-slate-500 rounded-md"
+            >
+              <div>
+                <label
+                  htmlFor="featured"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Featured Product
+                </label>
+                <div className="relative mt-1 rounded-md shadow-sm">
+                  <input
+                    id="featured"
+                    name="featured"
+                    type="checkbox"
+                    onChange={(e) => toggleFeatured(e.target.checked)}
+                    checked={bundle.featured}
+                    className="appearance-none h-8 w-8 indeterminate:bg-gray-300"
+                  />
+                </div>
+              </div>
+
+            </div>
             <form
               onSubmit={(e) => updateBundlePrice(e)}
               className="text-lg mt-5 text-slate-500 "
