@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getBundles } from "../../fetchers/bundles";
-import { getFeaturedProducts } from "../../fetchers/products";
+import { getBundles, getFeaturedBundles } from "../../fetchers/bundles";
 import formatCurrency from "../../lib/formatCurrency";
 
 
@@ -16,7 +15,7 @@ const NewArrivals = () => {
        data: bundles,
        isLoading,
        isSuccess,
-     } = useQuery(["bundles"], getBundles);
+     } = useQuery(["featured_bundles"], getFeaturedBundles);
 
   const router = useRouter()
 
@@ -25,7 +24,7 @@ const NewArrivals = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center">
           <h2 className="text-slate-800 text-md sm:text-2xl md:text-3xl font-bold">
-            New Arrivals
+            Featured Bundles
           </h2>
           <Link
             href="/bundles"

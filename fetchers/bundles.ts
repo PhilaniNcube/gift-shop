@@ -23,6 +23,21 @@ const getBundles = async () => {
 
 }
 
+const getFeaturedBundles = async () => {
+
+  const { data: bundles, error } = await supabase
+  .from('bundles')
+  .select('*, category(id, name, created_at, image, slug )').eq('featured', true)
+
+  if(error) {
+    throw new Error(error.message)
+  }
+
+
+  return bundles as Bundle[]
+
+}
+
 const getBundleById = async (id:string) => {
 
   const { data: bundles, error } = await supabase
@@ -125,4 +140,4 @@ const countBundles = async ():Promise<number> => {
 
 
 
-export {getBundles, getBundleById, getBundleProducts, getBundleCategories, getBundleBySlug, getBundlesByCategoryId, countBundles}
+export {getBundles, getBundleById, getBundleProducts, getBundleCategories, getBundleBySlug, getBundlesByCategoryId, getFeaturedBundles, countBundles}
