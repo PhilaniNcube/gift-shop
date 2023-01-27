@@ -113,11 +113,11 @@ const order = props.order
                 action="https://sandbox.payfast.co.za/eng/process"
                 method="POST"
               >
-                <input type="hidden" name="merchant_id" value={"10027336"} />
+                <input type="hidden" name="merchant_id" value={"16540568"} />
                 <input
                   type="hidden"
                   name="merchant_key"
-                  value={"retbvx8vz8gpw"}
+                  value={"9gguzznxmzkp2"}
                 />
                 <input
                   type="hidden"
