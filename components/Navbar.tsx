@@ -60,17 +60,17 @@ export default function Navbar() {
           </nav>
 
           <nav className="flex items-center space-x-8">
-            <div className="hidden md:flex items-center bg-slate-300 rounded-md py-2 pl-2 pr-4">
+            {/* <div className="hidden md:flex items-center bg-slate-300 rounded-md py-2 pl-2 pr-4">
               <MagnifyingGlassIcon className="h-6 w-6 text-slate-700 fill-transparent" />
               <input
                 type="text"
                 className="w-64 bg-transparent border-none outline-none ml-2 focus:outline-none focus:border-none ring-0 focus:ring-transparent focus:ring-0 focus:bg-slate-200 rounde-md"
               />
-            </div>
+            </div> */}
             <div className="flex items-center space-x-4 justify-between">
               {user ? (
                 <Fragment>
-                  <Link href="/account">
+                  <Link href="/admin/dashboard">
                     <UserIcon className="text-primary-main h-6 w-6 cursor-pointer" />
                   </Link>
                   <button
