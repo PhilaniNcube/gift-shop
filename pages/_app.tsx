@@ -6,12 +6,13 @@ import {
 } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 
-import Navbar from '../components/Navbar'
+// import Navbar from '../components/Navbar'
 import { Database } from "../db_types";
 import Footer from '../components/Footer';
 import { ShoppingCartProvider } from '../context/ShoppingCartContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Navigation from '../components/Navigation';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -26,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
         <QueryClientProvider client={queryClient}>
           <ShoppingCartProvider>
-            <Navbar />
+            <Navigation />
             <Component {...pageProps} />
             <Footer />
           </ShoppingCartProvider>

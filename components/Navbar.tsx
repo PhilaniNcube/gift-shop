@@ -1,16 +1,15 @@
 import Link from 'next/link'
 import { Fragment, useState } from "react";
 import {
-  MagnifyingGlassIcon,
   ShoppingCartIcon,
   UserIcon,
-
 } from "@heroicons/react/24/outline";
 import { useRouter } from 'next/router';
 import { useShoppingCart } from '../context/ShoppingCartContext';
 import { useUser } from '@supabase/auth-helpers-react';
 import { Database } from '../db_types';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import Image from 'next/image';
 
 
 
@@ -41,7 +40,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <nav className="flex items-center space-x-4">
             <h2 className="text-primary-main text-3xl xl:text-4xl font-extrabold">
-              all things gifts
+               <Image src="/images/atg_logo.png" width={432} height={187} alt="logo" className="w-44 object-cover" />
             </h2>
             <ul className="flex pl-4 items-center space-x-3">
               {navLinks.map((link, i) => (

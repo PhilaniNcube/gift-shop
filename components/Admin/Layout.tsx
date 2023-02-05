@@ -57,12 +57,12 @@ const Layout = ({children}:{children: ReactNode}) => {
           >
             Create Occasion
           </Link>
-          {/* <Link
+          <Link
             href="/admin/occasions"
             className="text-white text-xl font-bold"
           >
             Occasions
-          </Link> */}
+          </Link>
           <Link href="/admin/bundles/" className="text-white text-xl font-bold">
             Bundles
           </Link>

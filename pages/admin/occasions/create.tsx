@@ -1,11 +1,17 @@
-import { useRouter } from "next/router";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+// import { useRouter } from "next/router";
 import { useState } from "react";
 import slugify from "slugify";
 import Layout from "../../../components/Admin/Layout";
-import supabase from "../../../lib/client";
+import { Database } from "../../../db_types";
+
 
 const CreateOccasion = () => {
-  const router = useRouter();
+  // const router = useRouter();
+
+    const [supabase] = useState(() =>
+      createBrowserSupabaseClient<Database>()
+    );
 
   const [uploadData, setUploadData] = useState<ImageObject | undefined>();
 
@@ -64,8 +70,10 @@ const CreateOccasion = () => {
           slug: slug,
           image: uploadData,
         },
-      ])
-      .single();
+      ]).select('*')
+
+
+
 
 
 
@@ -73,7 +81,9 @@ const CreateOccasion = () => {
 
     if(error) alert(`Error: ${error.details}`)
 
-    router.push(`/admin/bundles`);
+    console.log({data, error})
+
+    // router.push(`/admin/bundles`);
   };
 
   return (
