@@ -10,7 +10,11 @@ import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { Database } from "../db_types";
 import Footer from '../components/Footer';
 import { ShoppingCartProvider } from '../context/ShoppingCartContext';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+  Hydrate,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Navigation from '../components/Navigation';
 
@@ -24,14 +28,19 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Fragment>
-      <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
+      <SessionContextProvider
+        supabaseClient={supabaseClient}
+        initialSession={pageProps.initialSession}
+      >
         <QueryClientProvider client={queryClient}>
-          <ShoppingCartProvider>
-            <Navigation />
-            <Component {...pageProps} />
-            <Footer />
-          </ShoppingCartProvider>
-          <ReactQueryDevtools />
+          <Hydrate state={pageProps.dehydratedState}>
+            <ShoppingCartProvider>
+              <Navigation />
+              <Component {...pageProps} />
+              <Footer />
+            </ShoppingCartProvider>
+            <ReactQueryDevtools />
+          </Hydrate>
         </QueryClientProvider>
       </SessionContextProvider>
     </Fragment>

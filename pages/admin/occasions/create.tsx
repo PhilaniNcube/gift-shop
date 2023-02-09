@@ -72,11 +72,6 @@ const CreateOccasion = () => {
         },
       ]).select('*')
 
-
-
-
-
-
     setLoading(false);
 
     if(error) alert(`Error: ${error.details}`)

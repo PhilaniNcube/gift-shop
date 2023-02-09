@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "../db_types";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -11,8 +11,6 @@ if (!url || !anonKey ) {
 
 
 
-const supabase = createClient<Database>(
-    url, anonKey,
-);
+const supabase = createBrowserSupabaseClient<Database>();
 
 export default supabase

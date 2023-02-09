@@ -1,4 +1,6 @@
 
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -9,6 +11,7 @@ import Layout from "../../../components/Admin/Layout";
 import { Database } from "../../../db_types";
 
 import { getBundleById, getBundleCategories, getBundleProducts } from "../../../fetchers/bundles";
+import { getOccasionBundles, getOccasions } from "../../../fetchers/occasions";
 import { getCategories, getProducts } from "../../../fetchers/products";
 import supabase from "../../../lib/client";
 import formatCurrency from "../../../lib/formatCurrency";
@@ -17,6 +20,7 @@ type Bundle = Database["public"]["Tables"]["bundles"]["Row"]
 type Product = Database["public"]["Tables"]["products"]["Row"]
 type BundleProduct = Database["public"]["Tables"]["bundle_products"]["Row"]
 type Category = Database["public"]["Tables"]["categories"]["Row"]
+type Occasion_Bundles = Database["public"]["Tables"]["occasion_bundles"]["Row"]
 
 
 
@@ -40,6 +44,12 @@ const Product = ({
   const [filter, setFilter] = useState("")
 
 
+  const {data, isLoading, isSuccess} = useQuery({
+    queryKey: ['occasions'],
+    queryFn: () => getOccasions()
+  })
+
+  const supabaseClient = createBrowserSupabaseClient<Database>()
 
 const selectedCategory = categories.find(c => c.id === bundle.category?.id)
 
@@ -222,6 +232,9 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
     router.reload();
   };
 
+
+
+
   const addBundleProduct = async (
     e: React.FormEvent<HTMLFormElement>,
     product: IProduct
@@ -403,10 +416,55 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
                 Save Gender
               </button>
             </form>
-            <div
+            <fieldset className="text-slate-700 mt-4">
+              <legend className="sr-only">Occasion</legend>
+              <div
+                className="text-base font-medium text-gray-900"
+                aria-hidden="true"
+              >
+                Occasion
+              </div>
+              <div className="mt-4 space-y-4">
+                {isLoading
+                  ? "loading"
+                  : isSuccess &&
+                    data.map((item) => (
+                      <div key={item.id} className="flex items-start">
+                        <div className="flex h-5 items-center">
+                          <input
+                            type="checkbox"
 
-              className="text-lg mt-5 text-slate-500 p-5 border border-dashed border-slate-500 rounded-md"
-            >
+                            id={`${item.title}`}
+                            name={`${item.title}`}
+                            value={item.id}
+                            onChange={async () => {
+                              const { data, error } = await supabaseClient
+                                .from("occasion_bundles")
+                                .insert([
+                                  {
+                                    bundle_id: bundle.id,
+                                    occasion_id: item.id,
+                                  },
+                                ]);
+
+                              console.log({ data, error });
+                            }}
+                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          />
+                        </div>
+                        <div className="ml-3 text-sm">
+                          <label
+                            htmlFor={`${item.title}`}
+                            className="font-medium text-gray-700"
+                          >
+                            {`${item.title}`}
+                          </label>
+                        </div>
+                      </div>
+                    ))}
+              </div>
+            </fieldset>
+            <div className="text-lg mt-5 text-slate-500 p-5 border border-dashed border-slate-500 rounded-md">
               <div>
                 <label
                   htmlFor="featured"
@@ -425,7 +483,6 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
                   />
                 </div>
               </div>
-
             </div>
             <form
               onSubmit={(e) => updateBundlePrice(e)}

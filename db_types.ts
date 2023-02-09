@@ -123,6 +123,24 @@ export type Json =
         image?: ImageObject;
       };
     };
+    occasion_bundles: {
+      Row: {
+        bundle_id: Database['public']['Tables']['bundles']['Row'];
+        occasion_id: Database['public']['Tables']['occasion']['Row'];
+        created_at: string;
+      }
+      Insert: {
+        bundle_id: string;
+        occassion_id: string;
+        created_at?: string;
+      }
+      Update: {
+        bundle_id: string;
+        occassion_id: string;
+        created_at?: string;
+      }
+
+    }
     products: {
       Row: IProduct;
       Insert: {
@@ -281,6 +299,9 @@ export type Json =
       role?: string;
   }
   };
+
 }
+
 }
+
 }
