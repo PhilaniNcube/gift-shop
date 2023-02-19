@@ -40,21 +40,26 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           <nav className="flex items-center space-x-4">
             <h2 className="text-primary-main text-3xl xl:text-4xl font-extrabold">
-               <Image src="/images/atg_logo.png" width={432} height={187} alt="logo" className="w-44 object-cover" />
+              <Image
+                src="/images/atg_logo.png"
+                width={432}
+                height={187}
+                alt="logo"
+                className="w-56 object-cover"
+              />
             </h2>
             <ul className="flex pl-4 items-center space-x-3">
               {navLinks.map((link, i) => (
                 <Link
                   key={i}
                   href={link.href}
-                  className={`text-lg font-bold ${
+                  className={`text-lg text-primary-main font-bold ${
                     link.active ? "text-primary-main" : "text-slate-800"
                   }`}
                 >
                   {link.text}
                 </Link>
               ))}
-
             </ul>
           </nav>
 

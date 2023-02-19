@@ -137,7 +137,33 @@ const countBundles = async ():Promise<number> => {
 
 }
 
+const getBundlesForHer = async ():Promise<Bundle[]> => {
+   const { data: bundles, error } = await supabase
+  .from('bundles')
+  .select('*, category(id, name, created_at, image, slug )').eq('gender', 'her')
+
+  if(error) {
+    throw new Error(error.message)
+  }
+
+
+  return bundles
+}
+
+const getBundlesForHim = async ():Promise<Bundle[]> => {
+   const { data: bundles, error } = await supabase
+  .from('bundles')
+  .select('*, category(id, name, created_at, image, slug )').eq('gender', 'him')
+
+  if(error) {
+    throw new Error(error.message)
+  }
+
+
+  return bundles
+}
 
 
 
-export {getBundles, getBundleById, getBundleProducts, getBundleCategories, getBundleBySlug, getBundlesByCategoryId, getFeaturedBundles, countBundles}
+
+export {getBundles, getBundleById, getBundleProducts, getBundleCategories, getBundleBySlug, getBundlesByCategoryId, getFeaturedBundles, countBundles, getBundlesForHim, getBundlesForHer}

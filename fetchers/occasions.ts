@@ -47,4 +47,13 @@ const getOccasionBundlesByOccasionId = async (id:string) => {
   return occasionBundles as Occasion_Bundle[]
 }
 
-export {getOccasions, getOccasionBundles, getOccasion, getOccasionBundlesByOccasionId}
+
+const getOccasionBundlesByBundleId = async (id:string) => {
+  const {data:occasionBundles, error} = await supabase.from('occasion_bundles').select('*, occasion_id(*), bundle_id(*)').eq('bundle_id', id)
+
+  if(error) { throw new Error(error.details)}
+
+  return occasionBundles as Occasion_Bundle[]
+}
+
+export {getOccasions, getOccasionBundles, getOccasion, getOccasionBundlesByOccasionId, getOccasionBundlesByBundleId}

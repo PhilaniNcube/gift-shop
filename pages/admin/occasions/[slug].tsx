@@ -6,15 +6,18 @@ import serviceRole from "../../../lib/serviceClient";
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import slugify from 'slugify';
 import { useRouter } from 'next/router';
+import { getBundles } from '../../../fetchers/bundles';
 
 type Occasion = Database["public"]["Tables"]["occasion"]["Row"];
+type Bundle = Database["public"]["Tables"]["bundles"]["Row"];
 
 type ComponentProps = {
+  bundles: Bundle[];
   occasion: Occasion;
-  error?: PostgrestError
+  error?: PostgrestError;
 };
 
-const Occasion = ({occasion}:ComponentProps) => {
+const Occasion = ({occasion, bundles}:ComponentProps) => {
 console.log(occasion)
 
 const router = useRouter()
@@ -99,6 +102,16 @@ const [loading, setLoading] = useState(false)
           Save
         </button>
       </form>
+
+      <form className="ring-1 p-8 ring-offset-1 rounded-xl mt-4 max-w-5xl">
+        {" "}
+        <button
+          type="submit"
+          className={`inline-flex mt-6 w-1/3 bg-blue-700 justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2 `}
+        >
+          Save
+        </button>
+      </form>
     </Layout>
   );
 };
@@ -112,8 +125,11 @@ export async function getServerSideProps({params:{slug}}:{params: {slug:string}}
     .from("occasion")
     .select("*").eq('slug',slug).single();
 
+const bundles = await getBundles()
+
   return {
     props: {
+      bundles,
       occasion,
       error
     },

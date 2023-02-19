@@ -8,12 +8,7 @@ export const config = {
 export const middleware = withMiddlewareAuth({
   authGuard: {
     isPermitted: async (user) => {
-
-
-const admins = ['khibanyakallo@gmail.com', 'ncbphi001@gmail.com']
-
-
-
+      const admins = ['khibanyakallo@gmail.com', 'ncbphi001@gmail.com']
         if(user.email) {
         return  admins.includes(user.email)
       } else {

@@ -5,9 +5,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Fragment } from 'react';
 import { useQuery } from '@tanstack/react-query';
-
 import Filter from '../../components/Filter';
-import { getBundles } from '../../fetchers/bundles';
 import supabase from '../../lib/client';
 import formatCurrency from '../../lib/formatCurrency';
 import { Database } from '../../db_types';
@@ -19,7 +17,6 @@ type Bundle = Database["public"]["Tables"]["bundles"]["Row"];
 
 export default function Category({
   category,
-
 }: {
   category: ICategory;
 }) {
@@ -91,10 +88,10 @@ export default function Category({
               <p className="text-primary-main text-md font-bold">
                 Showing 1 - 12 of 50 items
               </p>
-              <p className="text-primary-main text-md font-bold">To Show 8</p>
+              {/* <p className="text-primary-main text-md font-bold">To Show 8</p>
               <p className="text-primary-main text-md font-bold">
                 Sort By Position
-              </p>
+              </p> */}
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-6 md:gap-x-10 lg:gap-x-16">
                {isLoading ? 'Loading...' : isSuccess && data.map((product) => (

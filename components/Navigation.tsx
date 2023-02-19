@@ -2,9 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, Fragment } from "react";
-import { motion } from "framer-motion";
 import { getOccasions } from "../fetchers/occasions";
-import { Menu, Popover, Transition } from "@headlessui/react";
+import {  Popover, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
   Bars3Icon,
@@ -65,7 +64,7 @@ const toggleMenu = () => {
               width={432}
               height={187}
               alt="ATG Logo"
-              className="w-32 object-cover"
+              className="w-52 object-cover"
             />
           </Link>
         </div>
@@ -76,9 +75,9 @@ const toggleMenu = () => {
                 <Popover.Button
                   className={`
                 ${open ? "" : "text-opacity-90"}
-                group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-slate-700 hover:text-opacity-100 focus:outline-none `}
+                group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-primary-main hover:text-opacity-100 focus:outline-none `}
                 >
-                  <span>Gifts</span>
+                  <span className="">Gifts</span>
                   <ChevronDownIcon
                     className={`${open ? "" : "text-opacity-70"}
                   ml-2 h-5 w-5 text-slate-800 transition duration-150 ease-in-out group-hover:text-opacity-80`}
@@ -97,7 +96,7 @@ const toggleMenu = () => {
                   <Popover.Panel className="absolute top-20 left-0 right-0 z-30 w-full  shadow-md p-10 mx-auto bg-slate-50">
                     <div className="flex max-w-7xl mx-auto">
                       <div className="flex flex-col space-y-3">
-                        <h2 className="font-bold text-lg text-slate-700">
+                        <h2 className="font-bold text-lg text-primary-main">
                           Categories
                         </h2>
                         {categoriesLoading
@@ -126,7 +125,7 @@ const toggleMenu = () => {
                 <Popover.Button
                   className={`
                 ${open ? "" : "text-opacity-90"}
-                group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-slate-700 hover:text-opacity-100 focus:outline-none `}
+                group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-primary-main hover:text-opacity-100 focus:outline-none `}
                 >
                   <span>Occasions</span>
                   <ChevronDownIcon
@@ -167,15 +166,15 @@ const toggleMenu = () => {
               </Fragment>
             )}
           </Popover>
-          <span className="group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-slate-700 hover:text-opacity-100 focus:outline-none">
+          <span className="group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-primary-main hover:text-opacity-100 focus:outline-none">
             <Link href="/for-her">Gifts For Her</Link>
           </span>
-          <span className="group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-slate-700 hover:text-opacity-100 focus:outline-none">
+          <span className="group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-primary-main hover:text-opacity-100 focus:outline-none">
             <Link href="/for-him">Gifts For Him</Link>
           </span>
-          <span className="group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-slate-700 hover:text-opacity-100 focus:outline-none">
+          {/* <span className="group inline-flex items-center rounded-md px-3 py-2 text-base font-medium text-primary-main hover:text-opacity-100 focus:outline-none">
             <Link href="/contact">Contact</Link>
-          </span>
+          </span> */}
         </nav>
         <div className="flex" id="auth">
           {!user ? (
@@ -183,14 +182,14 @@ const toggleMenu = () => {
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                 <Link
                   href="/sign-in"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                  className="text-sm font-medium text-primary-main hover:text-gray-800"
                 >
                   Sign in
                 </Link>
                 <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
                 <Link
                   href="/register"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-800"
+                  className="text-sm font-medium text-primary-main hover:text-gray-800"
                 >
                   Create account
                 </Link>
@@ -201,10 +200,10 @@ const toggleMenu = () => {
                   className="group -m-2 flex items-center p-2"
                 >
                   <ShoppingBagIcon
-                    className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                    className="h-6 w-6 flex-shrink-0 text-primary-main group-hover:text-gray-500"
                     aria-hidden="true"
                   />
-                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                  <span className="ml-2 text-sm font-medium text-primary-main group-hover:text-gray-800">
                     {cartQuantity}
                   </span>
                   <span className="sr-only">items in cart, view bag</span>
@@ -269,10 +268,12 @@ const toggleMenu = () => {
               aria-hidden="true"
               onClick={openCart}
             />
-            <span className="text-sm font-medium text-slate-50 absolute border-r border-slate-300 -top-1 -right-1 p-1 bg-red-500 h-5 w-5 flex items-center justify-center rounded-full">{cartQuantity}</span>
+            <span className="text-sm font-medium text-slate-50 absolute border-r border-slate-300 -top-1 -right-1 p-1 bg-red-500 h-5 w-5 flex items-center justify-center rounded-full">
+              {cartQuantity}
+            </span>
           </div>
 
-          <Bars3Icon className="h-8 w-8 text-slate-700" onClick={openMenu} />
+          <Bars3Icon className="h-8 w-8 text-primary-main" onClick={openMenu} />
         </div>
 
         {open && (
@@ -290,7 +291,7 @@ const toggleMenu = () => {
                 </Link>
 
                 <XMarkIcon
-                  className="h-8 w-8 text-slate-700"
+                  className="h-8 w-8 text-primary-main"
                   onClick={closeMenu}
                 />
               </div>
@@ -299,35 +300,35 @@ const toggleMenu = () => {
                 onClick={toggleMenu}
               >
                 <Link
-                  className="my-3 text-md font-medium text-slate-700"
+                  className="my-3 text-md font-medium text-primary-main"
                   href="/bundles"
                 >
                   Gifts
                 </Link>
                 <Link
-                  className="my-3 text-md font-medium text-slate-700"
+                  className="my-3 text-md font-medium text-primary-main"
                   href="/occasion"
                 >
                   Occasion
                 </Link>
                 <Link
-                  className="my-3 text-md font-medium text-slate-700"
+                  className="my-3 text-md font-medium text-primary-main"
                   href="/for-her"
                 >
                   Gifts For Her
                 </Link>
                 <Link
-                  className="my-3 text-md font-medium text-slate-700"
+                  className="my-3 text-md font-medium text-primary-main"
                   href="/for-him"
                 >
                   Gifts For Him
                 </Link>
-                <Link
-                  className="my-3 text-md font-medium text-slate-700"
+                {/* <Link
+                  className="my-3 text-md font-medium text-primary-main"
                   href="/contact"
                 >
                   Contact
-                </Link>
+                </Link> */}
               </div>
               <div
                 className="p-4 flex flex-col bg-slate-600"

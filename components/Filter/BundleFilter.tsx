@@ -18,7 +18,7 @@ const BundleFilter = () => {
 
   return (
     <div className="flex flex-col space-y-1 p-4 bg-slate-200 rounded-lg">
-      {categories?.map((category) => (
+      {isLoading ? 'Loading...' : isSuccess && categories.map((category) => (
         <Link
           key={category.id}
           href={`/categories/${category.slug}`}

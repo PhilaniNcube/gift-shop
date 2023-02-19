@@ -6,7 +6,7 @@ const CategoryHeader = () => {
     <header className="py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="w-full relative isolate rounded-lg overflow-hidden">
+          <Link href="/for-her" className="w-full relative isolate rounded-lg overflow-hidden">
             <Image
               src="/images/ladies_gifts.jpg"
               width={947}
@@ -19,7 +19,7 @@ const CategoryHeader = () => {
                 Gifts For Women
               </h2>
             </div>
-          </div>
+          </Link>
           <div className="w-full ring-1 ring-slate-900/20 rounded-lg flex flex-col items-center text-center justify-center p-8">
             <h1 className="text-4xl md:text-[3rem] font-bold text-primary-main">
               Browse Categories
@@ -35,7 +35,7 @@ const CategoryHeader = () => {
               Discover More
             </Link>
           </div>{" "}
-          <div className="w-full relative isolate rounded-lg overflow-hidden">
+          <Link href="/for-him" className="w-full relative isolate rounded-lg overflow-hidden">
             <Image
               src="/images/drones.jpg"
               width={1000}
@@ -48,7 +48,7 @@ const CategoryHeader = () => {
                 Gifts For Men
               </h2>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </header>

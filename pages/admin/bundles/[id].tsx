@@ -11,7 +11,7 @@ import Layout from "../../../components/Admin/Layout";
 import { Database } from "../../../db_types";
 
 import { getBundleById, getBundleCategories, getBundleProducts } from "../../../fetchers/bundles";
-import { getOccasionBundles, getOccasions } from "../../../fetchers/occasions";
+import {  getOccasionBundlesByBundleId, getOccasions } from "../../../fetchers/occasions";
 import { getCategories, getProducts } from "../../../fetchers/products";
 import supabase from "../../../lib/client";
 import formatCurrency from "../../../lib/formatCurrency";
@@ -29,31 +29,30 @@ const Product = ({
   products,
   bundleProducts,
   categories,
+  occasionBundles,
 }: {
   bundle: Bundle;
   products: Product[];
   bundleProducts: BundleProduct[];
   categories: Category[];
+  occasionBundles: Occasion_Bundles[]
 }) => {
   const router = useRouter();
 
-  const [description, setDescription] = useState(bundle.description)
-  const [title, setTitle] = useState(bundle.title)
-  const [price, setPrice] = useState(bundle.price)
-  const [cost, setCost] = useState(bundle.cost)
-  const [filter, setFilter] = useState("")
+  const [description, setDescription] = useState(bundle.description);
+  const [title, setTitle] = useState(bundle.title);
+  const [price, setPrice] = useState(bundle.price);
+  const [cost, setCost] = useState(bundle.cost);
+  const [filter, setFilter] = useState("");
 
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ["occasions"],
+    queryFn: () => getOccasions(),
+  });
 
-  const {data, isLoading, isSuccess} = useQuery({
-    queryKey: ['occasions'],
-    queryFn: () => getOccasions()
-  })
+  const supabaseClient = createBrowserSupabaseClient<Database>();
 
-  const supabaseClient = createBrowserSupabaseClient<Database>()
-
-const selectedCategory = categories.find(c => c.id === bundle.category?.id)
-
-
+  // const selectedCategory = categories.find((c) => c.id === bundle.category?.id);
 
   const totalPrice = bundleProducts.reduce(
     (acc, product) => acc + product.quantity * product.product_id.price,
@@ -67,15 +66,13 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
   const [loading, setLoading] = useState(false);
   const [uploadData, setUploadData] = useState({});
 
-
-    const filteredProducts = useMemo(
-      () =>
-        products?.filter(
-          (product) =>
-            product.name.toLowerCase().includes(filter.toLowerCase())
-        ),
-      [filter, products]
-    );
+  const filteredProducts = useMemo(
+    () =>
+      products?.filter((product) =>
+        product.name.toLowerCase().includes(filter.toLowerCase())
+      ),
+    [filter, products]
+  );
 
   const handleImageUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -102,17 +99,17 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
 
     setUploadData(data);
 
+    console.log(uploadData)
 
     const { data: bundleProduct, error: errorProduct } = await supabase
       .from("bundles")
       .update({ main_image: data })
       .eq("id", bundle.id);
 
-
-
     if (errorProduct) {
       alert(errorProduct.details);
     } else {
+      console.log(bundleProduct)
       alert("Upload Successful");
     }
 
@@ -143,10 +140,16 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
     if (errorProduct) {
       alert(errorProduct.details);
     } else {
-
+      console.log(bundleProduct)
       router.reload();
     }
   };
+
+
+  console.log({ occasionBundles });
+
+
+  // const [occasion_bundles, setOccasionBundles] = useState(occasionBundles);
 
   const updateBundleDescription = async (
     e: React.FormEvent<HTMLFormElement>
@@ -160,8 +163,13 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       .eq("id", bundle.id);
 
 
-
-    router.reload();
+      if (bundleProduct) {
+        console.log(bundleProduct);
+        router.reload();
+      } else {
+        console.log(errorProduct);
+        alert(`There was an error: ${errorProduct.details}`);
+      }
   };
 
   const updateBundleTitle = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -169,17 +177,24 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
 
     e.preventDefault();
 
-    if(typeof title !== 'string') {
-      throw new Error(`Invalid title`)
+    if (typeof title !== "string") {
+      throw new Error(`Invalid title`);
     }
 
-    const slug = slugify(title,{lower: true, replacement: '_'} )
+    const slug = slugify(title, { lower: true, replacement: "_" });
     const { data: bundleProduct, error: errorProduct } = await supabase
       .from("bundles")
       .update({ title: title, slug: slug })
       .eq("id", bundle.id);
 
-    router.reload();
+
+      if (bundleProduct) {
+        console.log(bundleProduct);
+        router.reload();
+      } else {
+        console.log(errorProduct);
+        alert(`There was an error: ${errorProduct.details}`);
+      }
   };
 
   const updateBundlePrice = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -191,21 +206,35 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       .update({ price: price })
       .eq("id", bundle.id);
 
-    router.reload();
+
+      if (bundleProduct) {
+        console.log(bundleProduct);
+        router.reload();
+      } else {
+        console.log(errorProduct);
+        alert(`There was an error: ${errorProduct.details}`);
+      }
   };
 
-  const toggleFeatured = async (featured:boolean) => {
+  const toggleFeatured = async (featured: boolean) => {
     // const { featured } = Object.fromEntries(new FormData(e.currentTarget));
 
     // e.preventDefault();
     const { data: bundleProduct, error: errorProduct } = await supabase
       .from("bundles")
-      .update({ featured:featured })
+      .update({ featured: featured })
       .eq("id", bundle.id);
 
-      // console.log({bundleProduct, errorProduct})
+    // console.log({bundleProduct, errorProduct})
 
-    router.reload();
+
+      if (bundleProduct) {
+        console.log(bundleProduct);
+        router.reload();
+      } else {
+        console.log(errorProduct);
+        alert(`There was an error: ${errorProduct.details}`);
+      }
   };
 
   const setGender = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -217,7 +246,14 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       .update({ gender })
       .eq("id", bundle.id);
 
-    router.reload();
+
+      if (bundleProduct) {
+        console.log(bundleProduct);
+        router.reload();
+      } else {
+        console.log(errorProduct);
+        alert(`There was an error: ${errorProduct.details}`);
+      }
   };
 
   const updateBundleCost = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -229,11 +265,14 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       .update({ cost: cost })
       .eq("id", bundle.id);
 
-    router.reload();
+      if (bundleProduct) {
+        console.log(bundleProduct);
+        router.reload();
+      } else {
+        console.log(errorProduct);
+        alert(`There was an error: ${errorProduct.details}`);
+      }
   };
-
-
-
 
   const addBundleProduct = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -249,7 +288,14 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
         { product_id: product.id, bundle_id: bundle.id, quantity: quantity },
       ]);
 
-    router.reload();
+    if(addedProduct) {
+      console.log(addedProduct)
+      router.reload();
+    } else {
+      console.log(error)
+      alert(`There was an error: ${error.details}`)
+    }
+
   };
 
   const setCategory = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -268,7 +314,7 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
       );
     } else {
       alert("Bundle Updated");
-
+      console.log(data)
       router.reload();
     }
   };
@@ -416,54 +462,92 @@ const selectedCategory = categories.find(c => c.id === bundle.category?.id)
                 Save Gender
               </button>
             </form>
-            <fieldset className="text-slate-700 mt-4">
-              <legend className="sr-only">Occasion</legend>
-              <div
-                className="text-base font-medium text-gray-900"
-                aria-hidden="true"
-              >
-                Occasion
-              </div>
-              <div className="mt-4 space-y-4">
-                {isLoading
-                  ? "loading"
-                  : isSuccess &&
-                    data.map((item) => (
-                      <div key={item.id} className="flex items-start">
-                        <div className="flex h-5 items-center">
-                          <input
-                            type="checkbox"
+            <div className="mt-4 border border-slate-300 rounded-md p-4">
+              <h3 className="text-slate-700 font-bold text-2xl">Occasions</h3>
 
-                            id={`${item.title}`}
-                            name={`${item.title}`}
-                            value={item.id}
-                            onChange={async () => {
-                              const { data, error } = await supabaseClient
-                                .from("occasion_bundles")
-                                .insert([
-                                  {
-                                    bundle_id: bundle.id,
-                                    occasion_id: item.id,
-                                  },
-                                ]);
-
-                              console.log({ data, error });
-                            }}
-                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                          />
-                        </div>
-                        <div className="ml-3 text-sm">
-                          <label
-                            htmlFor={`${item.title}`}
-                            className="font-medium text-gray-700"
-                          >
-                            {`${item.title}`}
-                          </label>
-                        </div>
-                      </div>
-                    ))}
+              <div className="grid md:grid-cols-2 py-4 lg:grid-cols-3 gap-3 border-b border-slate-primary-main">
+                {occasionBundles.map((item, index) => (
+                  <div key={index} className=" flex items-center justify-between bg-slate-300 p-3 rounded-lg">
+                    <p className="text-xl font-bold text-primary-main">
+                      {item.occasion_id.title}
+                    </p>
+                    <svg
+                      onClick={async () => {
+                         await supabaseClient.from('occasion_bundles').delete().match({'bundle_id': item.bundle_id.id, 'occasion_id': item.occasion_id.id})
+                        // console.log({data, error})
+                         router.reload()
+                      }}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-10 h-10 cursor-pointer text-red-600"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                      />
+                    </svg>
+                  </div>
+                ))}
               </div>
-            </fieldset>
+
+              <div className="w-full py-12 gap-3">
+                {isLoading ? 'Loading...' : isSuccess && data?.map((occasion) => {
+
+                 const ID = occasionBundles.find(
+                   (item) => item.occasion_id.id === occasion.id
+                 );
+
+                //  const isChecked = ID?.occasion_id.id === occasion.id || false;
+
+
+                    if (ID?.occasion_id.id === occasion.id) {
+                      return null;
+                    }
+
+                   return (
+                     <div key={occasion.id} className="flex items-start">
+                       <div className="flex h-5 items-center">
+                         <input
+                           id={occasion.title}
+                           name={occasion.title}
+                           value={occasion.id}
+
+                           onChange={async () => {
+                             const { data, error } = await supabaseClient
+                               .from("occasion_bundles")
+                               .insert([
+                                 {
+                                   bundle_id: bundle.id,
+                                   occasion_id: occasion.id,
+                                 },
+                               ])
+                               .select("*");
+
+                             console.log({ data, error });
+
+                           }}
+                           type="checkbox"
+                          //  checked={ID?.occasion_id.id === occasion.id || false}
+                           className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 checked:text-primary-main checked:bg-primary-main"
+                         />
+                       </div>
+                       <div className="ml-3 text-sm">
+                         <label
+                           htmlFor={occasion.title}
+                           className="font-medium text-lg text-gray-700"
+                         >
+                           {occasion.title}
+                         </label>
+                       </div>
+                     </div>
+                   );
+                })}
+              </div>
+            </div>
             <div className="text-lg mt-5 text-slate-500 p-5 border border-dashed border-slate-500 rounded-md">
               <div>
                 <label
@@ -726,6 +810,8 @@ export async function getServerSideProps({
 
    const bundleCategories = await getBundleCategories(id)
 
+   const occasionBundles = await getOccasionBundlesByBundleId(id)
+
 
 
   return {
@@ -735,6 +821,7 @@ export async function getServerSideProps({
       bundleProducts,
       categories,
       bundleCategories,
+      occasionBundles,
     },
   };
 }
