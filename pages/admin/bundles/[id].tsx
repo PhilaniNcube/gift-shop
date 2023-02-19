@@ -166,7 +166,7 @@ const Product = ({
       if (bundleProduct) {
         console.log(bundleProduct);
         router.reload();
-      } else {
+      } else if(errorProduct){
         console.log(errorProduct);
         alert(`There was an error: ${errorProduct.details}`);
       }
