@@ -191,7 +191,7 @@ const Product = ({
       if (bundleProduct) {
         console.log(bundleProduct);
         router.reload();
-      } else {
+      } else if(errorProduct) {
         console.log(errorProduct);
         alert(`There was an error: ${errorProduct.details}`);
       }
@@ -210,7 +210,7 @@ const Product = ({
       if (bundleProduct) {
         console.log(bundleProduct);
         router.reload();
-      } else {
+      } else if(errorProduct) {
         console.log(errorProduct);
         alert(`There was an error: ${errorProduct.details}`);
       }
@@ -231,7 +231,7 @@ const Product = ({
       if (bundleProduct) {
         console.log(bundleProduct);
         router.reload();
-      } else {
+      } else if(errorProduct) {
         console.log(errorProduct);
         alert(`There was an error: ${errorProduct.details}`);
       }
@@ -250,7 +250,7 @@ const Product = ({
       if (bundleProduct) {
         console.log(bundleProduct);
         router.reload();
-      } else {
+      } else if(errorProduct) {
         console.log(errorProduct);
         alert(`There was an error: ${errorProduct.details}`);
       }
@@ -268,7 +268,7 @@ const Product = ({
       if (bundleProduct) {
         console.log(bundleProduct);
         router.reload();
-      } else {
+      } else if(errorProduct){
         console.log(errorProduct);
         alert(`There was an error: ${errorProduct.details}`);
       }
@@ -291,7 +291,7 @@ const Product = ({
     if(addedProduct) {
       console.log(addedProduct)
       router.reload();
-    } else {
+    } else if(error) {
       console.log(error)
       alert(`There was an error: ${error.details}`)
     }
