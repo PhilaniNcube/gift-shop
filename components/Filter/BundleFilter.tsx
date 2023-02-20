@@ -1,14 +1,10 @@
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { QueryClient, useQuery } from "@tanstack/react-query";
-
 import { getCategories } from "../../fetchers/products";
-import { useRouter } from "next/router";
+
 
 const BundleFilter = () => {
 
-  const queryClient = new QueryClient()
-
-  const router = useRouter()
 
   const {
     isLoading,

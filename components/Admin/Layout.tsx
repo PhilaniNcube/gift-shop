@@ -52,6 +52,12 @@ const Layout = ({children}:{children: ReactNode}) => {
             Create Category
           </Link>
           <Link
+            href="/admin/categories"
+            className="text-white text-xl font-bold"
+          >
+            Categories
+          </Link>
+          <Link
             href="/admin/occasions/create"
             className="text-white text-xl font-bold"
           >

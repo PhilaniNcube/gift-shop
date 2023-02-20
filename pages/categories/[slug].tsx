@@ -129,25 +129,17 @@ export default function Category({
 }
 
 
-
-
-
 export const getStaticPaths = async () =>{
 
     const { data: categories } = await supabase
       .from("categories")
       .select("*");
 
-
-
   const paths = categories?.map((category) => ({
     params: { slug: category.slug },
   }));
-
-
-
 return {
- paths ,
+ paths,
  fallback: 'blocking'
 }
 
@@ -163,14 +155,6 @@ export const getStaticProps = async ({params: {slug}}: {params: {slug: string}})
     console.log(slug)
 
   const category = categories?.filter(c => c.slug === slug) as ICategory[]
-
-  const { data: category_bundles, error } = await supabase
-    .from("category_bundles")
-    .select("bundle_id(*),category_id(*) ");
-
-
-
-
 
   return {
     props: {

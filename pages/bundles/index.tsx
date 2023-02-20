@@ -8,18 +8,13 @@ import BundleFilter from "../../components/Filter/BundleFilter";
 import { countBundles, getBundles } from "../../fetchers/bundles";
 import formatCurrency from "../../lib/formatCurrency";
 import { GetServerSideProps } from "next";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "../../db_types";
 
 type Bundle = Database["public"]["Tables"]["bundles"]["Row"];
 
-const Products = ({ bundles, count }: { bundles: IBundle[], count:number }) => {
+const Products = ({ bundles, count }: { bundles: Bundle[], count:number }) => {
 
-  const supabase = useSupabaseClient<Database>()
 
-  const router = useRouter()
 
 
 
