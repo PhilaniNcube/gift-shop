@@ -2,9 +2,6 @@ import supabase from '../lib/client';
 
 const getProducts = async () => {
 
-
-
-
   const { data: products, error } = await supabase
   .from('products')
   .select('id, created_at, name,  details, details, size, price,cost,  main_image, slug, category(*)')
@@ -14,7 +11,7 @@ const getProducts = async () => {
   }
 
 
-  return products as IProduct[]
+  return products
 
 }
 
@@ -29,7 +26,7 @@ const getFeaturedProducts = async () => {
   }
 
 
-  return products as IProduct[]
+  return products
 
 }
 
@@ -45,7 +42,7 @@ const getSingleProducts = async (slug:string) => {
   }
 
 
-  return products as IProduct
+  return products
 
 }
 
@@ -60,7 +57,7 @@ const getSingleProductById = async (id:string) => {
   }
 
 
-  return products as IProduct
+  return products
 
 }
 
@@ -73,14 +70,12 @@ const { data: categories, error } = await supabase
     throw new Error(error.message)
   }
 
-    return categories as ICategory[]
+    return categories
 
 }
 
 
 const getCategoryProducts = async (id:string) => {
-
-
 
    const { data: products, error } = await supabase
   .from('products')
@@ -89,9 +84,7 @@ const getCategoryProducts = async (id:string) => {
   if(error) {
     throw new Error(error.message)
   }
-
-
-  return products as IProduct[]
+  return products
 
 }
 

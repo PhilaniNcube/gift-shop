@@ -2,9 +2,6 @@
 import supabase from '../lib/client';
 
 
-
-
-
 const getBundles = async () => {
 
   const { data: bundles, error } = await supabase

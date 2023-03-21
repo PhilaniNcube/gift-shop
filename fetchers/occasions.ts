@@ -1,7 +1,7 @@
-import { Database } from "../db_types"
+
 import supabase from "../lib/client"
 
-type Occasion_Bundle = Database["public"]["Tables"]["occasion_bundles"]["Row"]
+
 
 const getOccasions = async () => {
 
@@ -13,7 +13,7 @@ const getOccasions = async () => {
     throw new Error(error.details)
   }
 
-  return occasion as IOccasion[]
+  return occasion
 }
 
 const getOccasion = async (slug:string) => {
@@ -26,7 +26,7 @@ const getOccasion = async (slug:string) => {
     throw new Error(error.details)
   }
 
-  return occasion as IOccasion
+  return occasion
 }
 
 
@@ -35,7 +35,7 @@ const getOccasionBundles = async () => {
 
   if(error) { throw new Error(error.details)}
 
-  return occasionBundles as Occasion_Bundle[]
+  return occasionBundles
 }
 
 
@@ -44,7 +44,7 @@ const getOccasionBundlesByOccasionId = async (id:string) => {
 
   if(error) { throw new Error(error.details)}
 
-  return occasionBundles as Occasion_Bundle[]
+  return occasionBundles
 }
 
 
@@ -53,7 +53,7 @@ const getOccasionBundlesByBundleId = async (id:string) => {
 
   if(error) { throw new Error(error.details)}
 
-  return occasionBundles as Occasion_Bundle[]
+  return occasionBundles
 }
 
 export {getOccasions, getOccasionBundles, getOccasion, getOccasionBundlesByOccasionId, getOccasionBundlesByBundleId}

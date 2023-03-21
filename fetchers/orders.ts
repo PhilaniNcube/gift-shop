@@ -1,4 +1,4 @@
-import supabase from "../lib/client"
+// import supabase from "../lib/client"
 import serviceRole from "../lib/serviceClient"
 
 
@@ -12,7 +12,7 @@ const getOrders = async () => {
     throw new Error(error.message)
   }
 
-  return orders as IOrder[]
+  return orders
 
 }
 
@@ -27,7 +27,7 @@ const getOrderById = async (id:string) => {
     throw new Error(error.message)
   }
 
-  return orders as IOrder
+  return orders
 
 }
 
