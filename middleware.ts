@@ -1,20 +1,30 @@
-import { withMiddlewareAuth } from '@supabase/auth-helpers-nextjs';
+import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs'
+import { NextResponse } from 'next/server'
 
-// Trigger this middleware to run on the `/secret-page` route
-export const config = {
-  matcher:  ['/admin', '/admin/:path', '/admin/:path*']
-};
+import type { NextRequest } from 'next/server'
+import { Database } from './schema'
 
-export const middleware = withMiddlewareAuth({
-  authGuard: {
-    isPermitted: async (user) => {
-      const admins = ['khibanyakallo@gmail.com', 'ncbphi001@gmail.com']
-        if(user.email) {
-        return  admins.includes(user.email)
-      } else {
-        return false
-      }
-    },
-    redirectTo: '/'
+
+
+
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next()
+
+  const supabase = createMiddlewareSupabaseClient<Database>({ req, res })
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+
+  const {error, data, status} = await supabase.rpc("is_admin")
+
+  if (data !== true) {
+    return NextResponse.redirect(new URL('/', req.url))
   }
-});
+
+
+}
+export const config = {
+  matcher: '/admin/:path*',
+}

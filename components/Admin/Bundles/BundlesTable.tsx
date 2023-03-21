@@ -1,16 +1,15 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { Database } from "../../../db_types";
 import formatCurrency from "../../../lib/formatCurrency";
+import { Database } from "../../../schema";
 
 type ComponentProps = {
   bundles : IBundle[]
 }
 
 function BundlesTable({bundles}:ComponentProps) {
-  const [show, setShow] = useState<null|number>(null);
+
 
   const router = useRouter()
 

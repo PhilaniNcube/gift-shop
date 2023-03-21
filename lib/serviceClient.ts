@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { Database } from "../db_types";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL
 
@@ -8,6 +9,6 @@ if (!url || !serviceKey) {
     throw new Error('Missing parameters for supabase client')
 }
 
-const serviceRole = createClient(url, serviceKey)
+const serviceRole = createClient<Database>(url, serviceKey)
 
 export default serviceRole

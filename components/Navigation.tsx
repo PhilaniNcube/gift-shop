@@ -12,10 +12,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { getCategories } from "../fetchers/products";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "../db_types";
+
 import { useUser } from "@supabase/auth-helpers-react";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { useRouter } from "next/router";
+import { Database } from "../schema";
 
 const Navigation = () => {
 

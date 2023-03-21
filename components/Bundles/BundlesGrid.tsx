@@ -2,13 +2,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
-import { Database } from "../../db_types";
-import formatCurrency from "../../lib/formatCurrency";
 
-type Bundle = Database["public"]['Tables']['bundles']['Row']
+import formatCurrency from "../../lib/formatCurrency";
+import { Database } from "../../schema";
 
 type Props = {
-  bundles: Bundle[]
+  bundles: Database["public"]['Tables']['bundles']['Row'][]
 }
 
 const BundlesGrid = ({bundles}:Props) => {
@@ -23,7 +22,7 @@ const BundlesGrid = ({bundles}:Props) => {
           <Fragment>
             <Image
               alt={product.title}
-              src={product.main_image.url}
+              src={product.main_image?.url}
               width={500}
               height={500}
               className="w-full shadow aspect-square object-cover rounded-lg"

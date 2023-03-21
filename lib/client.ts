@@ -1,5 +1,6 @@
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "../db_types";
+import { Database } from "../schema";
+
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY

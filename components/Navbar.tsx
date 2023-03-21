@@ -7,9 +7,10 @@ import {
 import { useRouter } from 'next/router';
 import { useShoppingCart } from '../context/ShoppingCartContext';
 import { useUser } from '@supabase/auth-helpers-react';
-import { Database } from '../db_types';
+
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import Image from 'next/image';
+import { Database } from '../schema';
 
 
 

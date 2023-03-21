@@ -1,10 +1,7 @@
-import { Database } from '../db_types';
+
 import supabase from '../lib/client';
 
-type Bundle = Database["public"]["Tables"]["bundles"]["Row"]
-// type Product = Database["public"]["Tables"]["products"]["Row"]
-type BundleProduct = Database["public"]["Tables"]["bundle_products"]["Row"]
-type Category = Database["public"]["Tables"]["categories"]["Row"]
+
 
 
 
@@ -19,7 +16,7 @@ const getBundles = async () => {
   }
 
 
-  return bundles as Bundle[]
+  return bundles
 
 }
 
@@ -34,7 +31,7 @@ const getFeaturedBundles = async () => {
   }
 
 
-  return bundles as Bundle[]
+  return bundles
 
 }
 
@@ -49,7 +46,7 @@ const getBundleById = async (id:string) => {
   }
 
 
-  return bundles as Bundle
+  return bundles
 
 }
 
@@ -64,7 +61,7 @@ const getBundleBySlug = async (slug:string) => {
   }
 
 
-  return bundles as Bundle
+  return bundles
 
 }
 
@@ -81,7 +78,7 @@ const getBundleProducts = async (bundleId: string) => {
     throw new Error(error.message)
   }
 
-  return bundles as BundleProduct[]
+  return bundles
 
 }
 
@@ -112,14 +109,11 @@ const getBundlesByCategoryId = async (id:string) => {
     throw new Error(error.message)
   }
 
-  return category_bundles as {
-    bundle_id: Bundle;
-    category_id: Category;
-  }[]
+  return category_bundles
 
 }
 
-const countBundles = async ():Promise<number> => {
+const countBundles = async () => {
 
     const { count, error } = await supabase
     .from("bundles")
@@ -137,7 +131,7 @@ const countBundles = async ():Promise<number> => {
 
 }
 
-const getBundlesForHer = async ():Promise<Bundle[]> => {
+const getBundlesForHer = async () => {
    const { data: bundles, error } = await supabase
   .from('bundles')
   .select('*, category(id, name, created_at, image, slug )').eq('gender', 'her')
@@ -150,7 +144,7 @@ const getBundlesForHer = async ():Promise<Bundle[]> => {
   return bundles
 }
 
-const getBundlesForHim = async ():Promise<Bundle[]> => {
+const getBundlesForHim = async () => {
    const { data: bundles, error } = await supabase
   .from('bundles')
   .select('*, category(id, name, created_at, image, slug )').eq('gender', 'him')
