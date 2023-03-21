@@ -198,7 +198,7 @@ export interface Database {
           email_address: string
           phone_number: string
           street_address: string
-          order_items: Json
+          order_items: Database['public']['Tables']['bundles']['Row'][]
           paid: boolean
           shipped: boolean
           payment_details: Json
@@ -218,7 +218,7 @@ export interface Database {
           email_address?: string
           phone_number?: string
           street_address?: string
-          order_items: Json
+          order_items: Database['public']['Tables']['bundles']['Row'][]
           paid?: boolean
           shipped?: boolean
           payment_details?: Json
@@ -238,7 +238,7 @@ export interface Database {
           email_address?: string
           phone_number?: string
           street_address?: string
-          order_items?: Json
+          order_items?: Database['public']['Tables']['bundles']['Row'][]
           paid?: boolean
           shipped?: boolean
           payment_details?: Json

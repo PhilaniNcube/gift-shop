@@ -1,9 +1,10 @@
 import Image from "next/image";
 
 import formatCurrency from "../../lib/formatCurrency";
+import { Database } from "../../schema";
 
 type ComponentProps = {
-  bundle: IBundle
+  bundle: Database['public']['Tables']['bundles']['Row']
 }
 
 const Bundle = ({bundle}:ComponentProps) => {

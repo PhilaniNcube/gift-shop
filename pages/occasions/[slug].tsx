@@ -19,7 +19,6 @@ type ComponentProps = {
 
 const Occasion = ({occasion}: ComponentProps) => {
 
-const router = useRouter()
 
 
 
