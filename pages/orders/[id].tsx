@@ -32,7 +32,9 @@ const order = props.order
               <div className="my-3">
                 <ul>
                   {order.order_items?.map((item) => {
-                    const product = bundles?.find((bundle) => bundle.id === item.id);
+                    const product = bundles?.find(
+                      (bundle) => bundle.id === item.id
+                    );
 
                     return (
                       <li key={item?.id} className="flex space-x-3">
