@@ -145,22 +145,22 @@ export interface Database {
       occasion: {
         Row: {
           id: string
-          created_at: string | null
-          title: string | null
+          created_at: string
+          title: string
           image: ImageObject
           slug: string
         }
         Insert: {
           id?: string
-          created_at?: string | null
-          title?: string | null
+          created_at?: string
+          title?: string
           image?: ImageObject
           slug: string
         }
         Update: {
           id?: string
-          created_at?: string | null
-          title?: string | null
+          created_at?: string
+          title?: string
           image?: ImageObject
           slug?: string
         }
@@ -173,75 +173,75 @@ export interface Database {
         }
         Insert: {
           occasion_id: string
-          created_at?: string | null
+          created_at?: string
           bundle_id: string
         }
         Update: {
           occasion_id?: string
-          created_at?: string | null
+          created_at?: string
           bundle_id?: string
         }
       }
       orders: {
         Row: {
           id: string
-          created_at: string | null
-          profile_id: Database['public']['Tables']['profiles']['Row'] | null
-          order_subtotal: number | null
-          shipping: number | null
-          total: number | null
-          city: string | null
-          postal_code: string | null
-          first_name: string | null
-          last_name: string | null
-          delivery_method: string | null
-          email_address: string | null
-          phone_number: string | null
-          street_address: string | null
+          created_at: string
+          profile_id: Database['public']['Tables']['profiles']['Row']
+          order_subtotal: number
+          shipping: number
+          total: number
+          city: string
+          postal_code: string
+          first_name: string
+          last_name: string
+          delivery_method: string
+          email_address: string
+          phone_number: string
+          street_address: string
           order_items: Json
-          paid: boolean | null
-          shipped: boolean | null
-          payment_details: Json | null
+          paid: boolean
+          shipped: boolean
+          payment_details: Json
         }
         Insert: {
           id?: string
-          created_at?: string | null
-          profile_id?: string | null
-          order_subtotal?: number | null
-          shipping?: number | null
-          total?: number | null
-          city?: string | null
-          postal_code?: string | null
-          first_name?: string | null
-          last_name?: string | null
-          delivery_method?: string | null
-          email_address?: string | null
-          phone_number?: string | null
-          street_address?: string | null
+          created_at?: string
+          profile_id?: string
+          order_subtotal?: number
+          shipping?: number
+          total?: number
+          city?: string
+          postal_code?: string
+          first_name?: string
+          last_name?: string
+          delivery_method?: string
+          email_address?: string
+          phone_number?: string
+          street_address?: string
           order_items: Json
-          paid?: boolean | null
-          shipped?: boolean | null
-          payment_details?: Json | null
+          paid?: boolean
+          shipped?: boolean
+          payment_details?: Json
         }
         Update: {
           id?: string
-          created_at?: string | null
-          profile_id?: string | null
-          order_subtotal?: number | null
-          shipping?: number | null
-          total?: number | null
-          city?: string | null
-          postal_code?: string | null
-          first_name?: string | null
-          last_name?: string | null
-          delivery_method?: string | null
-          email_address?: string | null
-          phone_number?: string | null
-          street_address?: string | null
+          created_at?: string
+          profile_id?: string
+          order_subtotal?: number
+          shipping?: number
+          total?: number
+          city?: string
+          postal_code?: string
+          first_name?: string
+          last_name?: string
+          delivery_method?: string
+          email_address?: string
+          phone_number?: string
+          street_address?: string
           order_items?: Json
-          paid?: boolean | null
-          shipped?: boolean | null
-          payment_details?: Json | null
+          paid?: boolean
+          shipped?: boolean
+          payment_details?: Json
         }
       }
       products: {
@@ -288,44 +288,44 @@ export interface Database {
       profiles: {
         Row: {
           id: string
-          created_at: string | null
-          first_name: string | null
-          last_name: string | null
-          email: string | null
-          role: string | null
+          created_at: string
+          first_name: string
+          last_name: string
+          email: string
+          role: string
         }
         Insert: {
           id?: string
-          created_at?: string | null
-          first_name?: string | null
-          last_name?: string | null
-          email?: string | null
-          role?: string | null
+          created_at?: string
+          first_name?: string
+          last_name?: string
+          email?: string
+          role?: string
         }
         Update: {
           id?: string
-          created_at?: string | null
-          first_name?: string | null
-          last_name?: string | null
-          email?: string | null
-          role?: string | null
+          created_at?: string
+          first_name?: string
+          last_name?: string
+          email?: string
+          role?: string
         }
       }
       roles: {
         Row: {
           id: string
-          created_at: string | null
-          name: string | null
+          created_at: string
+          name: string
         }
         Insert: {
           id: string
-          created_at?: string | null
-          name?: string | null
+          created_at?: string
+          name?: string
         }
         Update: {
           id?: string
-          created_at?: string | null
-          name?: string | null
+          created_at?: string
+          name?: string
         }
       }
     }

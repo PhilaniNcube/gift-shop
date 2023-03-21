@@ -1,12 +1,13 @@
 import {useState} from 'react'
 import { PostgrestError } from "@supabase/supabase-js";
 import Layout from "../../../components/Admin/Layout";
-import { Database } from "../../../db_types";
+
 import serviceRole from "../../../lib/serviceClient";
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import slugify from 'slugify';
 import { useRouter } from 'next/router';
 import { getBundles } from '../../../fetchers/bundles';
+import { Database } from '../../../schema';
 
 type Occasion = Database["public"]["Tables"]["occasion"]["Row"];
 type Bundle = Database["public"]["Tables"]["bundles"]["Row"];
@@ -22,7 +23,7 @@ console.log(occasion)
 
 const router = useRouter()
 
-const [occasionData, setOccasionData] = useState(occasion)
+const [occasionData, setOccasionData] = useState<Occasion>(occasion);
 const [loading, setLoading] = useState(false)
 
   const [supabase] = useState(() => createBrowserSupabaseClient<Database>());
@@ -79,7 +80,6 @@ const [loading, setLoading] = useState(false)
             </label>
             <input
               type="text"
-              name="title"
               value={occasionData.title}
               onChange={(e) => {
                 setOccasionData({

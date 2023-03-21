@@ -1,5 +1,6 @@
-import { Database } from "../../db_types";
+
 import { useRouter } from "next/router";
+import { Database } from "../../schema";
 
 type Category = Database["public"]["Tables"]["categories"]["Row"];
 
@@ -45,7 +46,8 @@ const CategoriesTable = ({ categories }: ComponentProps) => {
                 <img
                   src={category.image.src}
                   className="h-10 object-contain"
-                  alt={category.name}
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  alt={category.name!}
                 />
               </td>
             </tr>

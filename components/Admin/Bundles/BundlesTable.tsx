@@ -5,8 +5,8 @@ import formatCurrency from "../../../lib/formatCurrency";
 import { Database } from "../../../schema";
 
 type ComponentProps = {
-  bundles : IBundle[]
-}
+  bundles: Database["public"]["Tables"]["bundles"]["Row"][];
+};
 
 function BundlesTable({bundles}:ComponentProps) {
 
@@ -94,9 +94,7 @@ function BundlesTable({bundles}:ComponentProps) {
                     </p>
                   </td>
                   <td className="pl-12">
-                    <p className="font-medium">
-                      {format(new Date(bundle.created_at), "yyyy-MM-dd")}
-                    </p>
+                    <p className="font-medium">{bundle.created_at}</p>
                   </td>
                   <td className="pl-20">
                     <p className="font-medium text-green-600">
@@ -114,12 +112,9 @@ function BundlesTable({bundles}:ComponentProps) {
                   </td>
                   <td className="pl-16">
                     <div className="flex items-center">
-                      <p className="font-medium">
-                        {bundle.category.name}
-                      </p>
+                      <p className="font-medium">{bundle.category?.name}</p>
                     </div>
                   </td>
-
                 </tr>
               ))}
             </tbody>

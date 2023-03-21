@@ -3,7 +3,8 @@ import { GetServerSidePropsContext } from "next";
 import Layout from "../../../components/Admin/Layout";
 import CategoriesTable from "../../../components/Categories/CategoriesTable";
 import OccasionsTable from "../../../components/Occasions/OccasionsTable";
-import { Database } from "../../../db_types";
+import { Database } from "../../../schema";
+
 
 type Category = Database["public"]["Tables"]["categories"]["Row"];
 
