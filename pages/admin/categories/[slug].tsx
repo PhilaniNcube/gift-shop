@@ -16,7 +16,7 @@ type Props = {
 const Category = ({category}:Props) => {
 
   const router = useRouter();
-  const [uploadData, setUploadData] = useState<ImageObject | undefined>();
+  const [uploadData, setUploadData] = useState<ImageObject>();
 
   const [name, setName] = useState(category.name)
 
@@ -60,21 +60,25 @@ const Category = ({category}:Props) => {
       throw new Error("Please enter a valid data");
     }
 
+    if (!uploadData) {
+         throw new Error("Please enter a valid data");
+    }
+
     const slug = slugify(name, { lower: true, trim: true });
 
     const { data, error } = await supabase
       .from("categories")
-      .update([
+      .update(
         {
           name: name,
           slug: slug,
           image: {
-            src: uploadData?.url,
-            width: uploadData?.width,
-            height: uploadData?.height,
+            src: uploadData.url,
+            width: uploadData.width,
+            height: uploadData.height,
           },
         },
-      ]).eq('slug', category.slug).select('*').single()
+      ).eq('slug', category.slug).select('*').single()
 
       if(error) {
         alert(error.message)
