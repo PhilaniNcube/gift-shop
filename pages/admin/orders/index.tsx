@@ -3,8 +3,9 @@ import Layout from "../../../components/Admin/Layout";
 import { getOrders } from "../../../fetchers/orders";
 import formatCurrency from "../../../lib/formatCurrency";
 import {format} from "date-fns"
+import { Database } from "../../../schema";
 
-const Orders = ({orders}: {orders: IOrder[]}) => {
+const Orders = ({orders}: {orders: Database['public']['Tables']['orders']['Row'][]}) => {
 
   const router = useRouter()
 

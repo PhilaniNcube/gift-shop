@@ -1,24 +1,24 @@
-import { Switch } from "@headlessui/react";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Layout from "../../../components/Admin/Layout";
-import { getBundleProducts, getBundles } from "../../../fetchers/bundles";
+import {  getBundles } from "../../../fetchers/bundles";
 import { getOrderById } from "../../../fetchers/orders";
 import {
-  getCategories, getProducts,
+  getCategories,
 } from "../../../fetchers/products";
 import supabase from "../../../lib/client";
 
 import formatCurrency from "../../../lib/formatCurrency";
+import { Database } from "../../../schema";
 
 const Product = ({
   order,
   categories,
 }: {
-  order: IOrder;
-  categories: ICategory[];
+  order: Database['public']['Tables']['orders']['Row'];
+  categories: Database['public']['Tables']['categories']['Row'][];
 }) => {
 
   const router = useRouter()
@@ -206,9 +206,11 @@ export async function getServerSideProps({
 }: {
   params: { id: string };
 }) {
-  const order = (await getOrderById(id)) as IOrder;
+  const orderData = getOrderById(id);
 
-  const categories = (await getCategories()) as ICategory[];
+  const categoriesData =  getCategories();
+
+  const [order, categories] = await Promise.all([orderData, categoriesData])
 
   return {
     props: {
