@@ -247,42 +247,42 @@ export interface Database {
       products: {
         Row: {
           id: string
-          created_at: string | null
-          name: string | null
-          details: string | null
-          size: string | null
-          price: number | null
-          cost: number | null
-          category: Database['public']['Tables']['categories']['Row'] | null
+          created_at: string
+          name: string
+          details: string
+          size: string
+          price: number
+          cost: number
+          category: Database['public']['Tables']['categories']['Row']
           main_image: string
           slug: string
-          featured: boolean | null
+          featured: boolean
         }
         Insert: {
           id?: string
-          created_at?: string | null
-          name?: string | null
-          details?: string | null
-          size?: string | null
-          price?: number | null
-          cost?: number | null
-          category?: string | null
+          created_at?: string
+          name?: string
+          details?: string
+          size?: string
+          price?: number
+          cost?: number
+          category?: string
           main_image?: string
           slug?: string
-          featured?: boolean | null
+          featured?: boolean
         }
         Update: {
           id?: string
-          created_at?: string | null
-          name?: string | null
-          details?: string | null
-          size?: string | null
-          price?: number | null
-          cost?: number | null
-          category?: string | null
+          created_at?: string
+          name?: string
+          details?: string
+          size?: string
+          price?: number
+          cost?: number
+          category?: string
           main_image?: string
           slug?: string
-          featured?: boolean | null
+          featured?: boolean
         }
       }
       profiles: {

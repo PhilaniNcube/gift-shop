@@ -6,7 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 
 const ProductsComboBox = () => {
 
-  const {data:products} = useQuery(['products'], getProducts)
+  const { data: products, isLoading, isSuccess } = useQuery({
+    queryKey: ["products"],
+    queryFn: getProducts,
+  });
 
   const [selected, setSelected] = useState(products);
   const [query, setQuery] = useState("");
@@ -15,7 +18,7 @@ const ProductsComboBox = () => {
     query === ""
       ? products
       : products?.filter((product) =>
-          product.name
+          product?.name
             .toLowerCase()
             .replace(/\s+/g, "")
             .includes(query.toLowerCase().replace(/\s+/g, ""))
