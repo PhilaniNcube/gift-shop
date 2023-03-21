@@ -15,10 +15,10 @@ import { Database } from "../../../schema";
 
 const Product = ({
   order,
-  categories,
+
 }: {
   order: Database['public']['Tables']['orders']['Row'];
-  categories: Database['public']['Tables']['categories']['Row'][];
+  categories?: Database['public']['Tables']['categories']['Row'][];
 }) => {
 
   const router = useRouter()
