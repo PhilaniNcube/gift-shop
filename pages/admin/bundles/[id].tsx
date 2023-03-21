@@ -8,13 +8,14 @@ import React, { useState, useMemo } from "react";
 import slugify from "slugify";
 
 import Layout from "../../../components/Admin/Layout";
-import { Database } from "../../../db_types";
+
 
 import { getBundleById, getBundleCategories, getBundleProducts } from "../../../fetchers/bundles";
 import {  getOccasionBundlesByBundleId, getOccasions } from "../../../fetchers/occasions";
 import { getCategories, getProducts } from "../../../fetchers/products";
 import supabase from "../../../lib/client";
 import formatCurrency from "../../../lib/formatCurrency";
+import { Database } from "../../../schema";
 
 type Bundle = Database["public"]["Tables"]["bundles"]["Row"]
 type Product = Database["public"]["Tables"]["products"]["Row"]
@@ -154,9 +155,14 @@ const Product = ({
   const updateBundleDescription = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
-    const { description } = Object.fromEntries(new FormData(e.currentTarget));
 
     e.preventDefault();
+    const { description } = Object.fromEntries(new FormData(e.currentTarget));
+
+      if (typeof description !== "string") {
+        throw new Error(`Invalid description`);
+      }
+
     const { data: bundleProduct, error: errorProduct } = await supabase
       .from("bundles")
       .update({ description: description })
@@ -173,9 +179,9 @@ const Product = ({
   };
 
   const updateBundleTitle = async (e: React.FormEvent<HTMLFormElement>) => {
-    const { title } = Object.fromEntries(new FormData(e.currentTarget));
 
     e.preventDefault();
+    const { title } = Object.fromEntries(new FormData(e.currentTarget));
 
     if (typeof title !== "string") {
       throw new Error(`Invalid title`);
@@ -198,12 +204,16 @@ const Product = ({
   };
 
   const updateBundlePrice = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const { price } = Object.fromEntries(new FormData(e.currentTarget));
 
-    e.preventDefault();
+      if (typeof price !== "string") {
+        throw new Error(`Invalid price`);
+      }
+
     const { data: bundleProduct, error: errorProduct } = await supabase
       .from("bundles")
-      .update({ price: price })
+      .update({ price: +price })
       .eq("id", bundle.id);
 
 
@@ -238,12 +248,16 @@ const Product = ({
   };
 
   const setGender = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const { gender } = Object.fromEntries(new FormData(e.currentTarget));
 
-    e.preventDefault();
+      if (typeof gender !== "string") {
+        throw new Error(`Invalid gender`);
+      }
+
     const { data: bundleProduct, error: errorProduct } = await supabase
       .from("bundles")
-      .update({ gender })
+      .update({ gender:gender })
       .eq("id", bundle.id);
 
 
@@ -257,12 +271,16 @@ const Product = ({
   };
 
   const updateBundleCost = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const { cost } = Object.fromEntries(new FormData(e.currentTarget));
 
-    e.preventDefault();
+        if (typeof cost !== "string") {
+          throw new Error(`Invalid cost`);
+        }
+
     const { data: bundleProduct, error: errorProduct } = await supabase
       .from("bundles")
-      .update({ cost: cost })
+      .update({ cost: +cost })
       .eq("id", bundle.id);
 
       if (bundleProduct) {
@@ -276,16 +294,20 @@ const Product = ({
 
   const addBundleProduct = async (
     e: React.FormEvent<HTMLFormElement>,
-    product: IProduct
+    product: Database['public']['Tables']['products']['Row']
   ) => {
-    e.preventDefault();
 
     const { quantity } = Object.fromEntries(new FormData(e.currentTarget));
+    e.preventDefault();
+
+        if (typeof quantity !== "string") {
+          throw new Error(`Invalid quantity`);
+        }
 
     const { data: addedProduct, error } = await supabase
       .from("bundle_products")
       .insert([
-        { product_id: product.id, bundle_id: bundle.id, quantity: quantity },
+        { product_id: product.id, bundle_id: bundle.id, quantity: +quantity },
       ]);
 
     if(addedProduct) {
@@ -302,6 +324,10 @@ const Product = ({
     e.preventDefault();
 
     const { category } = Object.fromEntries(new FormData(e.currentTarget));
+
+        if (typeof category !== "string") {
+          throw new Error(`Invalid quantity`);
+        }
 
     const { data, error: errorBundle } = await supabase
       .from("bundles")
@@ -495,7 +521,7 @@ const Product = ({
               </div>
 
               <div className="w-full py-12 gap-3">
-                {isLoading ? 'Loading...' : isSuccess && data?.map((occasion) => {
+                {isLoading ? 'Loading...' : isSuccess && data.map((occasion) => {
 
                  const ID = occasionBundles.find(
                    (item) => item.occasion_id.id === occasion.id
@@ -512,8 +538,7 @@ const Product = ({
                      <div key={occasion.id} className="flex items-start">
                        <div className="flex h-5 items-center">
                          <input
-                           id={occasion.title}
-                           name={occasion.title}
+                           id={occasion?.id}
                            value={occasion.id}
 
                            onChange={async () => {
@@ -537,7 +562,7 @@ const Product = ({
                        </div>
                        <div className="ml-3 text-sm">
                          <label
-                           htmlFor={occasion.title}
+                           htmlFor="occasion"
                            className="font-medium text-lg text-gray-700"
                          >
                            {occasion.title}

@@ -60,34 +60,34 @@ export interface Database {
           price: number
           cost: number
           category: Database['public']['Tables']['categories']['Row'] | null
-          featured: boolean | null
-          gender: string | null
+          featured: boolean
+          gender: string
         }
         Insert: {
           id?: string
-          created_at?: string | null
+          created_at?: string
           title?: string
           main_image?: ImageObject
           slug: string
           description: string
           price?: number
           cost?: number
-          category?: string | null
-          featured?: boolean | null
-          gender?: string | null
+          category?: string
+          featured?: boolean
+          gender?: string
         }
         Update: {
           id?: string
-          created_at?: string | null
+          created_at?: string
           title?: string
           main_image?: ImageObject
           slug?: string
           description?: string
           price?: number
           cost?: number
-          category?: string | null
-          featured?: boolean | null
-          gender?: string | null
+          category?: string
+          featured?: boolean
+          gender?: string
         }
       }
       categories: {

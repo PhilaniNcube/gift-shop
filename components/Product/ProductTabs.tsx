@@ -81,7 +81,7 @@ export default function ProductTabs({product}: {product: IBundle}) {
                           src={product.product_id.main_image}
                           width={500}
                           height={500}
-                          alt={product.product_id.name!}
+                          alt={product.product_id.name}
                           className="w-full rounded-lg aspect-square group-hover:opacity-60 cursor-pointer object-cover"
                         />
                         <p className="text-sm font-medium mt-2 text-primary-main">
