@@ -122,17 +122,17 @@ const order = props.order
                 <input
                   type="hidden"
                   name="return_url"
-                  value={`https://gift-shop-nine.vercel.app/orders/${order.id}/success`}
+                  value={`https://allthingsgifts.co.za/orders/${order.id}/success`}
                 />
                 <input
                   type="hidden"
                   name="cancel_url"
-                  value={`https://gift-shop-nine.vercel.app/orders/${order.id}/cancel`}
+                  value={`https://allthingsgifts.co.za/orders/${order.id}/cancel`}
                 />
                 <input
                   type="hidden"
                   name="notify_url"
-                  value={`https://gift-shop-nine.vercel.app/api/orders/${order.id}/notify`}
+                  value={`https://allthingsgifts.co.za/api/orders/${order.id}/notify`}
                 />
                 <input type="hidden" name="amount" value={order.total} />
                 <input type="hidden" name="item_name" value={order.id} />

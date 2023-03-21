@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
-import { Database } from "../db_types";
+import { Database } from "../schema";
+
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL
 
