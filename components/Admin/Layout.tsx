@@ -17,7 +17,7 @@ const Layout = ({children}:{children: ReactNode}) => {
             details: "",
             size: "",
             main_image: "",
-            category: null,
+            // category: null,
           },
         ])
         .select("*")

@@ -16,7 +16,14 @@ const ShoppingCart = ({isOpen}:{isOpen:boolean}) => {
 
   const {closeCart, cartItems} = useShoppingCart()
 
-const { data: products, isLoading, isSuccess } = useQuery(["products"], getBundles);
+const {
+  data: products,
+  isLoading,
+  isSuccess,
+} = useQuery({
+  queryKey: ["bundles"],
+  queryFn: getBundles,
+});
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>

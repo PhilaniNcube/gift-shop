@@ -14,7 +14,10 @@ const ShoppingCartItem = ({id, quantity}:CartItemProps) => {
 
   const {removeFromCart} = useShoppingCart()
 
-const {data:products, isLoading} = useQuery(['products'], getBundles)
+const { data: products, isLoading } = useQuery({
+  queryKey: ["bundles"],
+  queryFn: getBundles
+});
 
     if(isLoading) return <p>Loading...</p>
 

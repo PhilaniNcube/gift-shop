@@ -10,7 +10,10 @@ const BundleFilter = () => {
     isLoading,
     isSuccess,
     data: categories,
-  } = useQuery(["categories"], getCategories);
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
 
   return (
     <div className="flex flex-col space-y-1 p-4 bg-slate-200 rounded-lg">

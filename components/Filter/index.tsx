@@ -5,7 +5,10 @@ import { getCategories } from "../../fetchers/products";
 
 const Filter = () => {
 
-  const {isLoading, data:categories} = useQuery(['categories'], getCategories)
+  const { isLoading, data: categories, isSuccess } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
 
 
   return (
@@ -13,7 +16,7 @@ const Filter = () => {
       {isLoading ? (
         <p className="py-8">Loading...</p>
       ) : (
-        categories?.map((category) => (
+       isSuccess && categories.map((category) => (
           <Link
             key={category.id}
             href={`/categories/${category.slug}`}
