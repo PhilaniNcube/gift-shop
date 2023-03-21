@@ -17,6 +17,7 @@ import { useUser } from "@supabase/auth-helpers-react";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { useRouter } from "next/router";
 import { Database } from "../schema";
+import { isAdmin } from "../fetchers/admin";
 
 const Navigation = () => {
 
@@ -39,6 +40,11 @@ const Navigation = () => {
      queryKey: ['categories'],
      queryFn:() => getCategories(),
   })
+
+const {data:admin} = useQuery({
+  queryKey: ['isAdmin'],
+  queryFn: isAdmin,
+})
 
 const [open, setOpen] = useState(false)
 
@@ -214,12 +220,22 @@ const toggleMenu = () => {
           ) : (
             <div className="ml-auto flex items-center">
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <Link
-                  href="/account"
-                  className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                >
-                  My Account
-                </Link>
+                {admin?.data === false ? (
+                  <Link
+                    href="/account"
+                    className="text-md font-medium text-primary-main hover:text-gray-800"
+                  >
+                    My Account
+                  </Link>
+                ) : (
+                  <Link
+                    href="/admin/dashboard"
+                    className="text-md font-medium text-primary-main hover:text-gray-800"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+
                 <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
                 <span
                   onClick={() => {
@@ -306,12 +322,12 @@ const toggleMenu = () => {
                 >
                   Gifts
                 </Link>
-                <Link
+                {/* <Link
                   className="my-3 text-md font-medium text-primary-main"
                   href="/occasion"
                 >
                   Occasion
-                </Link>
+                </Link> */}
                 <Link
                   className="my-3 text-md font-medium text-primary-main"
                   href="/for-her"

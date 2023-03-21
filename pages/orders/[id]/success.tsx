@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getBundles } from "../../../fetchers/bundles";
 import supabase from "../../../lib/client";
 import formatCurrency from "../../../lib/formatCurrency";
-import { Database } from "../../../schema";
+
 
 
 type OrderProps = {

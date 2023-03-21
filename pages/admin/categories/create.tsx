@@ -79,6 +79,11 @@ const CreateCategories = () => {
 
 
       setLoading(false);
+
+      if(error) {
+        alert('There was an error:' + error.message);
+      }
+      console.log(data)
       router.push(`/admin/bundles`);
     };
 

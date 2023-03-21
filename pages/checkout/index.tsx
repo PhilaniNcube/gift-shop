@@ -42,7 +42,7 @@ const {
   data: bundles,
   isLoading,
   isSuccess,
-} = useQuery(["bundles"], getBundles);
+} = useQuery({queryKey:["bundles"], queryFn:getBundles});
 
 const user = useUser()
 

@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const ProductsComboBox = () => {
 
-  const { data: products, isLoading, isSuccess } = useQuery({
+  const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
   });

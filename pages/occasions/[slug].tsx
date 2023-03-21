@@ -1,15 +1,13 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import { PostgrestError } from '@supabase/supabase-js';
 import { QueryClient, useQuery } from '@tanstack/react-query';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import {Fragment} from 'react'
 import Bundle from '../../components/Occasions/Bundle';
 import { Database } from '../../db_types';
-import { getOccasion, getOccasionBundles, getOccasionBundlesByOccasionId } from '../../fetchers/occasions';
-import serviceRole from '../../lib/serviceClient';
+import { getOccasion, getOccasionBundlesByOccasionId } from '../../fetchers/occasions';
+
 
 type OccasionType = Database["public"]["Tables"]["occasion"]["Row"];
 
@@ -19,10 +17,7 @@ type ComponentProps = {
 
 const Occasion = ({occasion}: ComponentProps) => {
 
-
-
-
-  const { data, isLoading, isSuccess } = useQuery({
+  const { data } = useQuery({
     queryKey: [`occasion ${occasion.title}`],
     queryFn: () => getOccasion(occasion.slug),
     initialData:occasion
@@ -106,18 +101,20 @@ export async function getServerSideProps({params: {slug}}:{params:{slug:string}}
 
    const queryClient = new QueryClient();
 
-  const {data, error} = await serviceRole.from('occasion').select('*').eq('slug',slug).single()
+  const occasion = await getOccasion(slug);
 
-  await queryClient.prefetchQuery([`occasion ${data.title}`], data);
 
-  console.log(data)
+
+  await queryClient.prefetchQuery({
+    queryKey: [`occasion ${occasion.title}`],
+    queryFn: () => getOccasion(slug),
+  });
 
 
   return {
     props: {
-      occasion:data,
-
-    }
-  }
+      occasion: occasion,
+    },
+  };
 
 }
