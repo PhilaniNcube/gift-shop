@@ -54,7 +54,7 @@ const CreateCategories = () => {
 
 
       if (
-        typeof name !== "string"
+        typeof name !== "string" || !uploadData
       ) {
         throw new Error("Please enter a valid data");
       }

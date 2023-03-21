@@ -56,7 +56,7 @@ const Category = ({category}:Props) => {
 
     const { name } = Object.fromEntries(new FormData(e.currentTarget));
 
-    if (typeof name !== "string") {
+    if (typeof name !== "string" || !uploadData) {
       throw new Error("Please enter a valid data");
     }
 
